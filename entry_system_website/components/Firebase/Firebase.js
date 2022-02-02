@@ -7,36 +7,52 @@ import { getAuth, signOut, signInWithEmailAndPassword , createUserWithEmailAndPa
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyDKwY8frueK8cFoTFEvNYdcF1-IFRYDw4o",
+    authDomain: "entrysystem-2fbb1.firebaseapp.com",
+    projectId: "entrysystem-2fbb1",
+    storageBucket: "entrysystem-2fbb1.appspot.com",
+    messagingSenderId: "986017227132",
+    appId: "1:986017227132:web:d8aa9215d01334e9df04f9",
+    measurementId: "G-Z7ZZ2GQM0T"
+};
 
-// Initialize Firebase
+// Initialize Firebases
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 //function  for signing Up users
-export function Firebase_signUp(email, password) {
-    createUserWithEmailAndPassword(auth, email,password).then(
+export async function Firebase_signUp(email, password) {
+    let FireBaseResponse;
+
+    await createUserWithEmailAndPassword(auth, email,password).then(
         (userCredentials) => {
-            const user = userCredentials.user;
-            return user;
+            FireBaseResponse = userCredentials.user;
         }).catch((error) => {
-            const errorCode = error.code;
+            //checking for error response 
+            const errorCode = error.code
             const errorMessage = error.message;
-            console.log(errorCode)
-            return errorMessage;
+            FireBaseResponse = errorCode;
         })
+
+    return FireBaseResponse;
 }
 
 //function  for signing in users 
-export function Firebase_signIn (email, password) {
-    signInWithEmailAndPassword(auth, email,password).then(
+export async function Firebase_signIn (email, password) {
+    let FireBaseResponse;
+
+    await signInWithEmailAndPassword(auth, email,password).then(
         (userCredentials) => {
-            const user = userCredentials.user;
-            return user;
+            FireBaseResponse = userCredentials.user;
         }).catch((error) => {
+            //checking for error response 
             const errorCode = error.code
             const errorMessage = error.message;
-            return errorMessage;
+            FireBaseResponse = errorCode;
         })
+
+    return FireBaseResponse;
 }
 
 

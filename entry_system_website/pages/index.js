@@ -13,7 +13,6 @@ export default function Home() {
           <li><Link className = {styles.SignOut} href="AccountCreationPage">Create Account</Link></li>
         </ul>
       </nav>
-
       <h1>School Entry System</h1>
     </div>
   )

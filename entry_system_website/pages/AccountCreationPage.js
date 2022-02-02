@@ -3,36 +3,27 @@ import { useRef } from 'react';
 
 export default function AccountCreation() {
     let email = useRef();
-    let password = useRef();
-
-
-    
-
+    let password = useRef();    
 
     function submitButtonHandler(){
-        let response = Firebase_signUp(email.current.value, password.current.value);
-        console.log(response); 
+        Firebase_signUp(email.current.value, password.current.value).then(
+            (res) => {
+                console.log(res);
+            }
+        )
     }
 
     return (
         <div>
-            <div>
-                <label >Enter Email:
+            <div className='AccountFormWrapper'>
+                <label >Enter Email: <br></br>
                     <input ref={email} type="text" id = "email" name = "email"/>
                 </label>
-                <label>Enter Password:
+                <label>Enter Password:<br></br>
                     <input ref={password} type="password" id = "password" name = "password"/>
                 </label>
+                <button onClick={submitButtonHandler}>Create Account</button>
             </div>
-            <button onClick={submitButtonHandler}></button>
-
-            <style jsx>{`
-                button {
-                    width: 2em;
-                    height: 2em;
-                }
-                `}
-            </style>
         </div>
     )
 }
