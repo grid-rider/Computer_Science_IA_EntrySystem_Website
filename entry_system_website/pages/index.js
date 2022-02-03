@@ -22,8 +22,7 @@ export default function Home() {
         <div className={styles.Icon}></div>
 
         <ul>
-          <li><Link className = {styles.SignIn} href="SignInPage">Sign In</Link></li>
-          <li><Link className = {styles.SignOut} href="AccountCreationPage">Create Account</Link></li>
+          <li><Link className = {styles.SignIn} href={user ? "Dashboard":"SignInPage"}>Dashboard</Link></li>
         </ul>
       </nav>
 
