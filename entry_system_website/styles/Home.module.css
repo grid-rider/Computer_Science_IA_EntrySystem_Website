@@ -1,7 +1,60 @@
 .HomePageWrapper {
   width: 100vw;
   height: 100vh;
-  background-image: url('../public/svg/HomePage_Background.svg');
+  background-image: url('../public/svg/TopRight.png');
+  background: cover;
   background-repeat: no-repeat;
+  background-position: top right;
+}
+
+.HomePageWrapper nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.HomePageWrapper nav ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  list-style-type: none;
+  margin: 0 auto;
+
+}
+.HomePageWrapper nav ul li{
+  padding: 0.9em;
+}
+
+.HomePageWrapper nav ul li a{
+  text-decoration: none;
+  color: black;
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+.HomePageWrapper nav .Icon {
+  width: 6em;
+  height: 3em;
+  background-image: url('../public/svg/Logo.jpg');
   background-size: contain;
+  background-repeat: no-repeat;
+  margin: 0 auto;
+}
+
+.HomePageWrapper section .Lock {
+  width: 20em;
+  height: 20em;
+  background-image: url('../public/svg/Lock.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 0 auto;
+}
+
+.HomePageWrapper section .BottomLeftPeople {
+  width: 20em;
+  height: 20em;
+  background-image: url('../public/svg/BottomLeft.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  margin: 0 0 auto 0;
 }

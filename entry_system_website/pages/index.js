@@ -2,8 +2,14 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
+import { useAuth } from '../components/Firebase/Context/authUserContext'
+import { useEffect } from 'react'
+
+
 
 export default function Home() {
+  let { user, Firebase_signOut , signIn} = useAuth();
+
   return (
     <div className={styles.HomePageWrapper}>
       
@@ -13,12 +19,20 @@ export default function Home() {
 
 
       <nav>
-        <div className={styles.Icon}> </div>
+        <div className={styles.Icon}></div>
+
         <ul>
           <li><Link className = {styles.SignIn} href="SignInPage">Sign In</Link></li>
           <li><Link className = {styles.SignOut} href="AccountCreationPage">Create Account</Link></li>
         </ul>
       </nav>
+
+      <section>
+        <div className={styles.Lock}></div>
+        <div className={styles.BottomLeftPeople}></div>
+      </section>
+
+
     </div>
   )
 }
