@@ -1,0 +1,7 @@
+.HomePageWrapper {
+  width: 100vw;
+  height: 100vh;
+  background-image: url('../public/svg/HomePage_Background.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}

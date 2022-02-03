@@ -58,5 +58,7 @@ export async function Firebase_signIn (email, password) {
 
 
 //function  for signing out users 
-
+export async function Firebase_signOut() {
+    signOut(auth);   
+}
 
