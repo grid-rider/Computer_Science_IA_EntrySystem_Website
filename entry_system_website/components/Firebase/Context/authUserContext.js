@@ -1,11 +1,23 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut} from "firebase/auth";
+import { getFirestore, setDoc, collection } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
 export function useAuth() {
     return useContext(AuthContext);
+}
+
+function userDocumentModel(email, FirstName, LastName, School) {
+    return({
+        email: email,
+        entry_status: false,
+        first_name: FirstName,
+        last_name: LastName,
+        school: School,
+
+    })
 }
 
 function getFirebaseApp() {
@@ -26,6 +38,7 @@ export function AuthProvider({ children }) {
 
     const app = getFirebaseApp();
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
     let [loading, setLoading] = useState(true);
     let [user, setUser] = useState(null);
@@ -57,12 +70,17 @@ export function AuthProvider({ children }) {
         return createUserWithEmailAndPassword(auth, email,password);
     }
 
+    function createFirestoreUser (UUID , email, password, FirstName, LastName, School){
+        return setDoc(collection(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School))
+    }
+
     let value = {
         loading,
         user,
         signIn,
         Firebase_signOut,
         createAccount,
+        createFirestoreUser
     }
     return(
         <AuthContext.Provider value={value}>
