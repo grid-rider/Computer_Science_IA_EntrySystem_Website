@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut} from "firebase/auth";
-import { getFirestore, setDoc, collection } from "firebase/firestore";
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut, deleteUser} from "firebase/auth";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
@@ -51,6 +51,7 @@ export function AuthProvider({ children }) {
                 setUser(user);
             }else{
                 console.log("user logged Out");
+                resetAuthState()
             }
         }));
     }),[]);
@@ -71,8 +72,21 @@ export function AuthProvider({ children }) {
     }
 
     function createFirestoreUser (UUID , email, password, FirstName, LastName, School){
-        return setDoc(collection(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School))
+        return setDoc(doc(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School))
     }
+
+    //function for deleting user 
+    //note requires authentication
+    function deleteAccount() {
+        return deleteUser(user);
+    }
+
+    function resetAuthState() {
+        setUser(null);
+        setLoading(true);
+    }
+
+    
 
     let value = {
         loading,
@@ -80,7 +94,9 @@ export function AuthProvider({ children }) {
         signIn,
         Firebase_signOut,
         createAccount,
-        createFirestoreUser
+        createFirestoreUser,
+        deleteAccount,
+        resetAuthState
     }
     return(
         <AuthContext.Provider value={value}>
