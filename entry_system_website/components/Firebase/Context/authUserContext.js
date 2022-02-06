@@ -44,9 +44,12 @@ export function AuthProvider({ children }) {
     let [user, setUser] = useState(null);
 
     useEffect((() => {
+
+        
         let unsubsribeAuth = onAuthStateChanged(auth, ((user) => {
             if(user){
                 console.log("user logged In");
+                console.log(user);
                 setLoading(true);
                 setUser(user);
             }else{
@@ -54,6 +57,7 @@ export function AuthProvider({ children }) {
                 resetAuthState()
             }
         }));
+
     }),[]);
 
     //function  for signing in users 

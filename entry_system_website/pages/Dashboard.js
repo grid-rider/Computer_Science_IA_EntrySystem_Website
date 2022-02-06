@@ -4,8 +4,6 @@ import { useState } from 'react';
 import {useAuth} from '../components/Firebase/Context/authUserContext.js';
 import styles from '../styles/Dashboard.module.css';
 import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -43,9 +41,7 @@ export default function Dashboard() {
     }
 
     function handleMenuSelector(event) {
-        setUserQuery(event.target.value) 
-
-        
+        setUserQuery(event.target.value);
     }
 
     if(user) {
@@ -57,16 +53,21 @@ export default function Dashboard() {
                             <img src='/svg/Logo.jpg' alt="Logo of Webdesign Used for Home Navigation"/>
                         </Link>
                     </button>
+                    
+                    <section>
 
-                    <div className={styles.StudentDirectoryTitle}>Student Directory</div>
-                    <FormGroup>
-                        <InputLabel>Entry Status Filter</InputLabel>
-                        <Select onChange={handleMenuSelector}>
-                            <MenuItem value="both">none</MenuItem>
-                            <MenuItem value="in">In School</MenuItem>
-                            <MenuItem value="out">out of School</MenuItem>
-                        </Select>
-                    </FormGroup>
+
+                        <div className={styles.StudentDirectoryTitle}>Student Directory</div>
+                        <FormGroup>
+                            <InputLabel>Entry Status Filter</InputLabel>
+                            <Select onChange={handleMenuSelector}>
+                                <MenuItem value="both">none</MenuItem>
+                                <MenuItem value="in">In School</MenuItem>
+                                <MenuItem value="out">out of School</MenuItem>
+                            </Select>
+                        </FormGroup>
+                    </section>
+
 
                     <UserProfile src="svg/profile_image_placeholder.png" email={user.email} firstName={firstName} lastName={lastName}/>
                 </nav>

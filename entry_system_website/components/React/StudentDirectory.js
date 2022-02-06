@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react"
 import { useAuth } from "../Firebase/Context/authUserContext";
 import StudentRow from "./StudentRow";
+import styles from '../../styles/StudentDirectory.module.css';
 
 export default function StudentDirectory(props) {
 
@@ -24,14 +25,14 @@ export default function StudentDirectory(props) {
 
         let listItems = updatedArray.map((student) => {
             let studentData = student.data();
-            return (<li key={student.id}><StudentRow entryStatus={studentData.entry_status} src="svg/profile_image_placeholder.png" email={studentData.email} firstName={studentData.first_name} lastName={studentData.last_name} key_value={student.id}/></li>)
+            return (<li className={styles.listItem} key={student.id}><StudentRow entryStatus={studentData.entry_status} src="svg/profile_image_placeholder.png" email={studentData.email} firstName={studentData.first_name} lastName={studentData.last_name} key_value={student.id}/></li>)
         })
 
         return listItems
     }
 
     return(
-        <ul>
+        <ul className={styles.list}>
             {getListFromUserArray()}
         </ul>
     )
