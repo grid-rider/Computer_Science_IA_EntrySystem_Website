@@ -11,18 +11,20 @@ export default function StudentDirectory(props) {
 
     function getListFromUserArray(){
         let updatedArray = studentList.filter((student) => {
+            let studentData = student.data();
             switch (props.query) {
                 case "in":
-                    return student.entry_status == true;
+                    return studentData.entry_status == true;
                 case "out":
-                    return student.entry_status == false;            
+                    return studentData.entry_status == false;            
                 case "both": 
                     return true;            
             }
         });
 
-        let listItems = updatedArray.map((element) => {
-            return (<StudentRow entryStatus={element.entry_status} src="svg/profile_image_placeholder.png" email={element.email} firstName={element.first_name} lastName={element.last_name} key_value={element.email}/>)
+        let listItems = updatedArray.map((student) => {
+            let studentData = student.data();
+            return (<li key={student.id}><StudentRow entryStatus={studentData.entry_status} src="svg/profile_image_placeholder.png" email={studentData.email} firstName={studentData.first_name} lastName={studentData.last_name} key_value={student.id}/></li>)
         })
 
         return listItems

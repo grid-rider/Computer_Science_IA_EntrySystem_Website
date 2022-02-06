@@ -11,7 +11,7 @@ export default function StudentRow(props) {
     }
 
     return(
-        <li key={props.key_value}>
+        <div>
             <img className={styles.userIcon} src={props.src} alt="Profile Icon"/>
             <div className={styles.userInformation}>
                 <div className={styles.fullName}>{props.firstName + " " + props.lastName}</div>
@@ -19,6 +19,6 @@ export default function StudentRow(props) {
             </div>
             <div>In Buildiung</div>
             <div style={entryStatusIcon_style} className={styles.entryStatusIcon}></div>
-        </li>
+        </div>
     )
 }

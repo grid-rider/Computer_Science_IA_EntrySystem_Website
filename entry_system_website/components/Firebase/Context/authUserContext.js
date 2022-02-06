@@ -100,13 +100,8 @@ export function AuthProvider({ children }) {
                 console.log(error);
                 return null;
             }
-
             return school;
-
-
         }
-
-
 
         if(user != null){
             getUserSchool().then((school) => {
@@ -126,7 +121,7 @@ export function AuthProvider({ children }) {
     }, [user]);
 
     useEffect(() => {
-        console.log(studentList);
+        console.log("change detected in student movement");
     }, [studentList])
 
 
@@ -148,7 +143,7 @@ export function AuthProvider({ children }) {
     function setStudentListFromSnapshot(snapshot){
         let temp_UserArray = [];
         snapshot.forEach(userRecord => {
-            temp_UserArray.push(userRecord.data());
+            temp_UserArray.push(userRecord);
         });
         setStudentList(temp_UserArray);
     }

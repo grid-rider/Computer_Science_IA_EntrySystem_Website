@@ -16,7 +16,6 @@ import StudentDirectory from '../components/React/StudentDirectory';
 export default function Dashboard() {
     let { user, getFirestoreUser} = useAuth();
     let [userQuery, setUserQuery] = useState("both");
-    let [userName, setUserName] = useState({firstname: "Unknown", lastname: "Unkown"});
     let [firstName, setFirstname] = useState("Unknown");
     let [lastName, setLastname] = useState("Unknown");
 
@@ -24,13 +23,6 @@ export default function Dashboard() {
         getUserExtraInformation()
     }, [user])
 
-    function Handlecheck_InSchool_SchoolQuery(event){
-        SetChecked_InSchool(event.target.checked)
-    }
-
-    function Handlecheck_OutofSchool_SchoolQuery(event){
-        SetChecked_OutOfSchool(event.target.checked)
-    }
 
     async function getUserExtraInformation() {
         if (user) {
