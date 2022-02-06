@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut, deleteUser} from "firebase/auth";
-import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
@@ -71,9 +71,6 @@ export function AuthProvider({ children }) {
         return createUserWithEmailAndPassword(auth, email,password);
     }
 
-    function createFirestoreUser (UUID , email, password, FirstName, LastName, School){
-        return setDoc(doc(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School))
-    }
 
     //function for deleting user 
     //note requires authentication
@@ -86,7 +83,82 @@ export function AuthProvider({ children }) {
         setLoading(true);
     }
 
+
+    //////////////////Firestore Functions////////////////////////
+    let [studentList, setStudentList] = useState([]);
+
+    useEffect(() => {
+        let unsubscribe;
+
+        async function getUserSchool() {
+            let school;
+            try {
+                const userDocument = await getFirestoreUser(user.uid);
+                school = userDocument.data().school;
+            } catch (error) {
+                console.log("error occuered with student school fetching");
+                console.log(error);
+                return null;
+            }
+
+            return school;
+
+
+        }
+
+
+
+        if(user != null){
+            getUserSchool().then((school) => {
+                console.log(school);
+                unsubscribe =  onSnapshot(query(collection(db, "users"), where("school","==",school)), ((querySnapshot) => {
+                    console.log("updated user list");
+                    setStudentListFromSnapshot(querySnapshot);
+                }));
+            })
+
+        }else{
+            resetFirestoreState();
+            if(unsubscribe != null){
+                unsubscribe();
+            }
+        }
+    }, [user]);
+
+    useEffect(() => {
+        console.log(studentList);
+    }, [studentList])
+
+
+    //create user record in firestore database
+    function createFirestoreUser (UUID , email, password, FirstName, LastName, School){
+        return setDoc(doc(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School))
+    }
+
+    //get firestore user with specific UUID 
+    function getFirestoreUser(UUID) {
+        return getDoc(doc(db, "users", UUID))
+    }
+
+    //get a collection of firestore user documents. Restricted to school of user.
+    function getFirestoreUserGroup(school) {
+        return getDocs(query(collection(db, "users"), where("school","==", school)))
+    }
+
+    function setStudentListFromSnapshot(snapshot){
+        let temp_UserArray = [];
+        snapshot.forEach(userRecord => {
+            temp_UserArray.push(userRecord.data());
+        });
+        setStudentList(temp_UserArray);
+    }
     
+    function resetFirestoreState() {
+        setStudentList([]);
+    }
+
+    
+    ////////////////////////////////////////////////////////////
 
     let value = {
         loading,
@@ -96,7 +168,10 @@ export function AuthProvider({ children }) {
         createAccount,
         createFirestoreUser,
         deleteAccount,
-        resetAuthState
+        resetAuthState,
+        getFirestoreUser,
+        getFirestoreUserGroup,
+        studentList
     }
     return(
         <AuthContext.Provider value={value}>

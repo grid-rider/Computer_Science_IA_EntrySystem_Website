@@ -15,13 +15,14 @@ export default function SignInPage (){
     let email = useRef();
     let password = useRef();
     
-    function signIn_ButtonHandler(){
-        signIn(email.current.value,password.current.value).then((res) => {
+    async function signIn_ButtonHandler(){
+        try {
+            let sign_in = await signIn(email.current.value, password.current.value);
             router.push("Dashboard");
-        }).catch((error) => {
+        } catch (error) {
             console.log(error.message);
             setInvalidLogin(true);
-        })
+        }
     }
 
 
