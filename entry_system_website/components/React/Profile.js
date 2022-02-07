@@ -1,17 +1,32 @@
+import { useState } from 'react';
+import { useEffect } from 'react';
 import styles from '../../styles/Profile.module.css';
-
+import { useAuth } from '../Firebase/Context/authUserContext';
+import {
+    HStack,
+    Flex,
+    Text,
+    Avatar
+} from '@chakra-ui/react';
 
 
 export default function UserProfile(props) {
-    
+
+    let {user} = useAuth();
+
+    let [ userIcon, setUserIcon] = useState("");
+    let [ name, setName] = useState("");
+    let [ email, setEmail ] = useState("");
+
+    useEffect(() => {
+        if(user) {
+
+        }
+    }, [user])
     
     return (
-        <div className={styles.profileWrapper}>
-            <img className={styles.userIcon} src={props.src} alt="Profile Icon"/>
-            <div className={styles.userInformation}>
-                <div className={styles.fullName}>{props.firstName + " " + props.lastName}</div>
-                <div className={styles.email}>{props.email}</div>
-            </div>
-        </div>
+        <Flex alignItems="center">
+            <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
+        </Flex>
     )
 }

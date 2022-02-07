@@ -66,8 +66,12 @@ export function AuthProvider({ children }) {
     }
 
     //function  for signing out users 
-    function Firebase_signOut () {
-        signOut(auth);   
+    async function Firebase_signOut () {
+        try {
+            signOut(auth);   
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     //function  for signing in users 
