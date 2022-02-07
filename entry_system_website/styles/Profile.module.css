@@ -1,0 +1,32 @@
+
+.profileWrapper {
+    display: flex;
+    flex-direction: row;
+    border: solid 0.5px rgb(109, 107, 107);
+    max-width: fit-content;
+
+}
+
+
+.profileWrapper img {
+    width: 30%;
+    height: 80%;
+    padding: 0.5em 1em;
+    margin: auto 0;
+
+}
+
+.profileWrapper .userInformation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1em;
+}
+
+.profileWrapper .userInformation .email{
+    margin-top: 0.5em;
+    font-size: small;
+    color: grey;
+
+}
+

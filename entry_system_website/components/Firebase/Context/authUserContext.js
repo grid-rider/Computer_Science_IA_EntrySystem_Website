@@ -1,11 +1,23 @@
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut} from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut, deleteUser} from "firebase/auth";
+import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
 export function useAuth() {
     return useContext(AuthContext);
+}
+
+function userDocumentModel(email, FirstName, LastName, School) {
+    return({
+        email: email,
+        entry_status: false,
+        first_name: FirstName,
+        last_name: LastName,
+        school: School,
+
+    })
 }
 
 function getFirebaseApp() {
@@ -26,20 +38,26 @@ export function AuthProvider({ children }) {
 
     const app = getFirebaseApp();
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
     let [loading, setLoading] = useState(true);
     let [user, setUser] = useState(null);
 
     useEffect((() => {
+
+        
         let unsubsribeAuth = onAuthStateChanged(auth, ((user) => {
             if(user){
                 console.log("user logged In");
+                console.log(user);
                 setLoading(true);
                 setUser(user);
             }else{
                 console.log("user logged Out");
+                resetAuthState()
             }
         }));
+
     }),[]);
 
     //function  for signing in users 
@@ -57,12 +75,102 @@ export function AuthProvider({ children }) {
         return createUserWithEmailAndPassword(auth, email,password);
     }
 
+
+    //function for deleting user 
+    //note requires authentication
+    function deleteAccount() {
+        return deleteUser(user);
+    }
+
+    function resetAuthState() {
+        setUser(null);
+        setLoading(true);
+    }
+
+
+    //////////////////Firestore Functions////////////////////////
+    let [studentList, setStudentList] = useState([]);
+
+    useEffect(() => {
+        let unsubscribe;
+
+        async function getUserSchool() {
+            let school;
+            try {
+                const userDocument = await getFirestoreUser(user.uid);
+                school = userDocument.data().school;
+            } catch (error) {
+                console.log("error occuered with student school fetching");
+                console.log(error);
+                return null;
+            }
+            return school;
+        }
+
+        if(user != null){
+            getUserSchool().then((school) => {
+                console.log(school);
+                unsubscribe =  onSnapshot(query(collection(db, "users"), where("school","==",school)), ((querySnapshot) => {
+                    console.log("updated user list");
+                    setStudentListFromSnapshot(querySnapshot);
+                }));
+            })
+
+        }else{
+            resetFirestoreState();
+            if(unsubscribe != null){
+                unsubscribe();
+            }
+        }
+    }, [user]);
+
+    useEffect(() => {
+        console.log("change detected in student movement");
+    }, [studentList])
+
+
+    //create user record in firestore database
+    function createFirestoreUser (UUID , email, password, FirstName, LastName, School){
+        return setDoc(doc(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School))
+    }
+
+    //get firestore user with specific UUID 
+    function getFirestoreUser(UUID) {
+        return getDoc(doc(db, "users", UUID))
+    }
+
+    //get a collection of firestore user documents. Restricted to school of user.
+    function getFirestoreUserGroup(school) {
+        return getDocs(query(collection(db, "users"), where("school","==", school)))
+    }
+
+    function setStudentListFromSnapshot(snapshot){
+        let temp_UserArray = [];
+        snapshot.forEach(userRecord => {
+            temp_UserArray.push(userRecord);
+        });
+        setStudentList(temp_UserArray);
+    }
+    
+    function resetFirestoreState() {
+        setStudentList([]);
+    }
+
+    
+    ////////////////////////////////////////////////////////////
+
     let value = {
         loading,
         user,
         signIn,
         Firebase_signOut,
         createAccount,
+        createFirestoreUser,
+        deleteAccount,
+        resetAuthState,
+        getFirestoreUser,
+        getFirestoreUserGroup,
+        studentList
     }
     return(
         <AuthContext.Provider value={value}>

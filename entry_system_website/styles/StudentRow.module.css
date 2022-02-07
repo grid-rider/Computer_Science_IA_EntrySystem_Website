@@ -1,0 +1,35 @@
+
+.StudentWrapper {
+    display: flex;
+    border-radius: 5rem;
+    margin-bottom: 2em;
+    height: fit-content;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0.5em;
+}
+
+.StudentWrapper .userIcon{
+    margin: 0 2em;
+}
+
+.StudentWrapper .userInformation{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.StudentWrapper .entryStatus{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.StudentWrapper .entryStatus .entryStatusTitle{
+    font-weight: 800;
+    padding-right: 2em;
+}
+
+
