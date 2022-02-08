@@ -43,7 +43,6 @@ export function AuthProvider({ children }) {
 
     let [loading, setLoading] = useState(true);
     let [user, setUser] = useState(null);
-    let [ userData, setUserData] = useState(null);
 
     useEffect((() => {
 
@@ -96,39 +95,42 @@ export function AuthProvider({ children }) {
 
     //////////////////Firestore Functions////////////////////////
     let [studentList, setStudentList] = useState([]);
+    let [ userData, setUserData] = useState(null);
+
 
     useEffect(() => {
-        let unsubscribe;
-
-        async function getUserSchool() {
-            let school;
-            try {
-                const userDocument = await getFirestoreUser(user.uid);
-                school = userDocument.data().school;
-            } catch (error) {
-                console.log("error occuered with student school fetching");
-                console.log(error);
-                return null;
-            }
-            return school;
-        }
+        let UserDocListener;
 
         if(user != null){
-            getUserSchool().then((school) => {
-                console.log(school);
-                unsubscribe =  onSnapshot(query(collection(db, "users"), where("school","==",school)), ((querySnapshot) => {
-                    console.log("updated user list");
-                    setStudentListFromSnapshot(querySnapshot);
-                }));
+            //set User Data
+            UserDocListener = onSnapshot(doc(db,"users",user.uid),{includeMetadataChanges: true},(doc) => {
+                console.log("updated local user information")
+                setUserData(doc.data());
             })
-
-        }else{
-            resetFirestoreState();
-            if(unsubscribe != null){
-                unsubscribe();
+        } else {
+            setUserData(null);
+            if(UserDocListener != null){
+                UserDocListener();
             }
         }
     }, [user]);
+
+    useEffect(() => {
+        let StudentListListener;
+
+        if(userData != null && user != null){
+            //check role
+            StudentListListener =  onSnapshot(query(collection(db, "users"), where("school","==",userData.school)), ((querySnapshot) => {
+                console.log("updated user list");
+                setStudentListFromSnapshot(querySnapshot);
+            }));
+        }else{
+            resetFirestoreState();
+            if(StudentListListener != null){
+                StudentListListener();
+            }
+        }
+    }, [userData])
 
     useEffect(() => {
         console.log("change detected in student movement");
@@ -158,6 +160,7 @@ export function AuthProvider({ children }) {
         setStudentList(temp_UserArray);
     }
     
+    
     function resetFirestoreState() {
         setStudentList([]);
     }
@@ -179,6 +182,19 @@ export function AuthProvider({ children }) {
 
     }
 
+    async function getUserSchool() {
+        let school;
+        try {
+            const userDocument = await getFirestoreUser(user.uid);
+            school = userDocument.data().school;
+        } catch (error) {
+            console.log("error occuered with student school fetching");
+            console.log(error);
+            return null;
+        }
+        return school;
+    }
+
 
     
     ////////////////////////////////////////////////////////////
@@ -195,7 +211,8 @@ export function AuthProvider({ children }) {
         getFirestoreUser,
         getFirestoreUserGroup,
         studentList,
-        getUserExtraInformation
+        getUserExtraInformation,
+        userData
     }
     return(
         <AuthContext.Provider value={value}>
