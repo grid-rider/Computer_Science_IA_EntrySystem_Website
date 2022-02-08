@@ -64,7 +64,7 @@ export default function SignInPage (){
         <Flex justifyContent="center" alignItems="center" height="100vh" flexDirection="column">
 
             <Flex flexDirection="column" borderRadius="12" background={formBackground} p="12" justifyContent="space-evenly">
-                <Heading mb="1em">Sign Up Form</Heading>
+                <Heading mb="1em">Sign In Form</Heading>
                 
 
                 <form onSubmit={handleSubmit(signIn_ButtonHandler)}>
