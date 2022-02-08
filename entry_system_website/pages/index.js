@@ -3,16 +3,17 @@ import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import { useAuth } from '../components/Firebase/Context/authUserContext'
 import { useEffect } from 'react'
-import { AspectRatio, Box, Center, Container, Flex, Image, useColorMode ,Button, IconButton, HStack} from '@chakra-ui/react';
+import { AspectRatio, Box, Center, Container, Flex, Image, useColorMode ,Button, IconButton, HStack, useDisclosure, Modal, ModalOverlay, ModalContent} from '@chakra-ui/react';
 import { LockIcon, PlusSquareIcon, SunIcon , UnlockIcon} from '@chakra-ui/icons';
 import UserProfile from '../components/React/Profile';
-
 
 export default function Home() {
   const { colorMode, toggleColorMode } = useColorMode()
 
 
   let { user, Firebase_signOut , signIn} = useAuth();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
 
   return (
     <Box>
@@ -25,6 +26,9 @@ export default function Home() {
                   Sign Out
                 </Button>
                 <UserProfile/>
+                <Button colorScheme='blue' variant='ghost'>
+                  <Link href="/Dashboard">Dashboard</Link>
+                </Button>
               </>
 
               :
@@ -43,7 +47,6 @@ export default function Home() {
             </Button>
           </HStack>
         </Flex>
-
     </Box>
   )
 }
