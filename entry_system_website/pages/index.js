@@ -26,9 +26,9 @@ export default function Home() {
                   Sign Out
                 </Button>
                 <UserProfile/>
-                <Button colorScheme='blue' variant='ghost'>
+                <Button colorScheme='blue' variant='solid'>
                   <Link href="/Dashboard">Dashboard</Link>
-                </Button>
+                </Button> 
               </>
 
               :
