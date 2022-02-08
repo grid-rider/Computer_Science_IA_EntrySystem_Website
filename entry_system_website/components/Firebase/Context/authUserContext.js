@@ -9,14 +9,15 @@ export function useAuth() {
     return useContext(AuthContext);
 }
 
-function userDocumentModel(email, FirstName, LastName, School) {
+function userDocumentModel(email, FirstName, LastName, School, Role) {
     return({
         email: email,
         entry_status: false,
         first_name: FirstName,
         last_name: LastName,
         school: School,
-
+        role: Role,
+        img_url: 'https://bit.ly/dan-abramov',
     })
 }
 
@@ -42,6 +43,7 @@ export function AuthProvider({ children }) {
 
     let [loading, setLoading] = useState(true);
     let [user, setUser] = useState(null);
+    let [ userData, setUserData] = useState(null);
 
     useEffect((() => {
 
@@ -134,8 +136,8 @@ export function AuthProvider({ children }) {
 
 
     //create user record in firestore database
-    function createFirestoreUser (UUID , email, password, FirstName, LastName, School){
-        return setDoc(doc(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School))
+    function createFirestoreUser (UUID , email, password, FirstName, LastName, School, Role){
+        return setDoc(doc(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School, Role))
     }
 
     //get firestore user with specific UUID 
@@ -160,6 +162,24 @@ export function AuthProvider({ children }) {
         setStudentList([]);
     }
 
+    async function getUserExtraInformation() {
+        if (user) {
+            try {
+                let UserDoc = await getFirestoreUser(user.uid);
+                if(UserDoc.exists()){
+                    return UserDoc.data();
+                }else{
+                    throw("User Document Not Found")
+                }
+            } catch (error) {
+               console.log(error) 
+               return(error)
+            }
+        }
+
+    }
+
+
     
     ////////////////////////////////////////////////////////////
 
@@ -174,7 +194,8 @@ export function AuthProvider({ children }) {
         resetAuthState,
         getFirestoreUser,
         getFirestoreUserGroup,
-        studentList
+        studentList,
+        getUserExtraInformation
     }
     return(
         <AuthContext.Provider value={value}>

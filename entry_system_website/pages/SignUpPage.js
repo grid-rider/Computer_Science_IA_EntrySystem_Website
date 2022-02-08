@@ -31,7 +31,7 @@ export default function AccountCreation() {
         try {
             let user = await createAccount(data.email, data.password);
             console.log(user);
-            let user_doc = await createFirestoreUser( user.user.uid ,data.email, data.password, data.firstName, data.lastName, data.school);
+            let user_doc = await createFirestoreUser( user.user.uid ,data.email, data.password, data.firstName, data.lastName, data.school, data.role);
             setInvalidSignUp(false);
             console.log(user_doc);
             router.push("/");
@@ -95,6 +95,15 @@ export default function AccountCreation() {
                             <option value="LeipzigInternationalSchool">Leipzig International School</option>
                         </Select>
                     </FormControl>
+
+                    <FormControl m={1}>
+                        <FormLabel>Occupation</FormLabel>
+                        <Select {...register("role")}>
+                            <option value="teacher">Teacher</option>
+                            <option value="student">Student</option>
+                        </Select>
+                    </FormControl>
+
                     <HStack mt="2em">
                         <Button width="100%" colorScheme="teal" type='submit' isLoading={isSubmitting}>Sign Up</Button>
                         <Button onClick={toggleColorMode}><SunIcon/></Button>

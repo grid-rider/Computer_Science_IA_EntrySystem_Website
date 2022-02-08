@@ -10,23 +10,29 @@ import {
 } from '@chakra-ui/react';
 
 
-export default function UserProfile(props) {
+export default function UserProfile() {
 
-    let {user} = useAuth();
+    let {getUserExtraInformation} = useAuth();
 
-    let [ userIcon, setUserIcon] = useState("");
-    let [ name, setName] = useState("");
-    let [ email, setEmail ] = useState("");
+    let [name, setName] = useState("Unkown");
+    let [imgUrl, setImgUrl] = useState("");
 
     useEffect(() => {
-        if(user) {
+        try {
+            getUserExtraInformation().then((userData) => {
+                setName(userData.first_name + " " + userData.last_name);
+                setImgUrl(userData.img_url)
+            })
 
+
+        } catch (error) {
+            console.log(error)
         }
-    }, [user])
+    }, [])
     
     return (
         <Flex alignItems="center">
-            <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
+            <Avatar name={name} src={imgUrl} />
         </Flex>
     )
 }
