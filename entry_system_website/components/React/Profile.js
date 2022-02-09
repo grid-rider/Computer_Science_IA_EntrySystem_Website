@@ -24,8 +24,6 @@ export default function UserProfile() {
         }
     }, [userData])
     return (
-        <Flex alignItems="center">
-            <Avatar name={name} src={imgUrl} />
-        </Flex>
+        <Avatar name={name} src={imgUrl}  marginRight="1em"/>
     )
 }

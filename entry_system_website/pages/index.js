@@ -7,17 +7,24 @@ import { AspectRatio, Box, Center, Container, Flex, Image, useColorMode ,Button,
 import { LockIcon, PlusSquareIcon, SunIcon , UnlockIcon} from '@chakra-ui/icons';
 import UserProfile from '../components/React/Profile';
 
+const initialRoleLandingPages = {
+  "teacher": "RowView",
+  "student": "StudentView"
+}
+
+
 export default function Home() {
+
   const { colorMode, toggleColorMode } = useColorMode()
 
 
   let { user, Firebase_signOut, userData} = useAuth();
-
   let [dashboardButtonLoading, setDashboardButtonLoading] = useState(true)
   let [dashboardSelector, setDashboardSelector] = useState("")
+  
   useEffect(() => {
     if(userData){
-      setDashboardSelector("dashboard/" + userData.role);
+      setDashboardSelector("dashboard/" + userData.role + "/" + initialRoleLandingPages[userData.role]);
       setDashboardButtonLoading(false);
     } else {
       setDashboardButtonLoading(true);
@@ -39,7 +46,6 @@ export default function Home() {
                   <Link href={dashboardSelector}>Dashboard</Link>
                 </Button> 
               </>
-
               :
               <>
                 <Button leftIcon={<LockIcon />} colorScheme='teal' variant='ghost'>
