@@ -35,8 +35,8 @@ export default function SignInPage (){
 
     //form handler
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+    let [invalidLogin , setInvalidLogin] = useState(false);
     let [showPassword, setShowPassword] = useState(false);
-    let [invalidLogin,setInvalidLogin] = useState(false);
 
 
     //color mode
@@ -46,16 +46,17 @@ export default function SignInPage (){
     async function signIn_ButtonHandler(data){
         try {
             let sign_in = await signIn(data.email, data.password);
-            router.push("StudentDashboard");
+            setInvalidLogin(false);
+            router.push("/");
         } catch (error) {
-            console.log(error.message);
             setInvalidLogin(true);
+            console.log(error.message);
         }
     }
 
     useEffect(() => {
         if(user) {
-            router.push("StudentDashboard");
+            router.push("/");
         }
     }, [])
 
@@ -96,12 +97,8 @@ export default function SignInPage (){
                     </HStack>
                 </form>
 
-                {invalidLogin &&
-                    <Alert status="error">
-                        <AlertIcon/>
-                        Invalid Email or Password
-                    </Alert>
-                }
+                <div style={{display: !invalidLogin ? "none" : "block", color: "red", fontSize: "1em", margin: "0 auto"}}>Invalid Email or Password</div>
+
 
             </Flex>
         </Flex>

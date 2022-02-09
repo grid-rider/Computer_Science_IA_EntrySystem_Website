@@ -1,8 +1,9 @@
-import { Box, Text , Flex, Button, Hstack, Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, Heading, Icon} from "@chakra-ui/react";
+import { Box, Text , Flex, Button, Hstack, Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, Heading, Icon, HStack, VStack} from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../components/Firebase/Context/authUserContext";
-import { AiOutlineDingding } from 'react-icons/ai';
+
+import Layout from "../../components/React/Layout/Layout";
 
 
 export default function SupervisorDashboard() {
@@ -10,20 +11,12 @@ export default function SupervisorDashboard() {
     let {userData, user} = useAuth();
     let router = useRouter();
 
+    let [menuSelector, setMenuSelector] = useState("graphAnalytics");
 
     if(userData){
         if(userData.role == "teacher"){
             return( 
-                <Flex flexDirection="row">
-                    <Flex flexDirection="column" width="15%" height="100vh" alignItems="center" justifyContent="space-between">
-                        <Button width="100%"><Icon as={AiOutlineDingding}/></Button>
-                        
-                    </Flex>
-                    <Flex flexDirection="column">
-                        <Text>Table</Text>
-                    </Flex>
-                
-                </Flex>
+                <Heading>Dashboard</Heading>
 
                 );
         }else{
@@ -32,4 +25,12 @@ export default function SupervisorDashboard() {
     } else {
         return( <Text>Acess Denied</Text>);
     }
+}
+
+SupervisorDashboard.getLayout = function getLayout(page) {
+    return(
+        <Layout>
+            {page}
+        </Layout>
+    )
 }
