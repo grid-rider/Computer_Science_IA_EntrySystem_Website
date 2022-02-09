@@ -1,7 +1,8 @@
-import { Box, Text , Flex, Button, Hstack} from "@chakra-ui/react";
+import { Box, Text , Flex, Button, Hstack, Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, Heading, Icon} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAuth } from "../../components/Firebase/Context/authUserContext";
+import { AiOutlineDingding } from 'react-icons/ai';
 
 
 export default function SupervisorDashboard() {
@@ -9,18 +10,21 @@ export default function SupervisorDashboard() {
     let {userData, user} = useAuth();
     let router = useRouter();
 
+
     if(userData){
         if(userData.role == "teacher"){
             return( 
                 <Flex flexDirection="row">
-                    <Flex flexDirection="column" width="20%" border='1px' borderColor='gray.200' position="absolute">
-                        <Text>Nav</Text>
+                    <Flex flexDirection="column" width="15%" height="100vh" alignItems="center" justifyContent="space-between">
+                        <Button width="100%"><Icon as={AiOutlineDingding}/></Button>
+                        
                     </Flex>
-
-                    <Flex flexDirection="column" width="100%" border='1px' borderColor='gray.200'>
-                        <Text>Nav</Text>
+                    <Flex flexDirection="column">
+                        <Text>Table</Text>
                     </Flex>
+                
                 </Flex>
+
                 );
         }else{
             return( <Text>Acess Denied </Text>);
