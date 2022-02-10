@@ -7,6 +7,7 @@ import UserProfile from "../Profile";
 import getIconFromType from '../../Helpers/iconTypes';
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Layout({children, menuItems}) {
 
@@ -14,6 +15,7 @@ export default function Layout({children, menuItems}) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    let router = useRouter();
 
     return(
         <>
@@ -22,16 +24,15 @@ export default function Layout({children, menuItems}) {
                     <Button width="80%" variant="ghost" borderBottom="1px" borderRadius="0" borderColor="gray.600" marginTop="1em" onClick={() => router.push("/")}><Icon width="30px" height="30px" as={AiOutlineDingding}/></Button>
                     <VStack>
                         <Heading fontWeight="bold" fontSize="1.5em">App Menu</Heading>
-                        <List>
+                        <List width="100%">
                             {menuItems.map(element => { 
                                 return (
                                 <ListItem key={element.title}>
-                                    <Button width="80%" variant="ghost" borderBottom="1px" borderRadius="0" borderColor="gray.600" marginTop="1em" leftIcon={getIconFromType(element.iconType)} backgroundColor={element.isActive && "teal.400"}>
-                                        <Link href={element.href}>{element.title}</Link> 
+                                    <Button width="100%" variant="ghost" onClick={() => router.push(element.href)} borderBottom="1px" borderRadius="0" borderColor="gray.600" marginTop="1em" leftIcon={getIconFromType(element.iconType)} backgroundColor={element.isActive && "teal.400"}>
+                                        <Text>{element.title}</Text> 
                                     </Button>
                                 </ListItem>
                                 )
-
                             })}
                         </List>
 

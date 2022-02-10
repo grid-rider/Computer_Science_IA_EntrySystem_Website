@@ -1,28 +1,31 @@
 
-import { Flex, Heading } from '@chakra-ui/react';
+import { Flex, Heading, Text, VStack } from '@chakra-ui/react';
 import Layout from '../../../components/React/Layout/Layout';
-import MenuItem  from '../../../components/Helpers/menuItemObject';
+import menuItems from '../../../components/Helpers/TeacherMenuItems';
 
+let PageMenuItems = menuItems(false,true,false);
 
 export default function RowView() {
+
+    
+    
     return(
-        <Flex>
-            <Heading> Row </Heading>
+        <Flex flexDir="column">
+            <Heading> Row View</Heading>
+            <VStack>
+                <Text>Student Directory</Text>
+            </VStack>
         </Flex>
     )
 }
 
-let menuItems = [
-    MenuItem("Row View", "/dashboard/teacher/RowView", "table", true),
-    MenuItem("Graph Analytics", "/dashboard/teacher/GraphAnalytics", "graph", false),
-    MenuItem("Real Time View", "/dashboard/teacher/RealtimeView", "spyGlass", false),
-];
+
 
 
 
 RowView.getLayout = function getLayout(pages) {
     return(
-        <Layout menuItems={menuItems}>
+        <Layout menuItems={PageMenuItems}>
             {pages}
         </Layout>
     )
