@@ -1,9 +1,10 @@
 
-import { Flex, Heading, List, ListItem, Text, VStack } from '@chakra-ui/react';
+import { Flex, Heading, List, ListItem, Table, Tbody, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import Layout from '../../../components/React/Layout/Layout';
 import menuItems from '../../../components/Helpers/TeacherMenuItems';
 import { useEffect, useState } from 'react';
 import {useAuth} from '../../../components/Firebase/Context/authUserContext';
+import StudentRowView from '../../../components/React/View/StudentRowView';
 
 let PageMenuItems = menuItems(false,true,false);
 
@@ -14,8 +15,7 @@ export default function RowView() {
 
     useEffect(() => {
         let tempArray = studentList.map((element) => {
-            let tempDocumentData = element.data()
-            return(<ListItem key={element.id}><Text>{tempDocumentData.email}</Text></ListItem>)
+            return(<StudentRowView data={element.data()}/>)
         })
         setDisplayStudentLIst(tempArray)
     }, [studentList])
@@ -26,9 +26,19 @@ export default function RowView() {
             <Heading> Row View</Heading>
             <VStack>
                 <Text>Student Directory</Text>
-                <List>
-                    {dispalyStudentList}
-                </List>
+                <Table>
+                    <Thead>
+                        <Tr>
+                            <Th>User</Th>
+                            <Th>Status</Th>
+                            <Th>Last Entry</Th>
+                            <Th>Last Leave</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {dispalyStudentList}
+                    </Tbody>
+                </Table>
             </VStack>
         </Flex>
     )

@@ -18,6 +18,8 @@ function userDocumentModel(email, FirstName, LastName, School, Role) {
         school: School,
         role: Role,
         img_url: 'https://bit.ly/dan-abramov',
+        last_entry: "Unkown",
+        last_exit: "Unkown",
     })
 }
 
