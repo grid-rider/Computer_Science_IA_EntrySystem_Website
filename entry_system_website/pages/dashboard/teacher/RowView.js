@@ -28,7 +28,6 @@ export default function RowView() {
             <Heading> Row View</Heading>
             <VStack>
                 <Text>Student Directory</Text>
-                <Button>Update Data</Button>
                 <Table>
                     <Thead>
                         <Tr>
