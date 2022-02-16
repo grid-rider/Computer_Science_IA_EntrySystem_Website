@@ -11,7 +11,7 @@ let PageMenuItems = menuItems(false,true,false);
 export default function RowView() {
 
     let [dispalyStudentList, setDisplayStudentLIst] = useState([]);
-    let { studentList } = useAuth();
+    let { studentList, updateUserInformation } = useAuth();
 
     useEffect(() => {
         let tempArray = studentList.map((element) => {
@@ -20,12 +20,15 @@ export default function RowView() {
         setDisplayStudentLIst(tempArray)
     }, [studentList])
 
+
+
     
     return(
         <Flex flexDir="column" justifyContent="space-evenly">
             <Heading> Row View</Heading>
             <VStack>
                 <Text>Student Directory</Text>
+                <Button>Update Data</Button>
                 <Table>
                     <Thead>
                         <Tr>
