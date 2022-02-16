@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Image, Td, Tr, VStack, Text } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Image, Td, Tr, VStack, Text, Button } from '@chakra-ui/react';
 
 
 
@@ -32,7 +32,7 @@ export default function StudentRowView(props){
             </Td>
             
             <Td>
-                <Text>edit</Text>
+                <Button variant="link">edit</Button>
             </Td>
         </Tr>
     )

@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut, deleteUser} from "firebase/auth";
-import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot } from "firebase/firestore";
+import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot, updateDoc } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
@@ -184,19 +184,18 @@ export function AuthProvider({ children }) {
 
     }
 
-    async function getUserSchool() {
-        let school;
-        try {
-            const userDocument = await getFirestoreUser(user.uid);
-            school = userDocument.data().school;
-        } catch (error) {
-            console.log("error occuered with student school fetching");
-            console.log(error);
-            return null;
+    async function updateUserInformation(key,information){
+        if (user) {
+            try {
+                await updateDoc(doc(db,"users",user.uid), {
+                    [key]: information
+                });
+            } catch (error) {
+                console.log(error);
+                return(error);
+            }
         }
-        return school;
     }
-
 
     
     ////////////////////////////////////////////////////////////
@@ -214,7 +213,8 @@ export function AuthProvider({ children }) {
         getFirestoreUserGroup,
         studentList,
         getUserExtraInformation,
-        userData
+        userData,
+        updateUserInformation
     }
     return(
         <AuthContext.Provider value={value}>
