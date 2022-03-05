@@ -197,6 +197,20 @@ export function AuthProvider({ children }) {
         }
     }
 
+    async function updateStudentInformation(key,information,id){
+        if (user) {
+            try {
+                await updateDoc(doc(db,"users",id), {
+                    [key]: information
+                });
+            } catch (error) {
+                console.log(error);
+                return(error);
+            }
+        }
+    }
+
+
     
     ////////////////////////////////////////////////////////////
 
@@ -214,7 +228,8 @@ export function AuthProvider({ children }) {
         studentList,
         getUserExtraInformation,
         userData,
-        updateUserInformation
+        updateUserInformation,
+        updateStudentInformation
     }
     return(
         <AuthContext.Provider value={value}>

@@ -22,7 +22,7 @@ export default function RowView() {
 
     
     return(
-        <Flex flexDir="column" justifyContent="space-evenly">
+        <Flex flexDir="column" justifyContent="space-evenly" alignItems="center">
             <Heading> Row View</Heading>
             <VStack>
                 <Text>Student Directory</Text>
