@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../Firebase/Context/authUserContext";
 
 
-export function editStudentModel({ isOpen, onOpen, onClose, uid, avatarIcon }) {
+export function EditStudentModel({ isOpen, onOpen, onClose, uid, avatarIcon }) {
 
     let {updateStudentInformation} = useAuth();
 
@@ -29,10 +29,10 @@ export function editStudentModel({ isOpen, onOpen, onClose, uid, avatarIcon }) {
                         <Flex >
                             <form onSubmit={handleSubmit(saveButtonHandler)}>
                                 <FormControl m={1}>
-                                    <FormLabel>Occupation</FormLabel>
-                                    <Select {...register("role")}>
-                                        <option value="teacher">Teacher</option>
-                                        <option value="student">Student</option>
+                                    <FormLabel>Presence</FormLabel>
+                                    <Select {...register("status")}>
+                                        <option value="present">Present</option>
+                                        <option value="absent">Absent</option>
                                     </Select>
                                 </FormControl>
                             </form>

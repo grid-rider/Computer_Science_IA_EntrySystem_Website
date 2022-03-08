@@ -15,7 +15,7 @@ export default function RowView() {
 
     useEffect(() => {
         let tempArray = studentList.map((element) => {
-            return(<StudentRowView data={element.data()}/>)
+            return(<StudentRowView data={element.data()} id={element.id}/>)
         })
         setDisplayStudentLIst(tempArray)
     }, [studentList])
@@ -29,7 +29,8 @@ export default function RowView() {
                 <Table>
                     <Thead>
                         <Tr>
-                            <Th>User</Th>
+                            <Th>Student Image</Th>
+                            <Th>Name</Th>
                             <Th>Status</Th>
                             <Th>Last Entry</Th>
                             <Th>Last Leave</Th>

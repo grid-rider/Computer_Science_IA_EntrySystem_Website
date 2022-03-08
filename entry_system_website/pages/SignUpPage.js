@@ -25,7 +25,7 @@ export default function AccountCreation() {
     const { colorMode, toggleColorMode } = useColorMode();
 
     //page routing
-    let router = useRouter();
+    let router = useRouter();   
 
     async function signUp_ButtonHandler(data){
         try {
@@ -77,7 +77,7 @@ export default function AccountCreation() {
                         <FormLabel>First Name</FormLabel>
                         <Input placeholder='Enter First Name' {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
                         <FormErrorMessage>
-                                {errors.password && errors.password.message}
+                                {errors.firstName && errors.firstName.message}
                         </FormErrorMessage>
                     </FormControl>
 
@@ -85,7 +85,7 @@ export default function AccountCreation() {
                         <FormLabel>Last Name</FormLabel>
                         <Input placeholder='Enter Last Name' {...register("lastName", { required: {value: true ,message: "Entry Required"}})}/>
                         <FormErrorMessage>
-                                {errors.password && errors.password.message}
+                                {errors.lastName && errors.lastName.message}
                         </FormErrorMessage>
                     </FormControl>
 

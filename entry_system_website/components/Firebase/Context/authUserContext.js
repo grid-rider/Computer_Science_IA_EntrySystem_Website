@@ -197,16 +197,30 @@ export function AuthProvider({ children }) {
         }
     }
 
-    async function updateStudentInformation(key,information,id){
+    async function updateStudentEntryStatus(status,id){
+
         if (user) {
-            try {
-                await updateDoc(doc(db,"users",id), {
-                    [key]: information
-                });
-            } catch (error) {
-                console.log(error);
-                return(error);
+            if(status == "true") {
+                try {
+                    await updateDoc(doc(db,"users",id), {
+                        entry_status: true
+                    });
+                } catch (error) {
+                    console.log(error);
+                    return(error);
+                }
             }
+            else {
+                try {
+                    await updateDoc(doc(db,"users",id), {
+                        entry_status: false
+                    });
+                } catch (error) {
+                    console.log(error);
+                    return(error);
+                }
+            }
+
         }
     }
 
@@ -229,7 +243,7 @@ export function AuthProvider({ children }) {
         getUserExtraInformation,
         userData,
         updateUserInformation,
-        updateStudentInformation
+        updateStudentEntryStatus
     }
     return(
         <AuthContext.Provider value={value}>
