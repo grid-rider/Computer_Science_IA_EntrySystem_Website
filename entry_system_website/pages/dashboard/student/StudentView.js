@@ -19,11 +19,18 @@ export default function StudentView() {
     }
 
     useEffect(() => {
-        let html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader",
-            { fps: 10, qrbox: {width: 250, height: 250} },
-            /* verbose= */ false);
-        html5QrcodeScanner.render(onScanSucess,onScanFailure);
+        Html5Qrcode.getCameras().then((devices) => {
+            if (devices && devices.length) {
+                var cameraId = devices[0].id;
+                const scanner = new Html5Qrcode("reader");
+                scanner.start(cameraId, {fps: 10}, onScanSucess, onScanFailure).catch((error) => {
+                    console.log("failed to start scanner")
+                    throw error 
+                })
+            }
+        }).catch((error) => {
+            console.log("error occured with QR code scanner : " + error)
+        })
     }, [])
 
     return(
