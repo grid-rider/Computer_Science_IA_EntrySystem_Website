@@ -2,39 +2,34 @@
 import { Flex, Heading } from '@chakra-ui/react';
 import Layout from '../../../components/React/Layout/Layout';
 import menuItems from '../../../components/Helpers/StudentMenuItems';
-import { useState } from 'react';
-import { QrReader } from 'react-qr-reader';
+import { useEffect, useState } from 'react';
+import {Html5QrcodeScanner} from "html5-qrcode";
+import {Html5Qrcode} from "html5-qrcode";
 
 let PageMenuItems = menuItems(false,true);
 
 export default function StudentView() {
 
-    const [data, setData] = useState('No result');
-
-    function handleError(){
-
+    //event listener function for HTMLQRCode scanner
+    function onScanSucess(decodedText, decodedResult){
+        console.log(`Code matched = ${decodedText}`, decodedResult);
+    }
+    function onScanFailure(error) {
+        console.warn(`Code scan error = ${error}`);
     }
 
-    function handleScan(d){
-        if (d) {
-            setData(d);
-        }
-    }
+    useEffect(() => {
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader",
+            { fps: 10, qrbox: {width: 250, height: 250} },
+            /* verbose= */ false);
+        html5QrcodeScanner.render(onScanSucess,onScanFailure);
+    }, [])
 
     return(
-        <Flex>
+        <Flex flexDir="column" justifyContent="space-between">
             <Heading> Analytics </Heading>
-            <QrReader
-            delay={300}
-            onError={handleError}
-            onScan={handleScan}
-            onResult={handleError}
-            onLoad={"mirrorVideo"}
-            showViewFinder= {true}
-            style={{ width: '100px', height:"100px" }}
-            />
-            <div>
-                {data}
+            <div id="reader">
             </div>
         </Flex>
     )
