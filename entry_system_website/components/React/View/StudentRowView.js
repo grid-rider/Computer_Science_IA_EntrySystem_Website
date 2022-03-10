@@ -1,10 +1,23 @@
-import { Avatar, Box, Flex, Image, Td, Tr, VStack, Text, Button , useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Select, ModalFooter} from '@chakra-ui/react';
+import { Avatar, Box, Flex, Image, Td, Tr, VStack, Text, Button , useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Select, ModalFooter, Center} from '@chakra-ui/react';
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../Firebase/Context/authUserContext";
 import { Timestamp } from 'firebase/firestore';
 
+
+function getParsedDate(date){
+    return(date.getDay() + "." + date.getMonth() +"." + date.getFullYear());
+}
+
+function getParsedTime(date){
+    return(date.getMinutes() + ":" + date.getHours());
+}
+
+
 export default function StudentRowView(props){
 
+    let entry_date = props.data.last_exit.toDate();
+    let exit_date = props.data.last_entry.toDate();
+    
     const { isOpen, onOpen, onClose } = useDisclosure()
     let {updateStudentEntryStatus} = useAuth();
     
@@ -38,17 +51,24 @@ export default function StudentRowView(props){
                 </Td>
 
                 <Td>
-                    <Box backgroundColor={props.data.entry_status.status ? "green" : "red"} borderRadius="2rem" padding="0.5em">
+                    <Box backgroundColor={props.data.entry_status ? "green" : "red"} borderRadius="2rem" padding="0.5em">
                         <Text>{props.data.entry_status ? "Present" : "Absent"}</Text>
                     </Box>
                 </Td>   
 
                 <Td>
-                    <Text>{props.data.entry_status.last_entry.seconds}</Text>
+                    <VStack>
+                        <Text>{getParsedDate(entry_date)}</Text>
+                        <Text>{getParsedTime(exit_date)}</Text>
+                    </VStack>
+
                 </Td>
 
                 <Td>
-                    <Text>{props.data.entry_status.last_exit.seconds}</Text>
+                    <VStack>
+                        <Text>{getParsedDate(exit_date)}</Text>
+                        <Text>{getParsedTime(exit_date)}</Text>
+                    </VStack>
                 </Td>
                 
                 <Td>

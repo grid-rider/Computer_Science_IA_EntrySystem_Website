@@ -3,7 +3,7 @@ import { Flex, Heading } from '@chakra-ui/react';
 import Layout from '../../../components/React/Layout/Layout';
 import menuItems from '../../../components/Helpers/StudentMenuItems';
 
-let PageMenuItems = menuItems(false,true);
+let PageMenuItems = menuItems(true,false);
 
 export default function StudentView() {
     return(

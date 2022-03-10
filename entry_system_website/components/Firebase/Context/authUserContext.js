@@ -203,7 +203,7 @@ export function AuthProvider({ children }) {
             if(status == "true") {
                 try {
                     await updateDoc(doc(db,"users",id), {
-                        entry_status: true
+                        entry_status: true 
                     });
                 } catch (error) {
                     console.log(error);
