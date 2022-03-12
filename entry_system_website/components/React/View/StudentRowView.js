@@ -15,15 +15,14 @@ function getParsedTime(date){
 
 export default function StudentRowView(props){
 
-    let entry_date = props.data.last_exit.toDate();
-    let exit_date = props.data.last_entry.toDate();
+    let entry_date =  new Date(props.data.last_entry.seconds*1000 + props.data.last_entry.nanoseconds/100000);
+    let exit_date = new Date(props.data.last_exit.seconds*1000 + props.data.last_exit.nanoseconds/100000);
     
     const { isOpen, onOpen, onClose } = useDisclosure()
     let {updateStudentEntryStatus} = useAuth();
     
     //form handler
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
-
 
     function saveButtonHandler(data){
         updateStudentEntryStatus(data.status,props.id).then(() => {
@@ -51,17 +50,22 @@ export default function StudentRowView(props){
                 </Td>
 
                 <Td>
+                    <Text>{props.data.role}</Text>
+                </Td>
+
+                <Td>
                     <Box backgroundColor={props.data.entry_status ? "green" : "red"} borderRadius="2rem" padding="0.5em">
                         <Text>{props.data.entry_status ? "Present" : "Absent"}</Text>
                     </Box>
                 </Td>   
 
+
+
                 <Td>
                     <VStack>
                         <Text>{getParsedDate(entry_date)}</Text>
-                        <Text>{getParsedTime(exit_date)}</Text>
+                        <Text>{getParsedTime(entry_date)}</Text>
                     </VStack>
-
                 </Td>
 
                 <Td>
@@ -87,7 +91,7 @@ export default function StudentRowView(props){
                             <Flex >
                                 <form onSubmit={handleSubmit(saveButtonHandler)}>
                                     <FormControl m={1}>
-                                        <FormLabel>Presences</FormLabel>
+                                        <FormLabel>Presence</FormLabel>
                                         <Select {...register("status")}>
                                             <option value="true">Present</option>
                                             <option value="false">Absent</option>

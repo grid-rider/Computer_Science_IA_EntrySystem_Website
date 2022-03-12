@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut, deleteUser} from "firebase/auth";
-import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot, updateDoc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot, updateDoc, Timestamp } from "firebase/firestore";
+import { getDatabase, set, ref } from 'firebase/database';
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
@@ -10,6 +11,7 @@ export function useAuth() {
 }
 
 function userDocumentModel(email, FirstName, LastName, School, Role) {
+
     return({
         email: email,
         entry_status: false,
@@ -18,8 +20,8 @@ function userDocumentModel(email, FirstName, LastName, School, Role) {
         school: School,
         role: Role,
         img_url: 'https://bit.ly/dan-abramov',
-        last_entry: "Unkown",
-        last_exit: "Unkown",
+        last_entry:  Timestamp.now(),
+        last_exit:  Timestamp.now(),
     })
 }
 
@@ -42,12 +44,12 @@ export function AuthProvider({ children }) {
     const app = getFirebaseApp();
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const realtime_db = getDatabase(app);
 
     let [loading, setLoading] = useState(true);
     let [user, setUser] = useState(null);
-
+    
     useEffect((() => {
-
         
         let unsubsribeAuth = onAuthStateChanged(auth, ((user) => {
             if(user){
@@ -94,10 +96,13 @@ export function AuthProvider({ children }) {
         setLoading(true);
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////Firestore Functions/////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //////////////////Firestore Functions////////////////////////
     let [studentList, setStudentList] = useState([]);
     let [ userData, setUserData] = useState(null);
+    let [ acessStations, setAcessStations] = useState([]);
 
 
     useEffect(() => {
@@ -119,25 +124,29 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         let StudentListListener;
+        let StationListener;
 
         if(userData != null && user != null){
-            //check role
+            //check role & get student list (for production refractor name to list as list is not isolated to students but also other user roles)
             StudentListListener =  onSnapshot(query(collection(db, "users"), where("school","==",userData.school)), ((querySnapshot) => {
                 console.log("updated user list");
                 setStudentListFromSnapshot(querySnapshot);
+            }));
+
+            StationListener = onSnapshot(query(collection(db,"stations"), where("school","==",userData.school)), ((querySnapshot) => {
+                console.log("updated station list");
+                setStationListFromSnapshot(querySnapshot);
             }));
         }else{
             resetFirestoreState();
             if(StudentListListener != null){
                 StudentListListener();
             }
+            if(StationListener != null){
+                StationListener();
+            }
         }
     }, [userData])
-
-    useEffect(() => {
-        console.log("change detected in student movement");
-    }, [studentList])
-
 
     //create user record in firestore database
     function createFirestoreUser (UUID , email, password, FirstName, LastName, School, Role){
@@ -159,12 +168,25 @@ export function AuthProvider({ children }) {
         snapshot.forEach(userRecord => {
             temp_UserArray.push(userRecord);
         });
+
         setStudentList(temp_UserArray);
+    }
+
+    function setStationListFromSnapshot(snapshot){
+        let temp_StationArray = [];
+        snapshot.forEach(station => {
+            temp_StationArray.push(station);
+        });
+        console.log("stations : ");
+        console.log(temp_StationArray);
+
+        setAcessStations(temp_StationArray);
     }
     
     
     function resetFirestoreState() {
         setStudentList([]);
+        setAcessStations([]);
     }
 
     async function getUserExtraInformation() {
@@ -220,12 +242,37 @@ export function AuthProvider({ children }) {
                     return(error);
                 }
             }
+        }
+    }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////Realtime DB Functions///////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async function setBuildingTransfer(type,station){
+        if (user) {
+            try {
+                await set(ref(realtime_db,"access_log/"+user.uid), {
+                    user_id: user.uid,
+                    first_name: userData.first_name,
+                    last_name: userData.last_name,
+                    timestamp: Timestamp.now(),
+                    acess_type: type,
+                    school: userData.school,
+                    station: station, 
+                }); 
+
+            } catch (error) {
+                console.log(error);
+                return(error);
+            }
 
         }
     }
 
 
-    
     ////////////////////////////////////////////////////////////
 
     let value = {
@@ -243,7 +290,9 @@ export function AuthProvider({ children }) {
         getUserExtraInformation,
         userData,
         updateUserInformation,
-        updateStudentEntryStatus
+        updateStudentEntryStatus,
+        setBuildingTransfer,
+        acessStations
     }
     return(
         <AuthContext.Provider value={value}>

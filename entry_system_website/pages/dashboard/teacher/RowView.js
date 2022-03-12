@@ -31,6 +31,7 @@ export default function RowView() {
                         <Tr>
                             <Th>Student Image</Th>
                             <Th>Name</Th>
+                            <Th>Role</Th>
                             <Th>Status</Th>
                             <Th>Last Entry</Th>
                             <Th>Last Leave</Th>

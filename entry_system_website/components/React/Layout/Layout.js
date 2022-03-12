@@ -28,7 +28,7 @@ export default function Layout({children, menuItems}) {
                             {menuItems.map(element => { 
                                 return (
                                 <ListItem key={element.title}>
-                                    <Button width="100%" variant="ghost" onClick={() => router.push(element.href)} borderBottom="1px" borderRadius="0" borderColor="gray.600" marginTop="1em" leftIcon={getIconFromType(element.iconType)} backgroundColor={element.isActive && "teal.400"}>
+                                    <Button width="100%" variant="ghost" onClick={() => router.push(element.href)} borderBottom="1px" borderRadius="1rem" borderColor="gray.600" marginTop="1em" leftIcon={getIconFromType(element.iconType)} backgroundColor={element.isActive && "teal.400"}>
                                         <Text>{element.title}</Text> 
                                     </Button>
                                 </ListItem>
@@ -42,7 +42,7 @@ export default function Layout({children, menuItems}) {
                         <BsQuestionSquare/>
                         <Flex alignItems="center"flexDirection="column" justifyContent="center">
                             <Heading fontSize="1.5em">Need Help</Heading>
-                            <Button   marginTop="0.5em" variant="outline" border="2px" borderColor="whiteAlpha.500">See Documentation</Button>
+                            <Button marginTop="0.5em" variant="outline" border="2px" borderColor="whiteAlpha.500">See Documentation</Button>
                         </Flex>
                     </VStack>
                 </Box>
