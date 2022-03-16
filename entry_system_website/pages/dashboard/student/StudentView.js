@@ -16,12 +16,15 @@ const qrScannerConfig = {
 export default function StudentView() {
 
 
+
+
     //useAuth object destructuring 
     let { setBuildingTransfer,acessStations,updateStudentEntryStatus, user, userData} = useAuth();
 
-
-    function handleScanStart(){
-        let scanner = new Html5Qrcode("reader");    
+    let scanner;
+    
+    function startQrCode () {
+        scanner = new Html5Qrcode("reader");    
         Html5Qrcode.getCameras().then((devices) => {
             if (devices && devices.length) {
                 //finding camera id. For development purposes using first camera. In production selecting environment facing camera
@@ -35,31 +38,31 @@ export default function StudentView() {
             console.log("error occured with QR code scanner : " + error)
         })
 
+    }
 
-            //event listener functions for HTMLQRCode scanner
-        function onScanSucess(decodedText, decodedResult){  
-            acessStations.forEach((doc) => {
-                if(decodedText == doc.id) {
-                    updateStudentEntryStatus(!userData.entry_status,user.uid).then(() => {
-                        setBuildingTransfer((userData.entry_status? "exit":"entry"),decodedText).then(() => {
-                            scanner.stop().catch((error) => {
-                                throw error
-                            })
-                        }).catch((error) => {
+
+    //event listener functions for HTMLQRCode scanner
+    function onScanSucess(decodedText, decodedResult){  
+        acessStations.forEach((doc) => {
+            if(decodedText == doc.id) {
+                updateStudentEntryStatus(!userData.entry_status,user.uid).then(() => {
+                    setBuildingTransfer((userData.entry_status? "exit":"entry"),decodedText).then(() => {
+                        console.log("got here 2")
+                        scanner.stop().catch((error) => {
                             throw error
                         })
                     }).catch((error) => {
-                        console.log(error)
+                        console.log(error);
                     })
-                }
-            });
-        }
-
-        function onScanFailure(error) {
-            
-        }   
+                }).catch((error) => {
+                    console.log(error)
+                })
+            }
+        });
     }
 
+    function onScanFailure(error) {
+    }   
 
     return(
         <Flex flexDir="column" justifyContent="space-between" align="center">
@@ -68,10 +71,9 @@ export default function StudentView() {
                 <Box position="relative" left="6em" zIndex="100" border="white 2px solid" p="4em">
                     <Text>Scan Me</Text>
                 </Box>
-                <Box width="17em" id="reader">
-                </Box>
+                <Box width="17em" id="reader"></Box>
+                <Button onClick={startQrCode}></Button>
             </HStack>
-            <Button colorScheme="teal" onClick={handleScanStart}></Button>
 
         </Flex>
     )

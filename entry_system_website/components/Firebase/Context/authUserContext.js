@@ -30,6 +30,7 @@ function getFirebaseApp() {
         apiKey: "AIzaSyDKwY8frueK8cFoTFEvNYdcF1-IFRYDw4o",
         authDomain: "entrysystem-2fbb1.firebaseapp.com",
         projectId: "entrysystem-2fbb1",
+        databaseURL: "https://entrysystem-2fbb1-default-rtdb.europe-west1.firebasedatabase.app/",
         storageBucket: "entrysystem-2fbb1.appspot.com",
         messagingSenderId: "986017227132",
         appId: "1:986017227132:web:d8aa9215d01334e9df04f9",
@@ -48,7 +49,7 @@ export function AuthProvider({ children }) {
 
     let [loading, setLoading] = useState(true);
     let [user, setUser] = useState(null);
-    
+
     useEffect((() => {
         
         let unsubsribeAuth = onAuthStateChanged(auth, ((user) => {
@@ -254,7 +255,7 @@ export function AuthProvider({ children }) {
     async function setBuildingTransfer(type,station){
         if (user) {
             try {
-                await set(ref(realtime_db,"access_log/"+user.uid), {
+                await set(ref(realtime_db,"/acess_log/",user.uid), {
                     user_id: user.uid,
                     first_name: userData.first_name,
                     last_name: userData.last_name,
@@ -263,10 +264,8 @@ export function AuthProvider({ children }) {
                     school: userData.school,
                     station: station, 
                 }); 
-
             } catch (error) {
                 console.log(error);
-                return(error);
             }
 
         }
