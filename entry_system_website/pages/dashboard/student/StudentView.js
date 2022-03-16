@@ -22,7 +22,7 @@ export default function StudentView() {
     let { setBuildingTransfer,acessStations,updateStudentEntryStatus, user, userData} = useAuth();
 
     let scanner;
-    
+
     function startQrCode () {
         scanner = new Html5Qrcode("reader");    
         Html5Qrcode.getCameras().then((devices) => {
@@ -62,6 +62,7 @@ export default function StudentView() {
     }
 
     function onScanFailure(error) {
+
     }   
 
     return(
