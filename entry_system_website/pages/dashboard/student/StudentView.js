@@ -28,7 +28,8 @@ export default function StudentView() {
         Html5Qrcode.getCameras().then((devices) => {
             if (devices && devices.length) {
                 //finding camera id. For development purposes using first camera. In production selecting environment facing camera
-                var cameraId = devices[0].id;
+                console.log(devices);
+                var cameraId = devices[1].id;
                 scanner.start(cameraId, qrScannerConfig, onScanSucess, onScanFailure).catch((error) => {
                     console.log("failed to start scanner")
                     throw error 
@@ -62,7 +63,7 @@ export default function StudentView() {
     }
 
     function onScanFailure(error) {
-
+        console.log(error)
     }   
 
     return(

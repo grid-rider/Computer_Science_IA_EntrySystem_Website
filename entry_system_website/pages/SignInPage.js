@@ -1,4 +1,3 @@
-import { Firebase_signIn, auth, Firebase_signOut} from '../components/Firebase/Firebase';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { onAuthStateChanged } from 'firebase/auth';

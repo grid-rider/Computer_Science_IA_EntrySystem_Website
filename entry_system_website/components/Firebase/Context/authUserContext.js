@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut, deleteUser} from "firebase/auth";
 import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot, updateDoc, Timestamp } from "firebase/firestore";
 import { getDatabase, set, ref } from 'firebase/database';
@@ -26,7 +26,7 @@ function userDocumentModel(email, FirstName, LastName, School, Role) {
 }
 
 function getFirebaseApp() {
-    const firebaseConfig = {
+    let firebaseConfig = {
         apiKey: "AIzaSyDKwY8frueK8cFoTFEvNYdcF1-IFRYDw4o",
         authDomain: "entrysystem-2fbb1.firebaseapp.com",
         projectId: "entrysystem-2fbb1",
@@ -41,7 +41,7 @@ function getFirebaseApp() {
 }
 
 export function AuthProvider({ children }) {
-
+    
     const app = getFirebaseApp();
     const auth = getAuth(app);
     const db = getFirestore(app);
