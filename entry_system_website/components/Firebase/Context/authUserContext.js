@@ -1,7 +1,7 @@
 import { initializeApp, getApps } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut, deleteUser} from "firebase/auth";
 import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot, updateDoc, Timestamp } from "firebase/firestore";
-import { getDatabase, set, ref } from 'firebase/database';
+import { getDatabase, set, ref, push } from 'firebase/database';
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
@@ -223,7 +223,7 @@ export function AuthProvider({ children }) {
     async function updateStudentEntryStatus(status,id){
 
         if (user) {
-            if(status == "true") {
+            if(status) {
                 try {
                     await updateDoc(doc(db,"users",id), {
                         entry_status: true 
@@ -255,7 +255,7 @@ export function AuthProvider({ children }) {
     async function setBuildingTransfer(type,station){
         if (user) {
             try {
-                await set(ref(realtime_db,"/acess_log/",user.uid), {
+                await push(ref(realtime_db,"/acess_log_v2/"), {
                     user_id: user.uid,
                     first_name: userData.first_name,
                     last_name: userData.last_name,
@@ -263,7 +263,7 @@ export function AuthProvider({ children }) {
                     acess_type: type,
                     school: userData.school,
                     station: station, 
-                }); 
+                })
             } catch (error) {
                 console.log(error);
             }

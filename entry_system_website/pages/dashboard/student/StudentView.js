@@ -28,8 +28,7 @@ export default function StudentView() {
         Html5Qrcode.getCameras().then((devices) => {
             if (devices && devices.length) {
                 //finding camera id. For development purposes using first camera. In production selecting environment facing camera
-                console.log(devices);
-                var cameraId = devices[1].id;
+                var cameraId = devices[0].id;
                 scanner.start(cameraId, qrScannerConfig, onScanSucess, onScanFailure).catch((error) => {
                     console.log("failed to start scanner")
                     throw error 
@@ -46,24 +45,25 @@ export default function StudentView() {
     function onScanSucess(decodedText, decodedResult){  
         acessStations.forEach((doc) => {
             if(decodedText == doc.id) {
-                updateStudentEntryStatus(!userData.entry_status,user.uid).then(() => {
-                    setBuildingTransfer((userData.entry_status? "exit":"entry"),decodedText).then(() => {
-                        console.log("got here 2")
-                        scanner.stop().catch((error) => {
-                            throw error
+                scanner.stop().then(() => {
+                    updateStudentEntryStatus(!userData.entry_status,user.uid).then(() => {
+                        setBuildingTransfer((userData.entry_status? "exit":"entry"),decodedText).then(() => {
+                            console.log("sucess !!!")
+                        }).catch((error) => {
+                            console.log(error);
                         })
                     }).catch((error) => {
-                        console.log(error);
+                        console.log(error)
                     })
                 }).catch((error) => {
-                    console.log(error)
+                    throw error
                 })
+
             }
         });
     }
 
     function onScanFailure(error) {
-        console.log(error)
     }   
 
     return(
