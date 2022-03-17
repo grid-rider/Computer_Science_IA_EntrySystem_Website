@@ -12,6 +12,7 @@ const qrScannerConfig = {
     fps: 15
 }
 
+let scanner;    
 
 export default function StudentView() {
 
@@ -31,12 +32,10 @@ export default function StudentView() {
         }
     }, [userData])
 
-    
-    let scanner;
 
     function startQrCode () {
-        scanner = new Html5Qrcode("reader");    
 
+        scanner = new Html5Qrcode("reader");    
         Html5Qrcode.getCameras().then((devices) => {
             if (devices && devices.length) {
                 //finding camera id. For development purposes using first camera. In production selecting environment facing camera
@@ -87,9 +86,8 @@ export default function StudentView() {
         }else{
             console.log("error")
             scanner.stop().then(() => {
-            }).catch((error) => {
-                console.log(error)
-            });
+                console.log("completed")
+            })
             
         }
     }
@@ -99,15 +97,15 @@ export default function StudentView() {
         <>
             <Flex flexDir="column" justifyContent="space-evenly" alignItems="center">
                 <Box borderRadius="10000rem" border="solid 2px white" height="sm" width="sm" padding="4em" overflow="hidden">
-                    <Box width="17em" id="reader"></Box>
-                    {scanOn? 
+                    <Box position="relative" width="xl" height="xl" id="reader" right="10em" bottom="6em"></Box>
+                    {scanOn?
                         <>
-                            <Box position="relative" left="6em" zIndex="100" border="white 2px solid" p="4em">
+                            <Box position="relative" zIndex="100" border="white 2px solid" p="4em">
                                 <Text>Scan Me</Text>
                             </Box>   
                         </>
                     :
-                        <Heading> Signed In </Heading>
+                        <Heading  position="relative"> Signed In </Heading>
                     }
                 </Box>
                 <Button onClick={toggleScan}>{!scanOn? "Start Scan" : "Stop Scan"}</Button>
