@@ -56,7 +56,6 @@ export function AuthProvider({ children }) {
             if(user){
                 console.log("user logged In");
                 console.log(user);
-                setLoading(true);
                 setUser(user);
             }else{
                 console.log("user logged Out");
@@ -114,6 +113,7 @@ export function AuthProvider({ children }) {
             UserDocListener = onSnapshot(doc(db,"users",user.uid),{includeMetadataChanges: true},(doc) => {
                 console.log("updated local user information")
                 setUserData(doc.data());
+                setLoading(false);
             })
         } else {
             setUserData(null);
