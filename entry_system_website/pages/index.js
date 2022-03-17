@@ -1,33 +1,67 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import { useAuth } from '../components/Firebase/Context/authUserContext'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { AspectRatio, Box, Center, Container, Flex, Image, useColorMode ,Button, IconButton, HStack, useDisclosure, Modal, ModalOverlay, ModalContent} from '@chakra-ui/react';
+import { LockIcon, PlusSquareIcon, SunIcon , UnlockIcon} from '@chakra-ui/icons';
+import UserProfile from '../components/React/Profile';
 
+const initialRoleLandingPages = {
+  "teacher": "RowView",
+  "student": "StudentView"
+}
 
 
 export default function Home() {
-  let { user, Firebase_signOut , signIn} = useAuth();
+
+  const { colorMode, toggleColorMode } = useColorMode()
+
+
+  let { user, Firebase_signOut, userData} = useAuth();
+  let [dashboardButtonLoading, setDashboardButtonLoading] = useState(true)
+  let [dashboardSelector, setDashboardSelector] = useState("")
+  
+  useEffect(() => {
+    if(userData){
+      setDashboardSelector("dashboard/" + userData.role + "/" + initialRoleLandingPages[userData.role]);
+      setDashboardButtonLoading(false);
+    } else {
+      setDashboardButtonLoading(true);
+    }
+  }, [userData]);
 
   return (
-    <div className={styles.HomePageWrapper}>
+    <Box>
+        <Flex justify="space-between" padding="20px">
+          <Image src="./svg/Logo.jpg" objectFit="contain"/>
+          <HStack>
+            {user ? 
+              <>
+                <Button leftIcon={<UnlockIcon />} onClick={Firebase_signOut} colorScheme='teal' variant='ghost'>
+                  Sign Out
+                </Button>
+                <UserProfile/>
+                <Button colorScheme='blue' variant='solid' isLoading={dashboardButtonLoading}>
+                  <Link href={dashboardSelector}>Dashboard</Link>
+                </Button> 
+              </>
+              :
+              <>
+                <Button leftIcon={<LockIcon />} colorScheme='teal' variant='ghost'>
+                  <Link href="/SignInPage">Sign In</Link>
+                </Button>
+                <Button leftIcon={<PlusSquareIcon />} colorScheme='teal' variant='ghost'>
+                  <Link href="/SignUpPage">Create Account</Link>
+                </Button>
+              </>
+            }
 
-
-      <nav>
-        <div className={styles.Icon}></div>
-
-        <ul>
-          <li><Link className = {styles.SignIn} href={user ? "Dashboard":"SignInPage"}>Dashboard</Link></li>
-        </ul>
-      </nav>
-
-      <section>
-        <div className={styles.Lock}></div>
-        <div className={styles.BottomLeftPeople}></div>
-      </section>
-
-
-    </div>
+            <Button onClick={toggleColorMode}>
+              <SunIcon/>
+            </Button>
+          </HStack>
+        </Flex>
+    </Box>
   )
 }
