@@ -84,7 +84,6 @@ export default function StudentView() {
     }   
 
     function toggleScan(){
-        setScanOn(value => !value);
         if(!scanOn){
             console.log("acessed")
             startQrCode()
@@ -95,26 +94,28 @@ export default function StudentView() {
             })
             
         }
+        setScanOn(value => !value);
+
     }
 
 
     return(
         <>
             <Flex flexDir="column" justifyContent="space-evenly" alignItems="center">
-                <VStack overflow="hidden" position="relative" borderRadius="10000rem" border="solid 2px white" height={{base:"19em",md:"md"}} width={{base:"19em",md:"md"}}>
-                    <Box position="absolute" zIndex="-100" width={{base:"33em",md:"xl"}} height={{base:"33em",md:"xl"}} id="reader" top="0em"></Box>
+                <Flex flexDir="column" justifyContent="center" alignItems="center" overflow="hidden" position="relative" borderRadius="1000rem" border="solid 2px white" height={{base:"19em",md:"md"}} width={{base:"19em",md:"md"}}>
+                    <Box display={scanOn? "inline":"none"} position="absolute" zIndex="0" width={{base:"33em",md:"xl"}} height={{base:"33em",md:"xl"}} id="reader" top="0em"></Box>
                     {scanOn?        
                         <Box position="absolute" zIndex="100" border="white 3px solid" p="7em" top="2em">
                             <Text>Scan Me</Text>
                         </Box>   
                         :
-                        <VStack>
+                        <Flex flexDir="column" justifyContent="center" alignItems="center">
                             <UserProfile/>
                             <Text>{name}</Text>
                             <Heading position="relative">Status: {(entryType? "Signed In" : "Signed Out")}</Heading>
-                        </VStack>
+                        </Flex>
                     }
-                </VStack>
+                </Flex>
                 <Button colorScheme="teal" width="70%" height="3em" borderRadius="2em" marginTop="2em" onClick={toggleScan}>{!scanOn? "Start Scan" : "Stop Scan"}</Button>
 
             </Flex>
