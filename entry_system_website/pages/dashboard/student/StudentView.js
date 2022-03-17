@@ -101,13 +101,13 @@ export default function StudentView() {
     return(
         <>
             <Flex flexDir="column" justifyContent="space-evenly" alignItems="center">
-                <VStack overflow="hidden" position="relative" borderRadius="10000rem" border="solid 2px white" height="md" width="md">
-                    <Box position="absolute" zIndex="1" width="xl" height="xxl" id="reader" top="0em"></Box>
+                <VStack overflow="hidden" position="relative" borderRadius="10000rem" border="solid 2px white" height={{base:"19em",md:"md"}} width={{base:"19em",md:"md"}}>
+                    <Box position="absolute" zIndex="-100" width={{base:"32em",md:"xl"}} height={{base:"32em",md:"xl"}} id="reader" top="0em"></Box>
                     {scanOn?        
                         <Box position="absolute" zIndex="100" border="white 3px solid" p="7em" top="2em">
                             <Text>Scan Me</Text>
                         </Box>   
-                    :
+                        :
                         <VStack>
                             <UserProfile/>
                             <Text>{name}</Text>
