@@ -1,15 +1,16 @@
 
-import { Box, Button, Flex, Heading, HStack, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, HStack, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import Layout from '../../../components/React/Layout/Layout';
 import menuItems from '../../../components/Helpers/StudentMenuItems';
 import { useEffect, useState } from 'react';
 import {Html5QrcodeScanner, Html5Qrcode} from "html5-qrcode";
 import { useAuth } from '../../../components/Firebase/Context/authUserContext';
+import UserProfile from '../../../components/React/Profile';
 
 let PageMenuItems = menuItems(false,true);
 
 const qrScannerConfig = {
-    fps: 15
+    fps: 15,
 }
 
 let scanner;    
@@ -19,7 +20,8 @@ export default function StudentView() {
 
     const { isOpen, onOpen, onClose} = useDisclosure();
     let [ scanOn, setScanOn] = useState(false);
-    let [ entryType, setEntryType] = useState(false)
+    let [ entryType, setEntryType] = useState(false);
+    let [ name, setName] = useState("loading...");
 
 
     //useAuth object destructuring 
@@ -29,6 +31,7 @@ export default function StudentView() {
     useEffect(() => {
         if(userData){
             setEntryType(userData.entry_type)
+            setName(userData.first_name + " " + userData.last_name)
         }
     }, [userData])
 
@@ -38,9 +41,11 @@ export default function StudentView() {
         scanner = new Html5Qrcode("reader");    
         Html5Qrcode.getCameras().then((devices) => {
             if (devices && devices.length) {
+                console.log("camera : ")
+                console.log(devices[0])
                 //finding camera id. For development purposes using first camera. In production selecting environment facing camera
                 var cameraId = devices[0].id;
-                scanner.start(cameraId, qrScannerConfig, onScanSucess, onScanFailure).catch((error) => {
+                scanner.start({ facingMode: "environment" }, qrScannerConfig, onScanSucess, onScanFailure).catch((error) => {
                     console.log("failed to start scanner")
                     throw error 
                 })
@@ -96,19 +101,21 @@ export default function StudentView() {
     return(
         <>
             <Flex flexDir="column" justifyContent="space-evenly" alignItems="center">
-                <Box borderRadius="10000rem" border="solid 2px white" height="sm" width="sm" padding="4em" overflow="hidden">
-                    <Box position="relative" width="xl" height="xl" id="reader" right="10em" bottom="6em"></Box>
-                    {scanOn?
-                        <>
-                            <Box position="relative" zIndex="100" border="white 2px solid" p="4em">
-                                <Text>Scan Me</Text>
-                            </Box>   
-                        </>
+                <VStack  position="relative" borderRadius="10000rem" border="solid 2px white" height="md" width="md" overflow="hidden">
+                    <Box position="absolute" zIndex="1" width="xl" height="xxl" id="reader" top="0em"></Box>
+                    {scanOn?        
+                        <Box position="absolute" zIndex="100" border="white 3px solid" p="7em" top="2em">
+                            <Text>Scan Me</Text>
+                        </Box>   
                     :
-                        <Heading  position="relative"> Signed In </Heading>
+                        <VStack>
+                            <UserProfile/>
+                            <Text>{name}</Text>
+                            <Heading position="relative">Status: {(entryType? "Signed In" : "Signed Out")}</Heading>
+                        </VStack>
                     }
-                </Box>
-                <Button onClick={toggleScan}>{!scanOn? "Start Scan" : "Stop Scan"}</Button>
+                </VStack>
+                <Button colorScheme="teal" width="70%" height="3em" borderRadius="2em" marginTop="2em" onClick={toggleScan}>{!scanOn? "Start Scan" : "Stop Scan"}</Button>
 
             </Flex>
 
@@ -126,7 +133,7 @@ export default function StudentView() {
             </Modal>
         </>
 
-    )
+    )   
 }
 
 StudentView.getLayout = function getLayout(pages) {
