@@ -103,7 +103,7 @@ export default function StudentView() {
         <>
             <Flex flexDir="column" justifyContent="space-evenly" alignItems="center">
                 <Flex flexDir="column" justifyContent="center" alignItems="center" sx={{overflow: "hidden"}} position="relative" borderRadius="1000rem" border="solid 2px white" height={{base:"19em",md:"md"}} width={{base:"19em",md:"md"}}>
-                    <Box display={scanOn? "inline":"none"} position="absolute" zIndex="0" width={{base:"33em",md:"xl"}} height={{base:"33em",md:"xl"}} id="reader" top="0em"></Box>
+                    <Box id="reader" display={scanOn? "inline":"none"}zIndex="0" width={{base:"33em",md:"xl"}} height={{base:"33em",md:"xl"}}  ></Box>
                     {scanOn?        
                         <Flex position="absolute" zIndex="100" border="white 3px solid" p="7em" top="2em">
                             <Text>Scan Me</Text>
