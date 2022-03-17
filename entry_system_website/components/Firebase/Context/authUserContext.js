@@ -222,9 +222,12 @@ export function AuthProvider({ children }) {
 
     async function updateStudentEntryStatus(status,id){
 
+
         if (user) {
-            if(status) {
+            //using string because chakraui selector cannot pass bool
+            if(status == "true") {
                 try {
+                    console.log(id)
                     await updateDoc(doc(db,"users",id), {
                         entry_status: true 
                     });
