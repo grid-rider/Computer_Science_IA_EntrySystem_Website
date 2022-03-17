@@ -15,7 +15,7 @@ export default function RowView() {
 
     useEffect(() => {
         let tempArray = studentList.map((element) => {
-            return(<StudentRowView data={element.data()} id={element.id}/>)
+            return(<StudentRowView key={element.id} data={element.data()} id={element.id}/>)
         })
         setDisplayStudentLIst(tempArray)
     }, [studentList])
