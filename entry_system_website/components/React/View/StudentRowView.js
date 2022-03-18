@@ -41,7 +41,7 @@ export default function StudentRowView(props){
                 <Td>
                     <Avatar name={name} src={props.data.img_url}/>
                 </Td>
-                
+
                 <Td>
                     <VStack>
                         <Text>{name}</Text>

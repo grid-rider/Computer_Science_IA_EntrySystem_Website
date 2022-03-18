@@ -225,9 +225,9 @@ export function AuthProvider({ children }) {
 
         if (user) {
             //using string because chakraui selector cannot pass bool
-            if(status == "true") {
+            if(status == "true" || status === true) {
+                console.log("logging entry")
                 try {
-                    console.log(id)
                     await updateDoc(doc(db,"users",id), {
                         entry_status: true 
                     });
@@ -237,6 +237,7 @@ export function AuthProvider({ children }) {
                 }
             }
             else {
+                console.log("logging exit")
                 try {
                     await updateDoc(doc(db,"users",id), {
                         entry_status: false
