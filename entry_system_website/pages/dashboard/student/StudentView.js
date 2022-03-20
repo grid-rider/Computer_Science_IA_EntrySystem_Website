@@ -7,7 +7,6 @@
     import { useAuth } from '../../../components/Firebase/Context/authUserContext';
     import UserProfile from '../../../components/React/Profile';
 
-    let PageMenuItems = menuItems(false,true);
 
     const qrScannerConfig = {
         fps: 15,
@@ -134,10 +133,3 @@
         )   
     }
 
-    StudentView.getLayout = function getLayout(pages) {
-        return(
-            <Layout menuItems={PageMenuItems}>
-                {pages}
-            </Layout>
-        )
-    }
