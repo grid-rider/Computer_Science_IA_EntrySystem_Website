@@ -42,8 +42,6 @@ export default function StudentView() {
         if(userData){
             let entry_date =  userData.last_entry.toDate();
             let exit_date =  userData.last_exit.toDate();
-            console.log( getParsedDate(exit_date));
-            console.log(exit_date);
             setEntryObject({
                 entry_date_string: getParsedDate(entry_date),
                 entry_time_string: getParsedTime(entry_date),
@@ -81,17 +79,20 @@ export default function StudentView() {
         scanner.pause(true);
         acessStations.forEach((doc) => {
             if(decodedText == doc.id) {
-                toggleScan();
-                updateStudentEntryStatus(!userData.entry_status,user.uid).then(() => {
-                    setBuildingTransfer((userData.entry_status? "entry":"exit"),decodedText).then(() => {
-                        onOpen();
-                        return 0;
+                scanner.stop().then(() => {
+                    updateStudentEntryStatus(!userData.entry_status,user.uid).then(() => {
+                        setBuildingTransfer((userData.entry_status? "entry":"exit"),decodedText).then(() => {
+                            onOpen()
+                            setScanOn(false);
+                            return 0;
+                        }).catch((error) => {
+                            console.log(error);
+                        })
                     }).catch((error) => {
-                        console.log(error);
+                        console.log(error)
                     })
-                }).catch((error) => {
-                    console.log(error)
                 })
+
             }
         });
         scanner.pause(false);
@@ -103,11 +104,11 @@ export default function StudentView() {
 
     function toggleScan(){
         if(!scanOn){
-            setScanOn(value => !value)
+            setScanOn(true)
             startQrCode()
         }else{
             scanner.stop().then(() => {
-                setScanOn(value => !value);
+                setScanOn(false);
             })
         }
     }
@@ -132,14 +133,16 @@ export default function StudentView() {
                     }
                 </Flex>
                 <Button colorScheme="teal" width={{base:"60vw",sm:"50vw",md:"15em"}} height="3em" borderRadius="2em" marginTop="2em" onClick={toggleScan}>{!scanOn? "Start Scan" : "Stop Scan"}</Button>
-                <Flex fledDir="row" justifyContent="space-around" alignItems="center" backgroundColor="gray.200" width="90vw" height="6em" marginTop="4em" borderRadius="2rem">
-                <Stat padding="0.5em" width="0.5em" backgroundColor="purple.600"  boxShadow='xs' rounded='xl' bg='white' margin="0.5em" color="black">
-                        <StatLabel fontWeight="bold" fontSize="1em">Last Entry</StatLabel>
-                        <StatNumber>{entryObject? entryObject.entry_date_string : "Loading"}, {entryObject? entryObject.entry_time_string : "Loading"}</StatNumber>
+                <Flex fledDir="row" justifyContent="space-around" alignItems="center" backgroundColor="gray.200" width="90vw" height="fit-content" marginTop="4em" borderRadius="2rem">
+                    <Stat padding="0.5em" width="0.5em"  backgroundColor="purple.600"  boxShadow='xs' rounded='xl' bg='white' margin="0.5em" color="black">
+                        <StatLabel fontWeight="bold" fontSize="1em">Last Entry:</StatLabel>
+                        <StatNumber>{entryObject? entryObject.entry_date_string : "Loading"} </StatNumber>
+                        <StatNumber>{entryObject? entryObject.entry_time_string : "Loading"}</StatNumber>
                     </Stat>
                     <Stat padding="0.5em" width="0.5em" backgroundColor="purple.600"  boxShadow='xs' rounded='xl' bg='white' margin="0.5em" color="black">
-                        <StatLabel fontWeight="bold" fontSize="1em">Last Exit</StatLabel>
-                        <StatNumber>{entryObject? entryObject.exit_date_string : "Loading"}, {entryObject? entryObject.exit_time_string : "Loading"}</StatNumber>
+                        <StatLabel fontWeight="bold" fontSize="1em">Last Exit:</StatLabel>
+                        <StatNumber>{entryObject? entryObject.exit_date_string : "Loading"}</StatNumber>
+                        <StatNumber>{entryObject? entryObject.exit_time_string : "Loading"}</StatNumber>
                     </Stat> 
                 </Flex>
 
