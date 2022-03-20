@@ -1,4 +1,4 @@
-import { Flex, Heading } from '@chakra-ui/react';
+import { Flex, Heading, Text} from '@chakra-ui/react';
 import UserProfile from '../components/React/Profile';
 
 export default function Account(){
