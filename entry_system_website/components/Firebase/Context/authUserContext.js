@@ -225,11 +225,13 @@ export function AuthProvider({ children }) {
 
         if (user) {
             //using string because chakraui selector cannot pass bool
+            let now = Timestamp.now();
             if(status == "true" || status === true) {
                 console.log("logging entry")
                 try {
                     await updateDoc(doc(db,"users",id), {
-                        entry_status: true 
+                        entry_status: true,
+                        last_entry: now,
                     });
                 } catch (error) {
                     console.log(error);
@@ -240,7 +242,8 @@ export function AuthProvider({ children }) {
                 console.log("logging exit")
                 try {
                     await updateDoc(doc(db,"users",id), {
-                        entry_status: false
+                        entry_status: false,
+                        last_exit: now,
                     });
                 } catch (error) {
                     console.log(error);

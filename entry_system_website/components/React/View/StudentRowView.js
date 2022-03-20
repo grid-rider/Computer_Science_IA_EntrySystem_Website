@@ -5,16 +5,17 @@ import { Timestamp } from 'firebase/firestore';
 
 
 function getParsedDate(date){
-    return(date.getDay() + "." + date.getMonth() +"." + date.getFullYear());
+    return(date.getDate() + "." + (date.getMonth()+1) +"." + date.getFullYear());
 }
 
 function getParsedTime(date){
-    return(date.getMinutes() + ":" + date.getHours());
+    return(date.getHours() + ":" + date.getMinutes());
 }
 
 
 export default function StudentRowView(props){
 
+    //creating new date object
     let entry_date =  new Date(props.data.last_entry.seconds*1000 + props.data.last_entry.nanoseconds/100000);
     let exit_date = new Date(props.data.last_exit.seconds*1000 + props.data.last_exit.nanoseconds/100000);
     
@@ -31,7 +32,7 @@ export default function StudentRowView(props){
             console.log(error)
         })
     }
-
+    
     let name = props.data.first_name + " " + props.data.last_name;
 
 
@@ -41,7 +42,7 @@ export default function StudentRowView(props){
                 <Td>
                     <Avatar name={name} src={props.data.img_url}/>
                 </Td>
-
+                
                 <Td>
                     <VStack>
                         <Text>{name}</Text>

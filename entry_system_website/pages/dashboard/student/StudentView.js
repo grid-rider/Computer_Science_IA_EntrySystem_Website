@@ -15,19 +15,16 @@ const qrScannerConfig = {
 
 
 function getParsedDate(date){
-    return(date.getDay() + "." + date.getMonth() +"." + date.getFullYear());
+    return(date.getDate() + "." + (date.getMonth()+1) +"." + date.getFullYear());
 }
 
 function getParsedTime(date){
-    return(date.getMinutes() + ":" + date.getHours());
+    return(date.getHours() + ":" + date.getMinutes());
 }
 
 let scanner;    
 
 export default function StudentView() {
-
-
-
 
     const { isOpen, onOpen, onClose} = useDisclosure();
     let [ scanOn, setScanOn] = useState(false);
@@ -43,8 +40,10 @@ export default function StudentView() {
     useEffect(() => {
         
         if(userData){
-            let entry_date =  new Date(userData.last_entry.seconds*1000 + userData.last_entry.nanoseconds/100000);
-            let exit_date = new Date(userData.last_exit.seconds*1000 + userData.last_exit.nanoseconds/100000);
+            let entry_date =  userData.last_entry.toDate();
+            let exit_date =  userData.last_exit.toDate();
+            console.log( getParsedDate(exit_date));
+            console.log(exit_date);
             setEntryObject({
                 entry_date_string: getParsedDate(entry_date),
                 entry_time_string: getParsedTime(entry_date),
@@ -82,11 +81,10 @@ export default function StudentView() {
         scanner.pause(true);
         acessStations.forEach((doc) => {
             if(decodedText == doc.id) {
-                console.log("got here")
+                toggleScan();
                 updateStudentEntryStatus(!userData.entry_status,user.uid).then(() => {
                     setBuildingTransfer((userData.entry_status? "entry":"exit"),decodedText).then(() => {
-                        onOpen()
-                        toggleScan()
+                        onOpen();
                         return 0;
                     }).catch((error) => {
                         console.log(error);
@@ -140,8 +138,8 @@ export default function StudentView() {
                         <StatNumber>{entryObject? entryObject.entry_date_string : "Loading"}, {entryObject? entryObject.entry_time_string : "Loading"}</StatNumber>
                     </Stat>
                     <Stat padding="0.5em" width="0.5em" backgroundColor="purple.600"  boxShadow='xs' rounded='xl' bg='white' margin="0.5em" color="black">
-                        <StatLabel fontWeight="bold" fontSize="1em">Last Entry</StatLabel>
-                        <StatNumber>{entryObject? entryObject.entry_date_string : "Loading"}, {entryObject? entryObject.entry_time_string : "Loading"}</StatNumber>
+                        <StatLabel fontWeight="bold" fontSize="1em">Last Exit</StatLabel>
+                        <StatNumber>{entryObject? entryObject.exit_date_string : "Loading"}, {entryObject? entryObject.exit_time_string : "Loading"}</StatNumber>
                     </Stat> 
                 </Flex>
 
