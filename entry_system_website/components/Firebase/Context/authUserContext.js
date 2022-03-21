@@ -3,7 +3,11 @@ import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWith
 import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot, updateDoc, Timestamp, addDoc, deleteDoc } from "firebase/firestore";
 import { getDatabase, set, ref, push } from 'firebase/database';
 import { createContext, useContext, useEffect, useState } from "react";
-import QRcode from 'davidshimjs-qrcodejs';
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+import { getStorage, uploadBytes, ref as sRef, deleteObject, getDownloadURL } from "firebase/storage";
 
 const AuthContext = createContext();
 
@@ -47,6 +51,7 @@ export function AuthProvider({ children }) {
     const auth = getAuth(app);
     const db = getFirestore(app);
     const realtime_db = getDatabase(app);
+    const storage = getStorage(app);
 
     let [loading, setLoading] = useState(true);
     let [user, setUser] = useState(null);
@@ -166,14 +171,34 @@ export function AuthProvider({ children }) {
 
     //delete station doc in firestore database
     function deleteStation (uid){
-        return deleteDoc(doc(db,"stations",uid));
+        try {
+            deleteDoc(doc(db,"stations/"+uid));
+        } catch (error) {
+            console.log(error);
+        }
+        return deleteObject(sRef(storage,"stations/"+uid))
     }
 
     //delete station doc in firestore database
-    function createStationQrCodeFile(uid, filePath){
-        let qrcode = new QRcode()
+    function getStationFileURL (uid){
+        return getDownloadURL(sRef(storage,"stations/"+uid))
+    }
+
+    //delete station doc in firestore database
+    function createStationQrCodeFile(id){
+        let definition = {
+            content: [
+                {text:"Securas Station:", margin: [200,100], fontSize:"30", color:"#89CFF1", bold:"true"},
+                {qr : id, margin: [160, 120],fit:"230"}
+            ]
+        }   
+        let pdfGenerator = pdfMake.createPdf(definition);
+        pdfGenerator.getBlob((blob) => {
+            return uploadBytes(sRef(storage,"stations/"+id),blob);
+        })
     }
     
+
 
     //get firestore user with specific UUID 
     function getFirestoreUser(UUID) {
@@ -323,7 +348,9 @@ export function AuthProvider({ children }) {
         setBuildingTransfer,
         acessStations,
         createStation,
-        deleteStation
+        deleteStation,
+        createStationQrCodeFile,
+        getStationFileURL
     }
     return(
         <AuthContext.Provider value={value}>

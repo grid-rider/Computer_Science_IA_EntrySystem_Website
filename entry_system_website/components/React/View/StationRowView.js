@@ -2,15 +2,28 @@ import { Avatar, Box, Flex, Image, Td, Tr, VStack, Text, Button , useDisclosure,
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../Firebase/Context/authUserContext";
 import { Timestamp } from 'firebase/firestore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 
 export default function StationRowView(props){
 
-    let {deleteStation} = useAuth();
+    let {deleteStation, getStationFileURL, userData} = useAuth();
+    let [stationURL,setStationURL] = useState("/");
 
-    function handleFileDownload(){
 
+    useEffect(() => {
+        handleStationFile()
+    }, [userData])
+
+    async function handleStationFile(){
+        try {
+            console.log("got here 3")
+           let href = await getStationFileURL(props.id);
+           console.log(href)
+           setStationURL(href);
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     async function handleStationRemove(){
@@ -20,10 +33,6 @@ export default function StationRowView(props){
             console.log(error)
         }
     }
-
-    useEffect(() => {
-        console.log(props.editMode)
-    }, [props.editMode])
 
     return(
         <>
@@ -40,7 +49,7 @@ export default function StationRowView(props){
                     {props.editMode? 
                         <Button variant="solid" onClick={handleStationRemove}>Remove</Button>
                     :
-                        <Button variant="solid" onClick={handleFileDownload}>File</Button>                
+                        <Button variant="solid" as="a" href={stationURL} target="_blank">File</Button>                
                     }
                 </Td>
             </Tr>

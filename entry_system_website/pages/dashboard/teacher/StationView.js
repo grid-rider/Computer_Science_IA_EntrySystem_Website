@@ -11,7 +11,7 @@ let PageMenuItems = menuItems(false,false,true);
 
 export default function RealtimeView() {
     let [dispalyStationList, setDisplayStationList] = useState([]);
-    let { acessStations, userData, createStation } = useAuth();
+    let { acessStations, userData, createStation, createStationQrCodeFile } = useAuth();
     let [editMode, setEditMode] = useState(false);
 
     //form handler
@@ -44,7 +44,8 @@ export default function RealtimeView() {
         console.log("got here")
         try {
             let station = await createStation(data.stationEntry,userData.school);
-            console.log(station)
+            console.log("id : " + station.id);
+            let fileUpload = await createStationQrCodeFile(station.id);
         } catch (error) {
             console.log(error)
         }
