@@ -8,53 +8,109 @@ import { useAuth } from '../../../components/Firebase/Context/authUserContext';
 
 let PageMenuItems = menuItems(true,false,false);
 
+function graphValueObject(date){
+    return({
+        x: date.getHours(),
+        y: date.getMinutes(),
+    })
+}
 
 export default function GraphAnalytics() {
 
-    let [ log, setLog ] = useState([]);
+    let [ accessGraphValues, setAccessGraphValues ] = useState([]);
+    let [ exitGraphValues, setExitGraphValues ] = useState([]);
+    let [ valueRange, setValueRange] = useState([]);
 
     let { accessLog, user } = useAuth();
 
-    useEffect(() => {
-        if(user){
-            console.log(accessLog);
-            setLog(accessLog);
-        }
-    }, [accessLog])
 
-    const labels = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        ];
+
+
 
     const data = {
-        labels: labels,
         datasets: [{
-            label: 'My First dataset',
-            data: [0, 10, 5, 2, 20, 30, 45],
+            label: 'User Entries',
+            backgroundColor:"rgba(245, 40, 145, 0.8)",
+            pointBackgroundColor:"rgba(245, 40, 145, 0.8)",
+            data: accessGraphValues,
+        },{
+            label: 'User Exits',
+            backgroundColor:"rgba(64, 144, 255, 0.8)",
+            pointBackgroundColor:"rgba(64, 144, 255, 0.8)",
+            data: exitGraphValues,
         }]
     };
 
     const config = {
-        type: 'line',
+        spanGaps: 1000 * 60 * 60 * 24 * 1, // 1 day
+        type: 'scatter',
         data: data,
         options: {
+            responsive: true,
+            scales: {
+                x: {
+                    min: 0,
+                    max: 24, 
+                    ticks: {
+                        stepSize: 1,
+                    }
+                },
+                y: {
+                    min: 0,
+                    max: 60, 
+                    ticks: {
+                        stepSize: 1,
+                    }
+                }
+            },
+            pointBackgroundColor: ['rgba(245, 40, 145, 0.8)','black','black','black'],
+
         }
     };
+    
+    useEffect(() => {
+
+
+        if(accessLog){
+            console.log(accessLog);
+            let temp_entryArray = [];
+            let temp_exitArray = [];
+            accessLog.forEach(element => {
+                let entryObject = element[1];
+                let Access_date = new Date(entryObject.timestamp.seconds*1000 + entryObject.timestamp.nanoseconds/100000);
+                let timeNow = new Date();
+
+                if(entryObject.acess_type == "entry"){
+                    if(Access_date.getDate() == timeNow.getDate() && Access_date.getMonth() == timeNow.getMonth() && Access_date.getFullYear() == timeNow.getFullYear()){
+                        temp_entryArray.push(graphValueObject(Access_date))
+                    } else {
+                        return; 
+                    }
+                } else if(entryObject.acess_type == "exit"){
+                    if(Access_date.getDate() == timeNow.getDate() && Access_date.getMonth() == timeNow.getMonth() && Access_date.getFullYear() == timeNow.getFullYear()){
+                        temp_exitArray.push(graphValueObject(Access_date))
+                    } else {
+                        return; 
+                    }
+                }
+            });
+            setAccessGraphValues(temp_entryArray);
+            setExitGraphValues(temp_exitArray);
+            console.log(accessGraphValues);
+        }
+
+
+    }, [accessLog])
 
 
     useEffect(()=>{
         let chart = new Chart("graph",config);
+        chart.update();
 
         return(() => {
             chart.destroy();
         })
-
-    },[])
+    },[accessGraphValues])
 
 
     return(

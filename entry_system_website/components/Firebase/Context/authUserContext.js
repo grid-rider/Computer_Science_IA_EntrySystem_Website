@@ -148,10 +148,12 @@ export function AuthProvider({ children }) {
             }));
 
             AccessLogListener = onValue(ref(realtime_db,"/access_log/"+userData.school),(snapshot) => {
-                const data = snapshot.val();
                 console.log("updated acess log");
-                console.log(data);
-                setAccessLog(data);
+                const data = snapshot.val();
+
+                //sets acess log to 2D array. This 2D array in the following form : 
+                //[[log_id, {acess_Object containing properties such as first name}], [log_id, {acess_Object}], .....]
+                setAccessLog(Object.entries(data));
             });
 
         }else{

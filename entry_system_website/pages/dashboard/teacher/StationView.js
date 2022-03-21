@@ -9,7 +9,7 @@ import { FaPray } from 'react-icons/fa';
 
 let PageMenuItems = menuItems(false,false,true);
 
-export default function RealtimeView() {
+export default function StationView() {
     let [dispalyStationList, setDisplayStationList] = useState([]);
     let { acessStations, userData, createStation, createStationQrCodeFile } = useAuth();
     let [editMode, setEditMode] = useState(false);
@@ -90,7 +90,7 @@ export default function RealtimeView() {
 
 
 
-RealtimeView.getLayout = function getLayout(pages) {
+StationView.getLayout = function getLayout(pages) {
     return(
         <Layout menuItems={PageMenuItems}>
             {pages}
