@@ -1,7 +1,7 @@
 import { initializeApp, getApps } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut, deleteUser} from "firebase/auth";
 import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot, updateDoc, Timestamp, addDoc, deleteDoc } from "firebase/firestore";
-import { getDatabase, set, ref, push } from 'firebase/database';
+import { getDatabase, set, ref, push, onValue } from 'firebase/database';
 import { createContext, useContext, useEffect, useState } from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -109,6 +109,7 @@ export function AuthProvider({ children }) {
     let [studentList, setStudentList] = useState([]);
     let [ userData, setUserData] = useState(null);
     let [ acessStations, setAcessStations] = useState([]);
+    let [ accessLog, setAccessLog] = useState([]);
 
 
     useEffect(() => {
@@ -144,6 +145,12 @@ export function AuthProvider({ children }) {
                 console.log("updated station list");
                 setStationListFromSnapshot(querySnapshot);
             }));
+
+            AccessLogListener = onValue(ref(realtime_db,"/access_log/"+userData.school),(snapshot) => {
+                const data = snapshot.val()
+                setAccessLog(data);
+            });
+
         }else{
             resetFirestoreState();
             if(StudentListListener != null){
@@ -310,7 +317,7 @@ export function AuthProvider({ children }) {
     async function setBuildingTransfer(type,station){
         if (user) {
             try {
-                await push(ref(realtime_db,"/acess_log/"), {
+                await push(ref(realtime_db,"/access_log/"+userData.school), {
                     user_id: user.uid,
                     first_name: userData.first_name,
                     last_name: userData.last_name,
@@ -350,7 +357,8 @@ export function AuthProvider({ children }) {
         createStation,
         deleteStation,
         createStationQrCodeFile,
-        getStationFileURL
+        getStationFileURL,
+        accessLog
     }
     return(
         <AuthContext.Provider value={value}>
