@@ -1,7 +1,4 @@
-
 import { Box, Button, Flex, Heading, HStack, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Stat, StatHelpText, StatLabel, StatNumber, Text, useDisclosure, VStack } from '@chakra-ui/react';
-import Layout from '../../../components/React/Layout/Layout';
-import menuItems from '../../../components/Helpers/StudentMenuItems';
 import { useEffect, useState } from 'react';
 import {Html5QrcodeScanner, Html5Qrcode} from "html5-qrcode";
 import { useAuth } from '../../../components/Firebase/Context/authUserContext';
@@ -31,6 +28,7 @@ export default function StudentView() {
     let [ entryType, setEntryType] = useState("loading...");
     let [ entryObject, setEntryObject] = useState(null);
     let [ name, setName] = useState("loading...");
+    let [ loading, setLoading] = useState(true);
 
 
     //useAuth object destructuring 
@@ -40,6 +38,7 @@ export default function StudentView() {
     useEffect(() => {
         
         if(userData){
+            setLoading(false);
             let entry_date =  userData.last_entry.toDate();
             let exit_date =  userData.last_exit.toDate();
             setEntryObject({
@@ -113,6 +112,16 @@ export default function StudentView() {
         }
     }
 
+    if(loading){
+        return(
+            <Flex justifyContent="center" alignItems="center" w="100vw" h="100vh">
+                <Box backgroundColor="teal.300" borderRadius="2rem" padding="2em"> 
+                    <Heading>Error, Please Log In</Heading>
+                    <Text as="a" fontSize="2em" href="/SignInPage" _hover={{borderBottom: "solid 2px white"}}>Login Here</Text>
+                </Box>
+            </Flex>
+        )
+    }
 
     return(
         <>
@@ -133,13 +142,13 @@ export default function StudentView() {
                     }
                 </Flex>
                 <Button colorScheme="teal" width={{base:"60vw",sm:"50vw",md:"15em"}} height="3em" borderRadius="2em" marginTop="2em" onClick={toggleScan}>{!scanOn? "Start Scan" : "Stop Scan"}</Button>
-                <Flex fledDir="row" justifyContent="space-around" alignItems="center" backgroundColor="gray.200" width="90vw" height="fit-content" marginTop="4em" borderRadius="2rem">
-                    <Stat padding="0.5em" width="0.5em"  backgroundColor="purple.600"  boxShadow='xs' rounded='xl' bg='white' margin="0.5em" color="black">
+                <Flex fledDir="row" px="2em" py="0.5em" justifyContent="space-around" alignItems="center" backgroundColor="gray.200" width="90vw" height="fit-content" marginTop="4em" borderRadius="2rem" width="fit-content">
+                    <Stat  maxW="10em" padding="0.8em" backgroundColor="purple.600"  boxShadow='xs' rounded='xl' bg='white' margin="0.5em" color="black">
                         <StatLabel fontWeight="bold" fontSize="1em">Last Entry:</StatLabel>
                         <StatNumber>{entryObject? entryObject.entry_date_string : "Loading"} </StatNumber>
                         <StatNumber>{entryObject? entryObject.entry_time_string : "Loading"}</StatNumber>
                     </Stat>
-                    <Stat padding="0.5em" width="0.5em" backgroundColor="purple.600"  boxShadow='xs' rounded='xl' bg='white' margin="0.5em" color="black">
+                    <Stat padding="0.8em" maxW="10em" backgroundColor="purple.600"  boxShadow='xs' rounded='xl' bg='white' margin="0.5em" color="black">
                         <StatLabel fontWeight="bold" fontSize="1em">Last Exit:</StatLabel>
                         <StatNumber>{entryObject? entryObject.exit_date_string : "Loading"}</StatNumber>
                         <StatNumber>{entryObject? entryObject.exit_time_string : "Loading"}</StatNumber>

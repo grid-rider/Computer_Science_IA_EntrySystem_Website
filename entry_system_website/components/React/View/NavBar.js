@@ -4,6 +4,7 @@ import UserProfile from '../Profile';
 import {FaUserCircle} from "react-icons/fa";
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { useAuth } from '../../Firebase/Context/authUserContext';
+import { MdAccountCircle } from "react-icons/md";
 
 export default function NavBar(){
     const { colorMode, toggleColorMode } = useColorMode();
@@ -34,10 +35,13 @@ export default function NavBar(){
                 <HStack display={{base:"none",xl:"inline"}}>
                     {user ? 
                     <>
+                        <UserProfile/>
+                        <Button as="a" href="/account" leftIcon={<MdAccountCircle size={28} />} colorScheme='teal' variant='ghost'>
+                        Account
+                        </Button>
                         <Button leftIcon={<UnlockIcon />} onClick={Firebase_signOut} colorScheme='teal' variant='ghost'>
                         Sign Out
                         </Button>
-                        <UserProfile/>
                     </>
                     :
                     <>
@@ -68,8 +72,8 @@ export default function NavBar(){
                     }
                     </MenuList>
                 </Menu>
-                <Button onClick={toggleColorMode}>
-                    <SunIcon/>
+                <Button onClick={toggleColorMode} variant="ghost">
+                    <SunIcon width="1.2em"  height="1.2em"/>
                 </Button>
             </HStack>
 

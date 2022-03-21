@@ -30,10 +30,8 @@ export default function AccountCreation() {
     async function signUp_ButtonHandler(data){
         try {
             let user = await createAccount(data.email, data.password);
-            console.log(user);
             let user_doc = await createFirestoreUser( user.user.uid ,data.email, data.password, data.firstName, data.lastName, data.school, data.role);
             setInvalidSignUp(false);
-            console.log(user_doc);
             router.push("/");
         } catch (error) {
             console.log(error);

@@ -1,8 +1,9 @@
 import { initializeApp, getApps } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword ,signOut, deleteUser} from "firebase/auth";
-import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot, updateDoc, Timestamp } from "firebase/firestore";
+import { getFirestore, setDoc, doc, getDoc, getDocs, query, collection, where, onSnapshot, updateDoc, Timestamp, addDoc, deleteDoc } from "firebase/firestore";
 import { getDatabase, set, ref, push } from 'firebase/database';
 import { createContext, useContext, useEffect, useState } from "react";
+import QRcode from 'davidshimjs-qrcodejs';
 
 const AuthContext = createContext();
 
@@ -154,10 +155,32 @@ export function AuthProvider({ children }) {
         return setDoc(doc(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School, Role))
     }
 
+    //create station doc in firestore database
+    function createStation (name,school){
+        return addDoc(collection(db,"stations"), {
+            name: name, 
+            school: school,
+            file_url: "",
+        })
+    }
+
+    //delete station doc in firestore database
+    function deleteStation (uid){
+        return deleteDoc(doc(db,"stations",uid));
+    }
+
+    //delete station doc in firestore database
+    function createStationQrCodeFile(uid, filePath){
+        let qrcode = new QRcode()
+    }
+    
+
     //get firestore user with specific UUID 
     function getFirestoreUser(UUID) {
         return getDoc(doc(db, "users", UUID))
     }
+
+
 
     //get a collection of firestore user documents. Restricted to school of user.
     function getFirestoreUserGroup(school) {
@@ -298,7 +321,9 @@ export function AuthProvider({ children }) {
         updateUserInformation,
         updateStudentEntryStatus,
         setBuildingTransfer,
-        acessStations
+        acessStations,
+        createStation,
+        deleteStation
     }
     return(
         <AuthContext.Provider value={value}>
