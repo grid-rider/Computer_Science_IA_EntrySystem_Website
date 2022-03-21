@@ -13,7 +13,7 @@ export default function GraphAnalytics() {
 
     let [ log, setLog ] = useState([]);
 
-    let { accessLog } = useAuth();
+    let { accessLog, user } = useAuth();
 
     useEffect(() => {
         if(user){

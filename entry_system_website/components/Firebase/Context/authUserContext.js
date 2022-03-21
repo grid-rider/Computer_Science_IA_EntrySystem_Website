@@ -133,6 +133,7 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         let StudentListListener;
         let StationListener;
+        let AccessLogListener;
 
         if(userData != null && user != null){
             //check role & get student list (for production refractor name to list as list is not isolated to students but also other user roles)
@@ -147,7 +148,9 @@ export function AuthProvider({ children }) {
             }));
 
             AccessLogListener = onValue(ref(realtime_db,"/access_log/"+userData.school),(snapshot) => {
-                const data = snapshot.val()
+                const data = snapshot.val();
+                console.log("updated acess log");
+                console.log(data);
                 setAccessLog(data);
             });
 
@@ -158,6 +161,9 @@ export function AuthProvider({ children }) {
             }
             if(StationListener != null){
                 StationListener();
+            }
+            if(AccessLogListener != null){
+                AccessLogListener();
             }
         }
     }, [userData])
@@ -233,9 +239,6 @@ export function AuthProvider({ children }) {
         snapshot.forEach(station => {
             temp_StationArray.push(station);
         });
-        console.log("stations : ");
-        console.log(temp_StationArray);
-
         setAcessStations(temp_StationArray);
     }
     
@@ -243,6 +246,7 @@ export function AuthProvider({ children }) {
     function resetFirestoreState() {
         setStudentList([]);
         setAcessStations([]);
+        setAccessLog([]);
     }
 
     async function getUserExtraInformation() {
