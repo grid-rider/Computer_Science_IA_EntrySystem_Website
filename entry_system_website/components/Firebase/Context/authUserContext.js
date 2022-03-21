@@ -310,7 +310,7 @@ export function AuthProvider({ children }) {
     async function setBuildingTransfer(type,station){
         if (user) {
             try {
-                await push(ref(realtime_db,"/acess_log_v2/"), {
+                await push(ref(realtime_db,"/acess_log/"), {
                     user_id: user.uid,
                     first_name: userData.first_name,
                     last_name: userData.last_name,
