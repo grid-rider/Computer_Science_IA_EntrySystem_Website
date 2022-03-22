@@ -3,11 +3,12 @@
   import Link from 'next/link'
   import { useAuth } from '../components/Firebase/Context/authUserContext'
   import { useEffect, useState } from 'react'
-  import { AspectRatio, Box, Menu, MenuItem, Center, Container, Flex, Image, useColorMode ,Button, IconButton, HStack, useDisclosure, Modal, ModalOverlay, ModalContent, MenuButton, MenuList} from '@chakra-ui/react';
+  import { AspectRatio, Box, Menu, MenuItem, Center, Container, Flex, Image, useColorMode ,Button, IconButton, HStack, useDisclosure, Modal, ModalOverlay, ModalContent, MenuButton, MenuList, Heading, Text} from '@chakra-ui/react';
   import { LockIcon, PlusSquareIcon, SunIcon , UnlockIcon} from '@chakra-ui/icons';
   import UserProfile from '../components/React/Profile';
   import {FaUserCircle} from "react-icons/fa";
-  import { HamburgerIcon } from '@chakra-ui/icons'
+  import { HamburgerIcon } from '@chakra-ui/icons';
+import NavBar from '../components/React/View/NavBar'
 
   const initialRoleLandingPages = {
     "teacher": "RowView",
@@ -34,62 +35,29 @@
     }, [userData]);
 
     return (
-      <Box>
-          <Flex flexDir="column">
-            <Flex flexDir="row" justifyContent="space-between" alignItems="center" padding="1em">
-              <Image src="./svg/Logo.jpg" objectFit="contain"/>
-              <HStack display={{base:"none",xl:"inline"}}>
-                {user ? 
-                  <>
-                    <Button leftIcon={<UnlockIcon />} onClick={Firebase_signOut} colorScheme='teal' variant='ghost'>
-                      Sign Out
-                    </Button>
-                    <UserProfile/>
-                    <Button colorScheme='blue' variant='solid' isLoading={dashboardButtonLoading}>
-                      <Link href={dashboardSelector}>Dashboard</Link>
-                    </Button> 
-                  </>
-                  :
-                  <>
-                    <Button leftIcon={<LockIcon />} colorScheme='teal' variant='ghost'>
-                      <Link href="/SignInPage">Sign In</Link>
-                    </Button>
-                    <Button leftIcon={<PlusSquareIcon />} colorScheme='teal' variant='ghost'>
-                      <Link href="/SignUpPage">Create Account</Link>
-                    </Button>
-                  </>
-                }
-              </HStack>
-              <HStack>
-                <Menu display={{base:"inline",xl:"none"}}>
-                  <MenuButton as={IconButton} variant="unstyled" icon={<HamburgerIcon w="1.5em" h="1.5em"/>}>Menu
-                  </MenuButton>
-                  <MenuList>
-                    {user ? 
-                      <>
-                        <MenuItem icon={<FaUserCircle/>}>Profile</MenuItem>
-                        <MenuItem>Sign Out</MenuItem>
+      <Flex flexDir="column" alignItems="center">
+        <NavBar/>
 
-                      </>
-                      :
-                      <>
-                        <MenuItem>Sign In</MenuItem>
-                        <MenuItem>Create Account</MenuItem>
-                      </>
-                    }
-                  </MenuList>
-                </Menu>
-                <Button onClick={toggleColorMode}>
-                    <SunIcon/>
-                </Button>
-              </HStack>
-
+        {user?
+            <Flex bgGradient='linear(to-b, blue.400, green.500 )' as="a" _hover={{bgGradient: 'linear(to-b, green.100, green.500 )'}} href={dashboardSelector} justifyContent="center" boxShadow="xl"alignItems="center" borderRadius="1000rem" width={{base:"80vw",sm:"60vw", md:"md"}} height={{base:"80vw",sm:"60vw",md:"md"}}>
+              <Heading align="center">To Start Please Press Here</Heading>
             </Flex>
+          :
+          
+            <Flex bgGradient='linear(to-b, blue.400, green.500 )' as="a" _hover={{bgGradient: 'linear(to-b, green.100, green.500 )'}} href="SignInPage" justifyContent="center" boxShadow="xl"alignItems="center" borderRadius="1000rem" width={{base:"80vw",sm:"60vw", md:"md"}} height={{base:"80vw",sm:"60vw",md:"md"}}>
+              <Heading align="center">Press Here To Sign In</Heading>
+            </Flex>
+        }
 
-            
+        <Box as="section" marginTop="2em">
+          <Heading align="center">The Story</Heading>
+          <Text>As Part of the continued move of digitalization</Text>
+        </Box>
 
 
-          </Flex>
-      </Box>
+        
+
+
+      </Flex>
     )
   }

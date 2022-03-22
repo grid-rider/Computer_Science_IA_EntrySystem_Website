@@ -22,11 +22,11 @@ export default function RowView() {
 
     
     return(
-        <Flex flexDir="column" justifyContent="space-evenly" alignItems="center">
+        <Flex flexDir="column" justifyContent="space-evenly" alignItems="center" width="100%" >
             <Heading> Row View</Heading>
             <VStack>
                 <Text>Student Directory</Text>
-                <Table>
+                <Table size="lg" fontSize="1.2em">
                     <Thead>
                         <Tr>
                             <Th>Student Image</Th>
