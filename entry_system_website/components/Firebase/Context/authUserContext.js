@@ -316,15 +316,15 @@ export function AuthProvider({ children }) {
 
     async function updateUserDataAccount(firstName,lastName, blobImage){
         try {
-            await uploadUserImage(blobImage)
+            //await uploadUserImage(blobImage)
             try {
                 let url = await getUserImageURL();
                 try {
-                    return updateDoc(washingtonRef, {
+                    return updateDoc(doc(db,"users",user.uid), {
                         first_name: firstName,
                         last_name: lastName,
                         img_url: url,
-                    });
+                    }); 
                 } catch (error) {
                     throw error
                 }
@@ -337,12 +337,12 @@ export function AuthProvider({ children }) {
     }
 
     function uploadUserImage(blobImage){
-        return uploadBytes(sRef(storage,"userImages/"+user.id),blobImage);
+        return uploadBytes(sRef(storage,"userImages/"+user.uid),blobImage);
     }
 
     //delete station doc in firestore database
     function getUserImageURL (){
-        return getDownloadURL(sRef(storage,"stations/"+user.id))
+        return getDownloadURL(sRef(storage,"userImages/"+user.uid))
     }
 
 

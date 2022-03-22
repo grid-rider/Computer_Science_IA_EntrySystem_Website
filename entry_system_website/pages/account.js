@@ -1,6 +1,6 @@
 import { useAuth } from '../components/Firebase/Context/authUserContext';
 import UserProfile from '../components/React/Profile';
-import { Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, InputGroup, InputRightElement, Modal, Select, Text, useColorModeValue } from '@chakra-ui/react';
+import { useToast, Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, InputGroup, InputRightElement, Modal, Select, Text, useColorModeValue } from '@chakra-ui/react';
 import {
     SunIcon,
     ViewIcon,
@@ -17,7 +17,8 @@ import { useEffect } from 'react';
 
 export default function Account(){
 
-    let { user, userData } = useAuth();
+    let { user, userData, updateUserDataAccount } = useAuth();
+    const toast = useToast();
     let [invalidSignUp, setInvalidSignUp] = useState(false);
     let [editMode, setEditMode] = useState(false);
     let [iconURL, setIconURL] = useState("");
@@ -32,7 +33,7 @@ export default function Account(){
                 return value && value.length
             } )
             .test("fileSize", "Image File To Larg", (value, context) => {
-                return value && value[0] && value[0].size <= 200000;
+                return value && value[0] && value[0].size <= 2000000;
             })
     });
 
@@ -42,8 +43,21 @@ export default function Account(){
       });
       
 
-    function saveEditButtonHandler(data){
-        updateUserDataAccount(data.firstName, data.lastName, data.picture.files[0])
+    async function saveEditButtonHandler(data){
+        try {
+            await updateUserDataAccount(data.firstName, data.lastName, data.picture[0]).then(() => {
+                toast({
+                    title: 'Account Changes Saved.',
+                    description: "We've created your account for you.",
+                    status: 'success',
+                    duration: 9000,
+                    isClosable: true,
+                })
+            })
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 
     function handleUserIconChange(event){
@@ -54,8 +68,9 @@ export default function Account(){
 
     useEffect(() => {
         if(userData){
-            setFirstName(userData.first_name)
-            setLastName(userData.last_name)
+            setFirstName(userData.first_name);
+            setLastName(userData.last_name);
+            setIconURL(userData.img_url);
         }
     }, [userData]);
     
@@ -77,7 +92,7 @@ export default function Account(){
                             </FormControl>
                             <FormControl  m={1} isInvalid={errors.firstName}>
                                 <FormLabel>First Name</FormLabel>
-                                <Input placeholder='Enter First Name' defaultValue={firstName} {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
+                                <Input boxShadow="lg" placeholder='Enter First Name' defaultValue={firstName} {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
                                 <FormErrorMessage>
                                         {errors.firstName && errors.firstName.message}
                                 </FormErrorMessage>
@@ -85,7 +100,7 @@ export default function Account(){
 
                             <FormControl  m={1} isInvalid={errors.lastName}>
                                 <FormLabel>Last Name</FormLabel>
-                                <Input placeholder='Enter Last Name'  defaultValue={lastName} {...register("lastName", { required: {value: true ,message: "Entry Required"}})}/>
+                                <Input boxShadow="lg" placeholder='Enter Last Name'  defaultValue={lastName} {...register("lastName", { required: {value: true ,message: "Entry Required"}})}/>
                                 <FormErrorMessage>
                                         {errors.lastName && errors.lastName.message}
                                 </FormErrorMessage>
