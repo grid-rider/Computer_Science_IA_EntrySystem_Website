@@ -12,11 +12,12 @@ import { useState } from 'react';
 import NavBar from '../components/React/View/NavBar';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from 'react';
 
 
 export default function Account(){
 
-    let { user } = useAuth();
+    let { user, userData } = useAuth();
     let [invalidSignUp, setInvalidSignUp] = useState(false);
     let [editMode, setEditMode] = useState(false);
     let [iconURL, setIconURL] = useState("");
@@ -42,7 +43,7 @@ export default function Account(){
       
 
     function saveEditButtonHandler(data){
-        console.log(data)
+        updateUserDataAccount(data.firstName, data.lastName, data.picture.files[0])
     }
 
     function handleUserIconChange(event){
@@ -50,6 +51,13 @@ export default function Account(){
         console.log(URL.createObjectURL(event.target.files[0]))
         setIconURL(URL.createObjectURL(event.target.files[0]))
     }
+
+    useEffect(() => {
+        if(userData){
+            setFirstName(userData.first_name)
+            setLastName(userData.last_name)
+        }
+    }, [userData]);
     
     return(
         <>
@@ -69,7 +77,7 @@ export default function Account(){
                             </FormControl>
                             <FormControl  m={1} isInvalid={errors.firstName}>
                                 <FormLabel>First Name</FormLabel>
-                                <Input placeholder='Enter First Name' {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
+                                <Input placeholder='Enter First Name' defaultValue={firstName} {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
                                 <FormErrorMessage>
                                         {errors.firstName && errors.firstName.message}
                                 </FormErrorMessage>
@@ -77,7 +85,7 @@ export default function Account(){
 
                             <FormControl  m={1} isInvalid={errors.lastName}>
                                 <FormLabel>Last Name</FormLabel>
-                                <Input placeholder='Enter Last Name' {...register("lastName", { required: {value: true ,message: "Entry Required"}})}/>
+                                <Input placeholder='Enter Last Name'  defaultValue={lastName} {...register("lastName", { required: {value: true ,message: "Entry Required"}})}/>
                                 <FormErrorMessage>
                                         {errors.lastName && errors.lastName.message}
                                 </FormErrorMessage>

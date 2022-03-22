@@ -314,6 +314,38 @@ export function AuthProvider({ children }) {
         }
     }
 
+    async function updateUserDataAccount(firstName,lastName, blobImage){
+        try {
+            await uploadUserImage(blobImage)
+            try {
+                let url = await getUserImageURL();
+                try {
+                    return updateDoc(washingtonRef, {
+                        first_name: firstName,
+                        last_name: lastName,
+                        img_url: url,
+                    });
+                } catch (error) {
+                    throw error
+                }
+            } catch (error) {
+                throw error;
+            }
+        } catch (error) {
+            return error
+        }
+    }
+
+    function uploadUserImage(blobImage){
+        return uploadBytes(sRef(storage,"userImages/"+user.id),blobImage);
+    }
+
+    //delete station doc in firestore database
+    function getUserImageURL (){
+        return getDownloadURL(sRef(storage,"stations/"+user.id))
+    }
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -364,7 +396,8 @@ export function AuthProvider({ children }) {
         deleteStation,
         createStationQrCodeFile,
         getStationFileURL,
-        accessLog
+        accessLog,
+        updateUserDataAccount
     }
     return(
         <AuthContext.Provider value={value}>
