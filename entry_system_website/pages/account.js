@@ -8,10 +8,12 @@ import {
 } from '@chakra-ui/icons';
 import { useColorMode } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
 export default function Account(){
 
     let { user } = useAuth();
+    let [editMode, setEditMode] = useState(false);
     
     if(!user){
         return(<Text>Acess Denied: Please Log In</Text>)
@@ -19,6 +21,10 @@ export default function Account(){
 
     //form handler
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+
+    function saveEditButtonHandler(data){
+
+    }
     
     return(
         <Flex justifyContent="center" alignItems="center" height="100vh" flexDirection="column">
@@ -27,27 +33,13 @@ export default function Account(){
                 <Heading mb="1em">Sign Up Form</Heading>
                 
 
-                <form onSubmit={handleSubmit(signUp_ButtonHandler)}>
+                <form onSubmit={handleSubmit(saveEditButtonHandler)}>
                     <FormControl  m={1} isInvalid={errors.email}>
                         <FormLabel>Email</FormLabel>
                         <Input type="email" placeholder='Enter Email' {...register("email", { required: {value: true ,message: "Entry Required"}})}/>
                         <FormErrorMessage>
                             {errors.email && errors.email.message}
                         </FormErrorMessage>
-                    </FormControl>
-
-                    <FormControl  m={1} isInvalid={errors.password}>
-                        <FormLabel>Password</FormLabel>
-                        <InputGroup>
-                            <Input id="password" type={showPassword? "text" : "password"} placeholder='Enter Password' {...register("password", { required: {value: true ,message: "Entry Required"}})}/>
-                            <InputRightElement>
-                                <Button variant="ghost" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <ViewOffIcon/> : <ViewIcon/>}</Button>
-                            </InputRightElement>
-                        </InputGroup>
-                        <FormErrorMessage>
-                                {errors.password && errors.password.message}
-                        </FormErrorMessage>
-
                     </FormControl>
 
                     <FormControl  m={1} isInvalid={errors.firstName}>
@@ -64,21 +56,6 @@ export default function Account(){
                         <FormErrorMessage>
                                 {errors.lastName && errors.lastName.message}
                         </FormErrorMessage>
-                    </FormControl>
-
-                    <FormControl m={1}>
-                        <FormLabel>School</FormLabel>
-                        <Select {...register("school")}>
-                            <option value="LeipzigInternationalSchool">Leipzig International School</option>
-                        </Select>
-                    </FormControl>
-
-                    <FormControl m={1}>
-                        <FormLabel>Occupation</FormLabel>
-                        <Select {...register("role")}>
-                            <option value="teacher">Teacher</option>
-                            <option value="student">Student</option>
-                        </Select>
                     </FormControl>
 
                     <HStack mt="2em">
