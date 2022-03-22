@@ -142,7 +142,7 @@ export default function StudentView() {
                     }
                 </Flex>
                 <Button colorScheme="teal" width={{base:"60vw",sm:"50vw",md:"15em"}} height="3em" borderRadius="2em" marginTop="2em" onClick={toggleScan}>{!scanOn? "Start Scan" : "Stop Scan"}</Button>
-                <Flex fledDir="row" px="2em" py="0.5em" justifyContent="space-around" alignItems="center" backgroundColor="gray.200" width="90vw" height="fit-content" marginTop="4em" borderRadius="2rem" width="fit-content">
+                <Flex flexDir="row" px="2em" py="0.5em" justifyContent="space-around" alignItems="center" backgroundColor="gray.200" width="90vw" height="fit-content" marginTop="4em" borderRadius="2rem" width="fit-content">
                     <Stat  maxW="10em" padding="0.8em" backgroundColor="purple.600"  boxShadow='xs' rounded='xl' bg='white' margin="0.5em" color="black">
                         <StatLabel fontWeight="bold" fontSize="1em">Last Entry:</StatLabel>
                         <StatNumber>{entryObject? entryObject.entry_date_string : "Loading"} </StatNumber>
