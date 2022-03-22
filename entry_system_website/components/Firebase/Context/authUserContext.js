@@ -15,20 +15,6 @@ export function useAuth() {
     return useContext(AuthContext);
 }
 
-function userDocumentModel(email, FirstName, LastName, School, Role) {
-
-    return({
-        email: email,
-        entry_status: false,
-        first_name: FirstName,
-        last_name: LastName,
-        school: School,
-        role: Role,
-        img_url: 'https://bit.ly/dan-abramov',
-        last_entry:  Timestamp.now(),
-        last_exit:  Timestamp.now(),
-    })
-}
 
 function getFirebaseApp() {
     let firebaseConfig = {
@@ -46,6 +32,22 @@ function getFirebaseApp() {
 }
 
 export function AuthProvider({ children }) {
+
+    function userDocumentModel(email, FirstName, LastName, School, Role, url) {
+
+        return({
+            email: email,
+            entry_status: false,
+            first_name: FirstName,
+            last_name: LastName,
+            school: School,
+            role: Role,
+            img_url: url,
+            last_entry:  Timestamp.now(),
+            last_exit:  Timestamp.now(),
+        })
+    }
+    
     
     const app = getFirebaseApp();
     const auth = getAuth(app);
@@ -171,8 +173,8 @@ export function AuthProvider({ children }) {
     }, [userData])
 
     //create user record in firestore database
-    function createFirestoreUser (UUID , email, password, FirstName, LastName, School, Role){
-        return setDoc(doc(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School, Role))
+    function createFirestoreUser (UUID , email, password, FirstName, LastName, School, Role, url){
+        return setDoc(doc(db,"users", UUID), userDocumentModel(email,FirstName,LastName,School, Role, url))
     }
 
     //create station doc in firestore database
@@ -314,13 +316,13 @@ export function AuthProvider({ children }) {
         }
     }
 
-    async function updateUserDataAccount(firstName,lastName, blobImage){
+    async function updateUserDataAccount(firstName,lastName, blobImage, uid){
         try {
-            //await uploadUserImage(blobImage)
+            await uploadUserImage(blobImage, uid)
             try {
-                let url = await getUserImageURL();
+                let url = await getUserImageURL(uid);
                 try {
-                    return updateDoc(doc(db,"users",user.uid), {
+                    return updateDoc(doc(db,"users", uid), {
                         first_name: firstName,
                         last_name: lastName,
                         img_url: url,
@@ -336,13 +338,13 @@ export function AuthProvider({ children }) {
         }
     }
 
-    function uploadUserImage(blobImage){
-        return uploadBytes(sRef(storage,"userImages/"+user.uid),blobImage);
+    function uploadUserImage(blobImage, uid){
+        return uploadBytes(sRef(storage,"userImages/"+uid),blobImage);
     }
 
     //delete station doc in firestore database
-    function getUserImageURL (){
-        return getDownloadURL(sRef(storage,"userImages/"+user.uid))
+    function getUserImageURL (uid){
+        return getDownloadURL(sRef(storage,"userImages/"+uid))
     }
 
 
@@ -397,7 +399,9 @@ export function AuthProvider({ children }) {
         createStationQrCodeFile,
         getStationFileURL,
         accessLog,
-        updateUserDataAccount
+        updateUserDataAccount,
+        uploadUserImage,
+        getUserImageURL
     }
     return(
         <AuthContext.Provider value={value}>

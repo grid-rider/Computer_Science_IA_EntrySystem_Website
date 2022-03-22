@@ -20,7 +20,6 @@ export default function Account(){
     let { user, userData, updateUserDataAccount } = useAuth();
     const toast = useToast();
     let [invalidSignUp, setInvalidSignUp] = useState(false);
-    let [editMode, setEditMode] = useState(false);
     let [iconURL, setIconURL] = useState("");
     let [firstName, setFirstName] = useState("Loading.....");
     let [lastName, setLastName] = useState("Loading.....");
@@ -45,7 +44,7 @@ export default function Account(){
 
     async function saveEditButtonHandler(data){
         try {
-            await updateUserDataAccount(data.firstName, data.lastName, data.picture[0]).then(() => {
+            await updateUserDataAccount(data.firstName, data.lastName, data.picture[0], user.uid).then(() => {
                 toast({
                     title: 'Account Changes Saved.',
                     description: "We've created your account for you.",
@@ -61,8 +60,6 @@ export default function Account(){
     }
 
     function handleUserIconChange(event){
-        console.log(event.target.files[0])
-        console.log(URL.createObjectURL(event.target.files[0]))
         setIconURL(URL.createObjectURL(event.target.files[0]))
     }
 
@@ -92,7 +89,7 @@ export default function Account(){
                             </FormControl>
                             <FormControl  m={1} isInvalid={errors.firstName}>
                                 <FormLabel>First Name</FormLabel>
-                                <Input boxShadow="lg" placeholder='Enter First Name' defaultValue={firstName} {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
+                                <Input color="white" backgroundColor="gray.800" boxShadow="lg" placeholder={firstName} {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
                                 <FormErrorMessage>
                                         {errors.firstName && errors.firstName.message}
                                 </FormErrorMessage>
@@ -100,7 +97,7 @@ export default function Account(){
 
                             <FormControl  m={1} isInvalid={errors.lastName}>
                                 <FormLabel>Last Name</FormLabel>
-                                <Input boxShadow="lg" placeholder='Enter Last Name'  defaultValue={lastName} {...register("lastName", { required: {value: true ,message: "Entry Required"}})}/>
+                                <Input color="white" backgroundColor="gray.800" boxShadow="lg" placeholder={lastName} {...register("lastName", { required: {value: true ,message: "Entry Required"}})}/>
                                 <FormErrorMessage>
                                         {errors.lastName && errors.lastName.message}
                                 </FormErrorMessage>
