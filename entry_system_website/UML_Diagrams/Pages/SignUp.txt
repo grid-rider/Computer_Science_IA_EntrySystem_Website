@@ -1,7 +1,7 @@
 @startuml
 title AuthContext Provider 
 
-class Index << (P,yellow) Page Component>> {
+class SignUp << (P,yellow) Page Component>> {
     == State ==
      #dashboardSelector
 
