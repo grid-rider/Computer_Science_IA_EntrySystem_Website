@@ -1,0 +1,109 @@
+@startuml
+title School Entry System App Overview
+
+class AuthContext << (P,yellow) Provider>> {
+    ~store AuthState
+    ==State==
+     #loading
+     #user
+     #studentList
+     #userData
+     #acessStations
+     #accessLog
+
+    ==Listeners==
+     ~UserDocListener
+     ~StudentListListener
+     ~StationListener
+     ~AccessLogListener
+
+
+    ==methods==
+    +handleEvents()
+    +loading()
+    +user()
+    +signIn()
+    +Firebase_signOut()
+    +createAccount()
+    +createFirestoreUser()
+    +deleteAccount()
+    +resetAuthState()
+    +getFirestoreUser()
+    +getFirestoreUserGroup()
+    +studentList()
+    +getUserExtraInformation()
+    +userData()
+    +updateUserInformation()
+    +updateStudentEntryStatus()
+    +setBuildingTransfer()
+    +acessStations()
+    +createStation()
+    +deleteStation()
+    +createStationQrCodeFile()
+    +getStationFileURL()
+    +accessLog()
+    +updateUserDataAccount()
+    +uploadUserImage()
+    +getUserImageURL()
+}
+
+class ChakraUI << (P, yellow) Provider >> {
+
+}
+
+class AppContainer << (C,red) container>> {
+    ~store AuthState
+}
+
+class UserObject << (O,green) object>> {
+    ==Attributes==
+    #email
+    #entry_status
+    #first_name
+    #last_name
+    #school
+    #role
+    #img_url
+    #last_entry
+    #last_exit
+}
+
+
+
+
+class SweepContainer << (C,red) container>> {
+    ~store
+    ==props==
+    # radius:number
+    # hubRadius: number
+}
+
+class Bezel << (C,blue) component >> {
+    ==props==
+    # radius: number
+}
+
+class Display << (C,blue) component >> {
+    ==props==
+    # svgHeight: number
+    # svgWidth: number
+    # diameter: number
+    # radius: number
+    # hubRadius: number
+}
+
+
+class Toggle << (C,blue) component >> {
+    ==state==
+    # value
+    ==props==
+    # id: number
+    # label: string
+    # onClick()
+}
+
+AuthContext <--> AppContainer
+ChakraUI <--> AppContainer
+UserObject --# AuthContext
+
+@enduml

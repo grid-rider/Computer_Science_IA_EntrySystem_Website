@@ -75,6 +75,7 @@ export default function GraphAnalytics() {
             console.log(accessLog);
             let temp_entryArray = [];
             let temp_exitArray = [];
+            //accesing 2D array acess log 
             accessLog.forEach(element => {
                 let entryObject = element[1];
                 let Access_date = new Date(entryObject.timestamp.seconds*1000 + entryObject.timestamp.nanoseconds/100000);
