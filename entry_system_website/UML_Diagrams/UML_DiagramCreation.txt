@@ -71,39 +71,17 @@ class UserObject << (O,green) object>> {
 
 
 
-class SweepContainer << (C,red) container>> {
+class ScanPage << (C,blue) component>> {
     ~store
     ==props==
     # radius:number
     # hubRadius: number
 }
 
-class Bezel << (C,blue) component >> {
-    ==props==
-    # radius: number
-}
-
-class Display << (C,blue) component >> {
-    ==props==
-    # svgHeight: number
-    # svgWidth: number
-    # diameter: number
-    # radius: number
-    # hubRadius: number
-}
-
-
-class Toggle << (C,blue) component >> {
-    ==state==
-    # value
-    ==props==
-    # id: number
-    # label: string
-    # onClick()
-}
 
 AuthContext <--> AppContainer
 ChakraUI <--> AppContainer
 UserObject --# AuthContext
+AppContainer <--> ScanPage
 
 @enduml

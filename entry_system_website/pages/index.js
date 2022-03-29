@@ -10,10 +10,11 @@
   import { HamburgerIcon } from '@chakra-ui/icons';
 import NavBar from '../components/React/View/NavBar'
 
-  const initialRoleLandingPages = {
+//Dictionary used to deffer user to appropriate page
+const initialRoleLandingPages = {
     "teacher": "RowView",
     "student": "StudentView"
-  }
+}
 
 
   export default function Home() {

@@ -1,0 +1,19 @@
+@startuml
+title AuthContext Provider 
+
+class AuthContext << (P,yellow) Page Component>> {
+    == State ==
+     #dashboardSelector
+
+    == Listeners ==
+     ~UserData
+
+    == Componants Used ==
+     *Navbar
+
+    == Methods ==
+    None
+
+}
+
+@enduml
