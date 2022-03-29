@@ -39,7 +39,7 @@ export default function Account(){
     //form handler
     const { register, handleSubmit, formState: { errors, isSubmitting } } =  useForm({
         resolver: yupResolver(schema),
-      });
+    });
       
 
     async function saveEditButtonHandler(data){

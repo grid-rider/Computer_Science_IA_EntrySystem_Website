@@ -1,22 +1,23 @@
 @startuml
 title AuthContext Provider 
 
-class SignUp << (P,yellow) Page Component>> {
+class Account << (P,yellow) Page Component>> {
     == State ==
      #invalidSignUp: Boolean
-     #showPassword: Boolean
      #iconURL: String
+     #firstName: String
+     #lastName: String
 
     == Listeners ==
-     None
+     ~userData
 
     == Componants Used ==
      *Navbar
 
     == Methods ==
-     +handleUserIconChange(): Void
-     +signUp_ButtonHandler(): Void
+    +saveEditButtonHandler(): Void
+    +handleUserIconChange(): Void
 
 }
-
+    
 @enduml

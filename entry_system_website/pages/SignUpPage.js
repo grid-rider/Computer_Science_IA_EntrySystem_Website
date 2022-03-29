@@ -11,6 +11,7 @@ import { useColorMode } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
+import NavBar from '../components/React/View/NavBar';
 
 
 export default function AccountCreation() {
@@ -81,7 +82,7 @@ export default function AccountCreation() {
 
     return (
         <Flex justifyContent="center" alignItems="center" height="100vh" flexDirection="column">
-
+            <NavBar/>
             <Flex flexDirection="column" borderRadius="12" background={formBackground} paddingLeft="12" paddingRight="12" py="2em" alignItems="center" justifyContent="space-evenly">
                 <Heading mb="0.4em">Sign Up Form</Heading>
                 

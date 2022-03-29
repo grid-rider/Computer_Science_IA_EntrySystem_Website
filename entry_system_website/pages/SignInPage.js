@@ -25,6 +25,7 @@ import {
     ViewOffIcon,
     AlertIcon
 } from '@chakra-ui/icons';
+import NavBar from '../components/React/View/NavBar';
 
 
 export default function SignInPage (){
@@ -62,7 +63,7 @@ export default function SignInPage (){
 
     return (
         <Flex justifyContent="center" alignItems="center" height="100vh" flexDirection="column">
-
+            <NavBar/>
             <Flex flexDirection="column" borderRadius="12" background={formBackground} p="12" justifyContent="space-evenly">
                 <Heading mb="1em">Sign In Form</Heading>
                 

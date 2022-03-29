@@ -8,7 +8,7 @@ import { useAuth } from '../../../components/Firebase/Context/authUserContext';
 
 let PageMenuItems = menuItems(true,false,false);
 
-function graphValueObject(date){
+function getGraphValueObject(date){
     return({
         x: date.getHours(),
         y: date.getMinutes(),
@@ -19,13 +19,7 @@ export default function GraphAnalytics() {
 
     let [ accessGraphValues, setAccessGraphValues ] = useState([]);
     let [ exitGraphValues, setExitGraphValues ] = useState([]);
-    let [ valueRange, setValueRange] = useState([]);
-
-    let { accessLog, user } = useAuth();
-
-
-
-
+    let { accessLog } = useAuth();
 
     const data = {
         datasets: [{
@@ -83,13 +77,13 @@ export default function GraphAnalytics() {
 
                 if(entryObject.acess_type == "entry"){
                     if(Access_date.getDate() == timeNow.getDate() && Access_date.getMonth() == timeNow.getMonth() && Access_date.getFullYear() == timeNow.getFullYear()){
-                        temp_entryArray.push(graphValueObject(Access_date))
+                        temp_entryArray.push(getGraphValueObject(Access_date))
                     } else {
                         return; 
                     }
                 } else if(entryObject.acess_type == "exit"){
                     if(Access_date.getDate() == timeNow.getDate() && Access_date.getMonth() == timeNow.getMonth() && Access_date.getFullYear() == timeNow.getFullYear()){
-                        temp_exitArray.push(graphValueObject(Access_date))
+                        temp_exitArray.push(getGraphValueObject(Access_date))
                     } else {
                         return; 
                     }

@@ -1,0 +1,22 @@
+@startuml
+title AuthContext Provider 
+
+class RowView << (P,yellow) Page Component>> {
+    == State ==
+     #dispalyStationList: [StationRowView]
+     #editMode: Boolean
+
+    == Listeners ==
+     ~acessStations
+     ~editMode
+
+    == Componants Used ==
+     *Layout
+
+    == Methods ==
+     +handleEditModeClick
+     +handleStationAdd
+
+}
+    
+@enduml

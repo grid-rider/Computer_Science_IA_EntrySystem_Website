@@ -1,0 +1,19 @@
+@startuml
+title AuthContext Provider 
+
+class RowView << (P,yellow) Page Component>> {
+    == State ==
+     #dispalyStudentList: [StudentRowView]
+
+    == Listeners ==
+     ~studentList
+
+    == Componants Used ==
+     *Layout
+
+    == Methods ==
+    None
+
+}
+    
+@enduml

@@ -19,6 +19,15 @@ function getParsedTime(date){
     return(date.getHours() + ":" + date.getMinutes());
 }
 
+function getEntryObject(entry_date,exit_date){
+    return({
+        entry_date_string: getParsedDate(entry_date),
+        entry_time_string: getParsedTime(entry_date),
+        exit_date_string: getParsedDate(exit_date),
+        exit_time_string: getParsedTime(exit_date),
+    });
+}
+
 let scanner;    
 
 export default function StudentView() {
@@ -41,12 +50,7 @@ export default function StudentView() {
             setLoading(false);
             let entry_date =  userData.last_entry.toDate();
             let exit_date =  userData.last_exit.toDate();
-            setEntryObject({
-                entry_date_string: getParsedDate(entry_date),
-                entry_time_string: getParsedTime(entry_date),
-                exit_date_string: getParsedDate(exit_date),
-                exit_time_string: getParsedTime(exit_date),
-            });
+            setEntryObject(getEntryObject(entry_date,exit_date));
             if(userData.entry_status){
                 setEntryType("Signed In")
             }else{

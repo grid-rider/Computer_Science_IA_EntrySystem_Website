@@ -1,0 +1,22 @@
+@startuml
+title AuthContext Provider 
+
+class GraphAnalytics << (P,yellow) Page Component>> {
+    == State ==
+     #accessGraphValues: [Object]
+     #exitGraphValues: [Object]
+
+    == Listeners ==
+     ~accessLog
+     ~accessGraphValues
+
+    == Componants Used ==
+     *Layout
+
+    == Methods ==
+    +getGraphValueObject(): Object
+    +handleUserIconChange(): Void
+
+}
+    
+@enduml
