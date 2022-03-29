@@ -1,7 +1,6 @@
 @startuml
-title AuthContext Provider 
 
-class SignIn << (P,yellow) Page Component>> {
+class Entry << (P,yellow) Page Component>> {
     == State ==
      #scanOn: Boolean
      #entryType: String

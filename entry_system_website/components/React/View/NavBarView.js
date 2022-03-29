@@ -1,6 +1,6 @@
 import { AspectRatio, Box, Menu, MenuItem, Center, Container, Flex, Image, useColorMode ,Button, IconButton, HStack, useDisclosure, Modal, ModalOverlay, ModalContent, MenuButton, MenuList, Heading, Text} from '@chakra-ui/react';
 import { LockIcon, PlusSquareIcon, SunIcon , UnlockIcon} from '@chakra-ui/icons';
-import UserProfile from '../Profile';
+import UserProfile from './ProfileIconView';
 import {FaUserCircle} from "react-icons/fa";
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { useAuth } from '../../Firebase/Context/authUserContext';

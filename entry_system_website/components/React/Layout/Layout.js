@@ -3,12 +3,12 @@ import { AiOutlineDingding } from 'react-icons/ai';
 import { VscGraphLine } from 'react-icons/vsc';
 import { ViewIcon, SunIcon, HamburgerIcon, CloseIcon, QuestionOutlineIcon} from '@chakra-ui/icons';
 import { BsQuestionSquare} from 'react-icons/bs';
-import UserProfile from "../Profile";
+import UserProfile from "../View/ProfileIconView";
 import getIconFromType from '../../Helpers/iconTypes';
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import NavBar from "../View/NavBar";
+import NavBar from "../View/NavBarView";
 
 export default function Layout({children, menuItems}) {
 

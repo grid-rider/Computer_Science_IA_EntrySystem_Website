@@ -1,5 +1,4 @@
 @startuml
-title AuthContext Provider 
 
 class Account << (P,yellow) Page Component>> {
     == State ==

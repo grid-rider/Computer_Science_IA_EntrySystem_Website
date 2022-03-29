@@ -1,7 +1,6 @@
 @startuml
-title AuthContext Provider 
 
-class RowView << (P,yellow) Page Component>> {
+class StationTable << (P,yellow) Page Component>> {
     == State ==
      #dispalyStationList: [StationRowView]
      #editMode: Boolean

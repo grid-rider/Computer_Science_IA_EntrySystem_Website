@@ -1,7 +1,6 @@
 @startuml
-title AuthContext Provider 
 
-class RowView << (P,yellow) Page Component>> {
+class AcessTable << (P,yellow) Page Component>> {
     == State ==
      #dispalyStudentList: [StudentRowView]
 

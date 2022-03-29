@@ -1,0 +1,22 @@
+@startuml
+
+class ProfileIconView << (P,blue) View Component>> {
+    == Props ==
+    None
+
+    == State ==
+     #name: String
+     #imgUrl: String
+
+    == Listeners ==
+    ~userData
+
+    == Componants Used ==
+    None
+    
+    == Methods ==
+    None 
+
+}
+    
+@enduml

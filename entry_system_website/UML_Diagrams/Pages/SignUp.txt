@@ -1,5 +1,4 @@
 @startuml
-title AuthContext Provider 
 
 class SignUp << (P,yellow) Page Component>> {
     == State ==

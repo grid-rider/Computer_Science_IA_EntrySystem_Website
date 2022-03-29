@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import styles from '../../styles/Profile.module.css';
-import { useAuth } from '../Firebase/Context/authUserContext';
+import { useAuth } from '../../Firebase/Context/authUserContext';
 import {
     HStack,
     Flex,
     Text,
     Avatar
 } from '@chakra-ui/react';
-
 
 export default function UserProfile() {
 
