@@ -2,8 +2,8 @@ import { Box, Button, Flex, Heading, HStack, Modal, ModalBody, ModalContent, Mod
 import { useEffect, useState } from 'react';
 import {Html5QrcodeScanner, Html5Qrcode} from "html5-qrcode";
 import { useAuth } from '../../../components/Firebase/Context/authUserContext';
-import UserProfile from '../../../components/React/Profile';
-import NavBar from '../../../components/React/View/NavBar';
+import UserProfile from '../../../components/React/View/ProfileIconView';
+import NavBar from '../../../components/React/View/NavBarView';
 
 
 const qrScannerConfig = {
