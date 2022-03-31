@@ -60,6 +60,14 @@ export function AuthProvider({ children }) {
             station: station, 
         })
     }
+
+    function stationDocumentModel(name,school){
+        return({
+            name: name, 
+            school: school,
+            file_url: "",
+        })
+    }
     
     
     const app = getFirebaseApp();
@@ -192,11 +200,7 @@ export function AuthProvider({ children }) {
 
     //create station doc in firestore database
     function createStation (name,school){
-        return addDoc(collection(db,"stations"), {
-            name: name, 
-            school: school,
-            file_url: "",
-        })
+        return addDoc(collection(db,"stations"), stationDocumentModel(name, school))
     }
 
     //delete station doc in firestore database

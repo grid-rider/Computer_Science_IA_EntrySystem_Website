@@ -1,13 +1,13 @@
 import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, List, ListItem, Table, Tbody, Text, Textarea, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import Layout from '../../../components/React/Layout/Layout';
-import menuItems from '../../../components/Helpers/TeacherMenuItems';
+import HelperClass from '../../../components/Helpers/HelperClass';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../components/Firebase/Context/authUserContext';
 import StationRowView from '../../../components/React/View/StationRowItem';
 import { useForm } from 'react-hook-form';
 import { FaPray } from 'react-icons/fa';
 
-let PageMenuItems = menuItems(false,false,true);
+let PageMenuItems = HelperClass.menuItems(false,false,true);
 
 export default function StationView() {
     let [dispalyStationList, setDisplayStationList] = useState([]);

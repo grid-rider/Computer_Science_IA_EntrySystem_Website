@@ -1,3 +1,4 @@
+
 function userDocumentModel(email, FirstName, LastName, School, Role, url) {
 
     return({
@@ -30,10 +31,14 @@ function userEntryRecordSchema(type, station){
     })
 }
 
-function createStation (name,school){
-    return addDoc(collection(db,"stations"), {
-        name: name, 
-        school: school,
-        file_url: "",
+function stationDocumentModel(name,school){
+
+    return({
+
+        name: string, 
+        school: string,
+        file_url: string,
+
     })
+
 }

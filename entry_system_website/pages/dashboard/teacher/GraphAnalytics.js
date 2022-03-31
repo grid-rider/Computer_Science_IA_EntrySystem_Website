@@ -1,12 +1,12 @@
 
 import { Box, Flex, Heading } from '@chakra-ui/react';
 import Layout from '../../../components/React/Layout/Layout';
-import menuItems from '../../../components/Helpers/TeacherMenuItems';
+import HelperClass from '../../../components/Helpers/HelperClass';
 import Chart from 'chart.js/auto';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../components/Firebase/Context/authUserContext';
 
-let PageMenuItems = menuItems(true,false,false);
+let PageMenuItems = HelperClass.menuItems(true,false,false);
 
 function getGraphValueObject(date){
     return({
