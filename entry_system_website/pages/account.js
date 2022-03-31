@@ -1,12 +1,6 @@
 import { useAuth } from '../components/Firebase/Context/authUserContext';
-import UserProfile from '../components/React/Profile';
+import UserProfile from '../components/React/View/ProfileIcon.js';
 import { useToast, Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, InputGroup, InputRightElement, Modal, Select, Text, useColorModeValue } from '@chakra-ui/react';
-import {
-    SunIcon,
-    ViewIcon,
-    ViewOffIcon,
-} from '@chakra-ui/icons';
-import { useColorMode } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import NavBar from '../components/React/View/NavBar';

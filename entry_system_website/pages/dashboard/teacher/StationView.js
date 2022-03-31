@@ -3,7 +3,7 @@ import Layout from '../../../components/React/Layout/Layout';
 import menuItems from '../../../components/Helpers/TeacherMenuItems';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../components/Firebase/Context/authUserContext';
-import StationRowView from '../../../components/React/View/StationRowView';
+import StationRowView from '../../../components/React/View/StationRowItem';
 import { useForm } from 'react-hook-form';
 import { FaPray } from 'react-icons/fa';
 

@@ -1,14 +1,8 @@
 import { Box, Text , Flex, Button, Hstack, Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, Heading, Icon, HStack, VStack, useColorMode, List, ListItem} from "@chakra-ui/react";
-import { AiOutlineDingding } from 'react-icons/ai';
-import { VscGraphLine } from 'react-icons/vsc';
 import { ViewIcon, SunIcon, HamburgerIcon, CloseIcon, QuestionOutlineIcon} from '@chakra-ui/icons';
-import { BsQuestionSquare} from 'react-icons/bs';
-import UserProfile from "../View/ProfileIconView";
 import getIconFromType from '../../Helpers/iconTypes';
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import NavBar from "../View/NavBarView";
+import NavBar from "../View/NavBar";
 
 export default function Layout({children, menuItems}) {
 

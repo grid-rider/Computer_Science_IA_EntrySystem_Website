@@ -1,9 +1,9 @@
 import { Box, Button, Flex, Heading, HStack, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Stat, StatHelpText, StatLabel, StatNumber, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import {Html5QrcodeScanner, Html5Qrcode} from "html5-qrcode";
-import { useAuth } from '../../../components/Firebase/Context/authUserContext';
-import UserProfile from '../../../components/React/View/ProfileIconView';
-import NavBar from '../../../components/React/View/NavBarView';
+import { useAuth } from '../components/Firebase/Context/authUserContext.js';
+import UserProfile from '../components/React/View/ProfileIcon.js';
+import NavBar from '../components/React/View/NavBar.js';
 
 
 const qrScannerConfig = {

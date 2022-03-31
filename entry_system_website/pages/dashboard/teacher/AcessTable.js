@@ -4,7 +4,7 @@ import Layout from '../../../components/React/Layout/Layout';
 import menuItems from '../../../components/Helpers/TeacherMenuItems';
 import { useEffect, useState } from 'react';
 import {useAuth} from '../../../components/Firebase/Context/authUserContext';
-import StudentRowView from '../../../components/React/View/StudentRowView';
+import StudentRowView from '../../../components/React/View/AccessRowItem';
 
 let PageMenuItems = menuItems(false,true,false);
 

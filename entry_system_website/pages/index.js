@@ -3,36 +3,25 @@
   import Link from 'next/link'
   import { useAuth } from '../components/Firebase/Context/authUserContext'
   import { useEffect, useState } from 'react'
-  import { AspectRatio, Box, Menu, MenuItem, Center, Container, Flex, Image, useColorMode ,Button, IconButton, HStack, useDisclosure, Modal, ModalOverlay, ModalContent, MenuButton, MenuList, Heading, Text} from '@chakra-ui/react';
-  import { LockIcon, PlusSquareIcon, SunIcon , UnlockIcon} from '@chakra-ui/icons';
-  import UserProfile from '../components/React/Profile';
-  import {FaUserCircle} from "react-icons/fa";
-  import { HamburgerIcon } from '@chakra-ui/icons';
+  import { AspectRatio, Box, Menu, MenuItem, Center, Container, Flex, Image, useColorMode ,Button, IconButton, HStack, useDisclosure, Modal, ModalOverlay, ModalContent, MenuButton, MenuList, Heading, Text} from '@chakra-ui/react';  
 import NavBar from '../components/React/View/NavBar'
 
-//Dictionary used to deffer user to appropriate page
-const initialRoleLandingPages = {
-    "teacher": "RowView",
-    "student": "StudentView"
-}
-
-
   export default function Home() {
-
     const { colorMode, toggleColorMode } = useColorMode()
-
-
     let { user, Firebase_signOut, userData} = useAuth();
-    let [dashboardButtonLoading, setDashboardButtonLoading] = useState(true)
-    let [dashboardSelector, setDashboardSelector] = useState("")
+    let [isTeacher, setIsTeacher] = useState(false)
     
     useEffect(() => {
       if(userData){
-        setDashboardSelector("dashboard/" + userData.role + "/" + initialRoleLandingPages[userData.role]);
-        setDashboardButtonLoading(false);
-      } else {
-        setDashboardButtonLoading(true);
+        if(userData.role === "teacher"){
+          setIsTeacher(true);
+        } else {
+          setIsTeacher(false);
+        }
+      } else{
+        setIsTeacher(false);
       }
+
     }, [userData]);
 
     return (
@@ -40,13 +29,26 @@ const initialRoleLandingPages = {
         <NavBar/>
 
         {user?
-            <Flex bgGradient='linear(to-b, blue.400, green.500 )' as="a" _hover={{bgGradient: 'linear(to-b, green.100, green.500 )'}} href={dashboardSelector} justifyContent="center" boxShadow="xl"alignItems="center" borderRadius="1000rem" width={{base:"80vw",sm:"60vw", md:"md"}} height={{base:"80vw",sm:"60vw",md:"md"}}>
+            <Flex bgGradient='linear(to-b, blue.400, green.500 )' as="a" _hover={{bgGradient: 'linear(to-b, green.100, green.500 )'}} href="Entry" justifyContent="center" boxShadow="xl"alignItems="center" borderRadius="1000rem" width={{base:"80vw",sm:"50vw", md:"md"}} height={{base:"80vw",sm:"50vw",md:"md"}}>
               <Heading align="center">To Start Please Press Here</Heading>
             </Flex>
+
           :
           
-            <Flex bgGradient='linear(to-b, blue.400, green.500 )' as="a" _hover={{bgGradient: 'linear(to-b, green.100, green.500 )'}} href="SignInPage" justifyContent="center" boxShadow="xl"alignItems="center" borderRadius="1000rem" width={{base:"80vw",sm:"60vw", md:"md"}} height={{base:"80vw",sm:"60vw",md:"md"}}>
+            <Flex bgGradient='linear(to-b, blue.400, green.500 )' as="a" _hover={{bgGradient: 'linear(to-b, green.100, green.500 )'}} href="SignInPage" justifyContent="center" boxShadow="xl"alignItems="center" borderRadius="1000rem" width={{base:"80vw",sm:"50vw", md:"md"}} height={{base:"80vw",sm:"50vw",md:"md"}}>
               <Heading align="center">Press Here To Sign In</Heading>
+            </Flex>
+        }
+
+        {isTeacher?
+
+            <Flex marginTop="2em" bgGradient='linear(to-b, blue.400, green.500 )' as="a" _hover={{bgGradient: 'linear(to-b, green.100, green.500 )'}} href="/dashboard/teacher/AcessTable" justifyContent="center" boxShadow="xl"alignItems="center" borderRadius="1000rem" width={{base:"80vw",sm:"50vw", md:"md"}} height={{base:"80vw",sm:"50vw",md:"md"}}>
+              <Heading align="center">Press Here To Enter Teacher Section</Heading>
+            </Flex>
+            :
+            <Flex marginTop="2em" bgGradient='linear(to-b, blue.400, green.500 )' justifyContent="center" boxShadow="xl"alignItems="center" borderRadius="1000rem" width={{base:"80vw",sm:"50vw", md:"md"}} height={{base:"80vw",sm:"50vw",md:"md"}} flexDir="column">
+              <Heading align="center">Teacher Section</Heading>
+              <Heading align="center" color="red">Acess Denied</Heading>
             </Flex>
         }
 

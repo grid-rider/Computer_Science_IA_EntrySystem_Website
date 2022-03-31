@@ -27,7 +27,7 @@ export default function StudentRowView(props){
 
     function saveButtonHandler(data){
         updateStudentEntryStatus(data.status,props.id).then(() => {
-            onClose()
+            onClose()   
         }).catch((error) => {
             console.log(error)
         })

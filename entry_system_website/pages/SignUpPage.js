@@ -81,9 +81,10 @@ export default function AccountCreation() {
     }
 
     return (
-        <Flex justifyContent="center" alignItems="center" height="100vh" flexDirection="column">
+        <>
+        <Flex justifyContent="center" alignItems="center" flexDirection="column" >
             <NavBar/>
-            <Flex flexDirection="column" borderRadius="12" background={formBackground} paddingLeft="12" paddingRight="12" py="2em" alignItems="center" justifyContent="space-evenly">
+            <Flex flexDirection="column" borderRadius="12" background={formBackground} paddingLeft="12" paddingRight="12" py="2em" alignItems="center" justifyContent="space-evenly" height="80%">
                 <Heading mb="0.4em">Sign Up Form</Heading>
                 
                 <Avatar width="4em" height="4em" src={iconURL}/>
@@ -158,7 +159,7 @@ export default function AccountCreation() {
                 <div style={{display: !invalidSignUp ? "none" : "block", color: "red", fontSize: "1em", margin: "0 auto"}}>Invalid Email or Password</div>
             </Flex>
         </Flex>
-
+        </>
         
     )
 }
