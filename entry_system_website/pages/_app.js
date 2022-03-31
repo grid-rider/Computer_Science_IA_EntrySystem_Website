@@ -1,5 +1,3 @@
-import '../styles/Account.css';
-import '../styles/globals.css';
 import {AuthProvider} from '../components/Firebase/Context/authUserContext.js';
 import { ChakraProvider } from '@chakra-ui/react'
 import theme from '../components/ChakraUI/theme'

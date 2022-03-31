@@ -1,10 +1,10 @@
 
 import { Box, Flex, Heading } from '@chakra-ui/react';
-import Layout from '../../../components/React/Layout/Layout';
-import HelperClass from '../../../components/Helpers/HelperClass';
+import Layout from '../../components/React/Layout/Layout';
+import HelperClass from '../../components/Helpers/HelperClass';
 import Chart from 'chart.js/auto';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../../components/Firebase/Context/authUserContext';
+import { useAuth } from '../../components/Firebase/Context/authUserContext';
 
 let PageMenuItems = HelperClass.menuItems(true,false,false);
 

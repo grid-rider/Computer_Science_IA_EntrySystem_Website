@@ -5,7 +5,6 @@ import { AiOutlineTable, AiOutlineMonitor } from 'react-icons/ai';
 
 //Helper class provides functions that are used to improve code maintaince and to simplify code 
 export default class HelperClass{
-    
     /**
      * This Function is used to make readability in layout file better by providing
      * function that returns appropriate icon from request. 
@@ -28,11 +27,9 @@ export default class HelperClass{
         }
     }
 
-    /*
-    This function returns a MenuItem object that which is used in the Layout Provider to create
-    buttons to link to pages.
-    */
     /**
+     * This function returns a MenuItem object that which is used in the Layout Provider to create
+     * buttons to link to pages.
      * @param  {string} title - Name of button that is used for this link button
      * @param  {string} href - Link to page 
      * @param  {string} iconType - Icon type of icon function above
@@ -48,7 +45,6 @@ export default class HelperClass{
             }
         )
     }
-
     /**
      * This function uses the above MenuItem object to create elements for the layout side bar.
      * @param  {boolean} isGraphAnalytics - is the graph analytics page selected 
@@ -58,18 +54,30 @@ export default class HelperClass{
     */
     static menuItems(isGraphAnalytics, isAcessTable, isStationTable){
         return ([
-            this.MenuItem("Acess Table", "/dashboard/teacher/AcessTable", "table", isAcessTable),
-            this.MenuItem("Graph Analytics", "/dashboard/teacher/GraphAnalytics", "graph", isGraphAnalytics),
-            this.MenuItem("Station Table", "/dashboard/teacher/StationTable", "spyGlass", isStationTable),
+            this.MenuItem("Acess Table", "/teacher/AcessTable", "table", isAcessTable),
+            this.MenuItem("Graph Analytics", "/teacher/GraphAnalytics", "graph", isGraphAnalytics),
+            this.MenuItem("Station Table", "/teacher/StationTable", "spyGlass", isStationTable),
         ]);
     }
-
+    /**
+     * @param  {Date} - javasceript data object passed 
+     * @return {string} - string in the form DD.MM.YYYY
+     */
     static getParsedDate(date){
         return(date.getDate() + "." + (date.getMonth()+1) +"." + date.getFullYear());
     }
-    
+    /**
+     * @param  {Date} - javasceript data object passed 
+     * @return {string} - string in the form Hours:Minutes
+     */
     static getParsedTime(date){
         return(date.getHours() + ":" + date.getMinutes());
     }
 
 }
+
+
+
+
+
+

@@ -1,11 +1,10 @@
 import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, List, ListItem, Table, Tbody, Text, Textarea, Th, Thead, Tr, VStack } from '@chakra-ui/react';
-import Layout from '../../../components/React/Layout/Layout';
-import HelperClass from '../../../components/Helpers/HelperClass';
+import Layout from '../../components/React/Layout/Layout';
+import HelperClass from '../../components/Helpers/HelperClass';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../../components/Firebase/Context/authUserContext';
-import StationRowView from '../../../components/React/View/StationRowItem';
+import { useAuth } from '../../components/Firebase/Context/authUserContext';
+import StationRowView from '../../components/React/View/StationRowItem';
 import { useForm } from 'react-hook-form';
-import { FaPray } from 'react-icons/fa';
 
 let PageMenuItems = HelperClass.menuItems(false,false,true);
 

@@ -5,17 +5,19 @@ import { getDatabase, set, ref, push, onValue } from 'firebase/database';
 import { createContext, useContext, useEffect, useState } from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 import { getStorage, uploadBytes, ref as sRef, deleteObject, getDownloadURL } from "firebase/storage";
+
+//Setting up pdf generator for later use
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const AuthContext = createContext();
 
+//Custom hook that is made to enable acess to AuthProvider functions
 export function useAuth() {
     return useContext(AuthContext);
 }
 
-
+//Firebase setup. Please do not share config properties as they contain keys
 function getFirebaseApp() {
     let firebaseConfig = {
         apiKey: "AIzaSyDKwY8frueK8cFoTFEvNYdcF1-IFRYDw4o",
@@ -48,7 +50,7 @@ export function AuthProvider({ children }) {
         })
     }
     
-    function userEntryRecordSchema(type, station){
+    function userEntryRecordModel(type, station){
 
         return({
             user_id: user.uid,
@@ -69,14 +71,17 @@ export function AuthProvider({ children }) {
         })
     }
     
-    
+    //Initizatialization of different Firebase DB's
     const app = getFirebaseApp();
     const auth = getAuth(app);
     const db = getFirestore(app);
     const realtime_db = getDatabase(app);
     const storage = getStorage(app);
 
+    //Loading state displays if user is logged in or not
     let [loading, setLoading] = useState(true);
+    //User state contains returned firebase user object from firebase auth 
+    //Initially set to null because user is initially signed out
     let [user, setUser] = useState(null);
 
     useEffect((() => {
@@ -125,9 +130,9 @@ export function AuthProvider({ children }) {
         setLoading(true);
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////Firestore Functions/////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////Firestore Section/////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     let [studentList, setStudentList] = useState([]);
     let [ userData, setUserData] = useState(null);
@@ -367,14 +372,14 @@ export function AuthProvider({ children }) {
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////Realtime DB Functions///////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////Realtime DB Section/////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async function setBuildingTransfer(type,station){
         if (user) {
             try {
-                await push(ref(realtime_db,"/access_log/"+userData.school), userEntryRecordSchema(type,station))
+                await push(ref(realtime_db,"/access_log/"+userData.school), userEntryRecordModel(type,station))
             } catch (error) {
                 console.log(error);
             }
@@ -383,8 +388,10 @@ export function AuthProvider({ children }) {
     }
 
 
-    ////////////////////////////////////////////////////////////
+    ////////////Functions and Variables for Export////////////
+    
 
+    //These will be acessible through the custom useAuth hook
     let value = {
         loading,
         user,

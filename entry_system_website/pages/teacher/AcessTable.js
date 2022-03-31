@@ -1,10 +1,10 @@
 
 import { Button, Flex, Heading, List, ListItem, Table, Tbody, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
-import Layout from '../../../components/React/Layout/Layout';
-import HelperClass from '../../../components/Helpers/HelperClass';
+import Layout from '../../components/React/Layout/Layout';
+import HelperClass from '../../components/Helpers/HelperClass';
 import { useEffect, useState } from 'react';
-import {useAuth} from '../../../components/Firebase/Context/authUserContext';
-import StudentRowView from '../../../components/React/View/AccessRowItem';
+import {useAuth} from '../../components/Firebase/Context/authUserContext';
+import StudentRowView from '../../components/React/View/AccessRowItem';
 
 let PageMenuItems = HelperClass.menuItems(false,true,false);
 
