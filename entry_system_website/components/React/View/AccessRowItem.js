@@ -2,16 +2,7 @@ import { Avatar, Box, Flex, Image, Td, Tr, VStack, Text, Button , useDisclosure,
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../Firebase/Context/authUserContext";
 import { Timestamp } from 'firebase/firestore';
-
-
-function getParsedDate(date){
-    return(date.getDate() + "." + (date.getMonth()+1) +"." + date.getFullYear());
-}
-
-function getParsedTime(date){
-    return(date.getHours() + ":" + date.getMinutes());
-}
-
+import HelperClass from '../../Helpers/HelperClass';
 
 export default function StudentRowView(props){
 
@@ -64,15 +55,15 @@ export default function StudentRowView(props){
 
                 <Td>
                     <VStack>
-                        <Text>{getParsedDate(entry_date)}</Text>
-                        <Text>{getParsedTime(entry_date)}</Text>
+                        <Text>{HelperClass.getParsedDate(entry_date)}</Text>
+                        <Text>{HelperClass.getParsedTime(entry_date)}</Text>
                     </VStack>
                 </Td>
 
                 <Td>
                     <VStack>
-                        <Text>{getParsedDate(exit_date)}</Text>
-                        <Text>{getParsedTime(exit_date)}</Text>
+                        <Text>{HelperClass.getParsedDate(exit_date)}</Text>
+                        <Text>{HelperClass.getParsedTime(exit_date)}</Text>
                     </VStack>
                 </Td>
                 

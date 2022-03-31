@@ -5,13 +5,13 @@ import NavBar from "../View/NavBar";
 import HelperClass from "../../Helpers/HelperClass";
 /**
  * Description: This component is used by the layout provider to provide navigation to the teacher section pages.
- * Note: The properties (children and menuItems) in this function are destructured to gain easy access
+ * Note: The properties (children and menuItems) in this function are destructured to gain quicker access
  * @param  {} {children 
  * @param  {} menuItems}
  */
 export default function Layout({children, menuItems}) {
 
-    
+    //useRouter hook used to navigate between pages
     let router = useRouter();
 
     return(

@@ -4,27 +4,19 @@ import {Html5QrcodeScanner, Html5Qrcode} from "html5-qrcode";
 import { useAuth } from '../components/Firebase/Context/authUserContext.js';
 import UserProfile from '../components/React/View/ProfileIcon.js';
 import NavBar from '../components/React/View/NavBar.js';
+import HelperClass from '../components/Helpers/HelperClass.js';
 
 
 const qrScannerConfig = {
     fps: 15,
 }
 
-
-function getParsedDate(date){
-    return(date.getDate() + "." + (date.getMonth()+1) +"." + date.getFullYear());
-}
-
-function getParsedTime(date){
-    return(date.getHours() + ":" + date.getMinutes());
-}
-
 function getEntryObject(entry_date,exit_date){
     return({
-        entry_date_string: getParsedDate(entry_date),
-        entry_time_string: getParsedTime(entry_date),
-        exit_date_string: getParsedDate(exit_date),
-        exit_time_string: getParsedTime(exit_date),
+        entry_date_string: HelperClass.getParsedDate(entry_date),
+        entry_time_string: HelperClass.getParsedTime(entry_date),
+        exit_date_string: HelperClass.getParsedDate(exit_date),
+        exit_time_string: HelperClass.getParsedTime(exit_date),
     });
 }
 
