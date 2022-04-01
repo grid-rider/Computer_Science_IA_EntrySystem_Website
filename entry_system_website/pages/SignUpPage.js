@@ -42,7 +42,7 @@ export default function AccountCreation() {
     });
     //form handler
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
-        resolver: yupResolver(schema), //using yup for image file validatoin
+        resolver: yupResolver(schema), //using yup for image file validatoi n
     });
       
     //page routing

@@ -17,6 +17,7 @@ import {
     useColorMode,
     useColorModeValue,
     Button,
+    useToast,
 } from '@chakra-ui/react'
 
 import {
@@ -32,6 +33,7 @@ export default function SignInPage (){
 
     let { signIn , user} = useAuth();
     const router = useRouter();
+    let toast = useToast();
 
     //form handler
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
@@ -47,6 +49,13 @@ export default function SignInPage (){
         try {
             let sign_in = await signIn(data.email, data.password);
             setInvalidLogin(false);
+            toast({ //toast icon is generated with a duration of 9000ms to provide feedback for user
+                title: 'Account Setup',
+                description: "You Have Been Signed In",
+                status: 'success',
+                duration: 9000,
+                isClosable: true,
+            })
             router.push("/");
         } catch (error) {
             setInvalidLogin(true); //Providing user feedback by setting invalid state to true
@@ -56,6 +65,7 @@ export default function SignInPage (){
 
     useEffect(() => {
         if(user) {
+
             router.push("/");
         }
     }, [])
