@@ -58,7 +58,6 @@ export default function GraphAnalytics() {
                 }
             },
             pointBackgroundColor: ['rgba(245, 40, 145, 0.8)','black','black','black'],
-
         }
     };
     

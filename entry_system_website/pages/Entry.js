@@ -34,7 +34,7 @@ export default function StudentView() {
 
     //useAuth object destructuring 
     let { setBuildingTransfer,acessStations,updateStudentEntryStatus, user, userData} = useAuth();
-
+ 
 
     useEffect(() => {
         
@@ -55,27 +55,32 @@ export default function StudentView() {
 
 
     function startQrCode () {
-
+        //instantiage Html5Qrcode object with id of component where rendered
         scanner = new Html5Qrcode("reader");    
         Html5Qrcode.getCameras().then((devices) => {
-            scanner.start({ facingMode: "environment" }, qrScannerConfig, onScanSucess, onScanFailure).catch((error) => {
+            //starting scanner facing environment
+            scanner.start({ facingMode: "environment" }, qrScannerConfig, onScanSucess, onScanFailure)
+            .catch((error) => {
                 console.log("failed to start scanner")
                 throw error 
             })
         }).catch((error) => {
             console.log("error occured with QR code scanner : " + error)
         })
-
     }
 
 
     //event listener functions for HTMLQRCode scanner
     function onScanSucess(decodedText, decodedResult){  
-        scanner.pause(true);
-        acessStations.forEach((doc) => {
+        scanner.pause(true); //pausing scanner to ensure no further sucessful scans
+        acessStations.forEach((doc) => { 
+            //iterating through acessStation array to check if code is valid
             if(decodedText == doc.id) {
-                scanner.stop().then(() => {
-                    updateStudentEntryStatus(!userData.entry_status,user.uid).then(() => {
+                scanner.stop().then(() => {  //stopping scanner to ensure no further scanning
+                    updateStudentEntryStatus(!userData.entry_status,user.uid).then(() => { 
+                        //updating user entry status in user firestore document
+
+                        //calling promise of userFirestore entry status change and acess log recordd
                         setBuildingTransfer((userData.entry_status? "entry":"exit"),decodedText).then(() => {
                             onOpen()
                             setScanOn(false);
@@ -90,14 +95,15 @@ export default function StudentView() {
 
             }
         });
-        scanner.pause(false);
+        scanner.pause(false); //if scanner fails to match code return to scanning
     }
 
     function onScanFailure(error) {
-        console.log(error)
-    }   
+        console.log(error) //logging errors for development
+    }           
 
     function toggleScan(){
+        //changing scanning mode 
         if(!scanOn){
             setScanOn(true)
             startQrCode()

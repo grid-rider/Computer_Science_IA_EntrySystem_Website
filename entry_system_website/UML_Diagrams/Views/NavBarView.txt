@@ -1,5 +1,4 @@
 @startuml
-title AuthContext Provider 
 
 class NavBarView << (P,blue) View Component>> {
     == Props ==
