@@ -16,14 +16,20 @@ import NavBar from '../components/React/View/NavBar';
 
 export default function AccountCreation() {
 
-    let { createAccount, createFirestoreUser, uploadUserImage, resetAuthState, getUserImageURL} = useAuth();
     let [invalidSignUp, setInvalidSignUp] = useState(false);
     let [showPassword, setShowPassword] = useState(false);
     let [iconURL, setIconURL] = useState("");
 
 
+    //color mode
+    let formBackground = useColorModeValue("gray.100","gray.700");
+    const { colorMode, toggleColorMode } = useColorMode();
 
-    //object schema for image file upload validation
+
+    //getting authContext functions and states
+    let { createAccount, createFirestoreUser, uploadUserImage, resetAuthState, getUserImageURL} = useAuth();
+
+    //creeating object for yup to be used for validation testing 
     const schema = yup.object().shape({
         picture: yup
             .mixed()
@@ -31,28 +37,21 @@ export default function AccountCreation() {
                 return value && value.length
             } )
             .test("fileSize", "Image File To Larg", (value, context) => {
-                return value && value[0] && value[0].size <= 2000000;
+                return value && value[0] && value[0].size <= 2000000; //checking size of file
             })
     });
-
-
     //form handler
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(schema), //using yup for image file validatoin
     });
       
-
-    //color mode
-    let formBackground = useColorModeValue("gray.100","gray.700");
-    const { colorMode, toggleColorMode } = useColorMode();
-
     //page routing
     let router = useRouter();   
 
-    //toast 
+    //toast provides user feedback 
     const toast = useToast();
 
-
+    //Function used to pass data from form to authContext functions for firebase
     async function signUp_ButtonHandler(data){
         try {
             let user = await createAccount(data.email, data.password);
@@ -88,12 +87,12 @@ export default function AccountCreation() {
                 <Heading mb="0.4em">Sign Up Form</Heading>
                 
                 <Avatar width="4em" height="4em" src={iconURL}/>
-                <form onSubmit={handleSubmit(signUp_ButtonHandler)}>
+                <form onSubmit={handleSubmit(signUp_ButtonHandler)}> {/**Setting signup form to pass data to signUp_ButtonHandler() */}
                     <FormControl  m={1} isInvalid={errors.picture} onChange={handleUserIconChange}>
                         <FormLabel>User Icon</FormLabel>
                         <Input p="0.1em" variant="unstyled" {...register("picture")} type="file" name="picture"/>
                         <FormErrorMessage>
-                        {errors.picture && errors.picture.message}
+                        {errors.picture && errors.picture.message} {/**Error message displayed when validation fails */}
                         </FormErrorMessage>
                     </FormControl>
 
@@ -110,6 +109,7 @@ export default function AccountCreation() {
                         <InputGroup>
                             <Input id="password" type={showPassword? "text" : "password"} placeholder='Enter Password' {...register("password", { required: {value: true ,message: "Entry Required"}})}/>
                             <InputRightElement>
+                                {/**Implementing hide password functionality to provide better security */}
                                 <Button variant="ghost" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <ViewOffIcon/> : <ViewIcon/>}</Button>
                             </InputRightElement>
                         </InputGroup>
@@ -135,6 +135,7 @@ export default function AccountCreation() {
                         </FormErrorMessage>
                     </FormControl>
 
+                    {/**Restricting school and roles with selectors to fit confines of app */}
                     <FormControl m={1}>
                         <FormLabel>School</FormLabel>
                         <Select {...register("school")}>
@@ -149,7 +150,8 @@ export default function AccountCreation() {
                             <option value="student">Student</option>
                         </Select>
                     </FormControl>
-
+                    
+                    {/**Submit section */}
                     <HStack mt="2em">
                         <Button width="100%" colorScheme="teal" type='submit' isLoading={isSubmitting}>Sign Up</Button>
                         <Button onClick={toggleColorMode}><SunIcon/></Button>

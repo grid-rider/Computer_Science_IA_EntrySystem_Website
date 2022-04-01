@@ -17,21 +17,6 @@ export function useAuth() {
     return useContext(AuthContext);
 }
 
-//Firebase setup. Please do not share config properties as they contain keys
-function getFirebaseApp() {
-    let firebaseConfig = {
-        apiKey: "AIzaSyDKwY8frueK8cFoTFEvNYdcF1-IFRYDw4o",
-        authDomain: "entrysystem-2fbb1.firebaseapp.com",
-        projectId: "entrysystem-2fbb1",
-        databaseURL: "https://entrysystem-2fbb1-default-rtdb.europe-west1.firebasedatabase.app/",
-        storageBucket: "entrysystem-2fbb1.appspot.com",
-        messagingSenderId: "986017227132",
-        appId: "1:986017227132:web:d8aa9215d01334e9df04f9",
-        measurementId: "G-Z7ZZ2GQM0T"
-    };
-
-    return initializeApp(firebaseConfig);
-}
 
 export function AuthProvider({ children }) {
 
@@ -70,6 +55,23 @@ export function AuthProvider({ children }) {
             file_url: "",
         })
     }
+
+    //Firebase setup. Please do not share config properties as they contain keys
+    function getFirebaseApp() {
+        let firebaseConfig = {
+            apiKey: "AIzaSyDKwY8frueK8cFoTFEvNYdcF1-IFRYDw4o",
+            authDomain: "entrysystem-2fbb1.firebaseapp.com",
+            projectId: "entrysystem-2fbb1",
+            databaseURL: "https://entrysystem-2fbb1-default-rtdb.europe-west1.firebasedatabase.app/",
+            storageBucket: "entrysystem-2fbb1.appspot.com",
+            messagingSenderId: "986017227132",
+            appId: "1:986017227132:web:d8aa9215d01334e9df04f9",
+            measurementId: "G-Z7ZZ2GQM0T"
+        };
+
+        return initializeApp(firebaseConfig);
+    }
+
     
     //Initizatialization of different Firebase DB's
     const app = getFirebaseApp();
@@ -77,6 +79,11 @@ export function AuthProvider({ children }) {
     const db = getFirestore(app);
     const realtime_db = getDatabase(app);
     const storage = getStorage(app);
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////Auth Section/////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //Loading state displays if user is logged in or not
     let [loading, setLoading] = useState(true);
@@ -338,6 +345,19 @@ export function AuthProvider({ children }) {
         }
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////Storage DB section/////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //Function used to update user account 
+    /**
+     * Async function that deals with updating the userData for the account page
+     * @param  {string} firstName
+     * @param  {string} lastName
+     * @param  {blob} blobImage - Method of transfering files programmatically
+     * @param  {string} uid - Unique identifies of user account in firebase
+     */
     async function updateUserDataAccount(firstName,lastName, blobImage, uid){
         try {
             await uploadUserImage(blobImage, uid)
@@ -348,7 +368,7 @@ export function AuthProvider({ children }) {
                         first_name: firstName,
                         last_name: lastName,
                         img_url: url,
-                    }); 
+                    });     
                 } catch (error) {
                     throw error
                 }
@@ -359,12 +379,20 @@ export function AuthProvider({ children }) {
             return error
         }
     }
-
+    /**
+     * @param  {blob} blobImage
+     * @param  {string} uid - Unique identifies of user account in firebase
+     * @returns {Promis} - Promise of uploading image in userImages/ path
+     */
     function uploadUserImage(blobImage, uid){
-        return uploadBytes(sRef(storage,"userImages/"+uid),blobImage);
+        return uploadBytes(sRef(storage,"userImages/"+uid),blobImage); //uploaing blob of user image to firebase storage
     }
 
-    //delete station doc in firestore database
+    /**
+     * This function is used by the userData to create reference to image in storage database
+     * @param  {string} uid - function getUserImageURL 
+     * @returns {Promis} Promise of uploading image in userImages/ path
+    */
     function getUserImageURL (uid){
         return getDownloadURL(sRef(storage,"userImages/"+uid))
     }

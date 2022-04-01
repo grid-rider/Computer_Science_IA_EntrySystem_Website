@@ -49,7 +49,7 @@ export default function SignInPage (){
             setInvalidLogin(false);
             router.push("/");
         } catch (error) {
-            setInvalidLogin(true);
+            setInvalidLogin(true); //Providing user feedback by setting invalid state to true
             console.log(error.message);
         }
     }
@@ -69,12 +69,12 @@ export default function SignInPage (){
                 <Heading mb="1em">Sign In Form</Heading>
                 
 
-                <form onSubmit={handleSubmit(signIn_ButtonHandler)}>
+                <form onSubmit={handleSubmit(signIn_ButtonHandler)}> {/**Setting signup form to pass data to signIn_ButtonHandler */}
                     <FormControl  m={1} isInvalid={errors.email}>
                         <FormLabel>Email</FormLabel>
                         <Input type="email" placeholder='Enter Email' {...register("email", { required: {value: true ,message: "Entry Required"}})}/>
                         <FormErrorMessage>
-                            {errors.email && errors.email.message}
+                            {errors.email && errors.email.message} {/**Error message displayed when validation fails */}
                         </FormErrorMessage>
                     </FormControl>
 
@@ -83,7 +83,10 @@ export default function SignInPage (){
                         <InputGroup>
                             <Input id="password" type={showPassword? "text" : "password"} placeholder='Enter Password' {...register("password", { required: {value: true ,message: "Entry Required"}})}/>
                             <InputRightElement>
-                                <Button variant="ghost" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <ViewOffIcon/> : <ViewIcon/>}</Button>
+                                {/**Implementing hide password functionality to provide better security */}
+                                <Button variant="ghost" onClick={() => setShowPassword(!showPassword)}>
+                                    {showPassword ? <ViewOffIcon/> : <ViewIcon/>}
+                                </Button>
                             </InputRightElement>
                         </InputGroup>
                         <FormErrorMessage>
@@ -93,14 +96,12 @@ export default function SignInPage (){
                     </FormControl>
 
                     <HStack mt="2em">
+                        {/**Submit section */}
                         <Button width="100%" colorScheme="teal" type='submit' isLoading={isSubmitting}>Sign In</Button>
                         <Button onClick={toggleColorMode}><SunIcon/></Button>
                     </HStack>
                 </form>
-
                 <div style={{display: !invalidLogin ? "none" : "block", color: "red", fontSize: "1em", margin: "0 auto"}}>Invalid Email or Password</div>
-
-
             </Flex>
         </Flex>
         </>
