@@ -21,6 +21,8 @@ export default function GraphAnalytics() {
     let [ exitGraphValues, setExitGraphValues ] = useState([]);
     let { accessLog } = useAuth();
 
+
+    //data point object used for Graphing
     const data = {
         datasets: [{
             label: 'User Entries',
