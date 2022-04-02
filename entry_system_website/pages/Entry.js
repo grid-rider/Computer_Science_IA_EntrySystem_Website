@@ -137,7 +137,7 @@ export default function StudentView() {
                         </Flex>   
                         :
                         <Flex flexDir="column" justifyContent="center" alignItems="center">
-                            <UserProfile/>
+                            <UserProfile/> {/**Component from custom ProfileIcon component */}
                             <Text>{name}</Text>
                             <Heading position="relative">{entryType}</Heading>
                         </Flex>

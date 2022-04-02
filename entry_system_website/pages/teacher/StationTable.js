@@ -6,6 +6,7 @@ import { useAuth } from '../../components/Firebase/Context/authUserContext';
 import StationRowView from '../../components/React/View/StationRowItem';
 import { useForm } from 'react-hook-form';
 
+//updating the table layout to highlight the stationTable button.
 let PageMenuItems = HelperClass.menuItems(false,false,true);
 
 export default function StationView() {
@@ -32,16 +33,19 @@ export default function StationView() {
                 return(<StationRowView key={element.id} data={element.data()} id={element.id} editMode={editMode}/>)
             })
             setDisplayStationList(tempArray)
-        }
+        }   
     }, [editMode])
 
     function handleEditModeClick(){
         setEditMode((value) => !value);
     }
 
+    /**
+     * @param  {object} data - Provides access to the form question of the stations name
+    */
     async function handleStationAdd(data){
-        console.log("got here")
         try {
+            //Creating station file in user doc
             let station = await createStation(data.stationEntry,userData.school);
             console.log("id : " + station.id);
             let fileUpload = await createStationQrCodeFile(station.id);
