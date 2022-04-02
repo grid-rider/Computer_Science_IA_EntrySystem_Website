@@ -17,7 +17,6 @@ export default function StationRowView(props){
 
     async function handleStationFile(){
         try {
-            console.log("got here 3")
            let href = await getStationFileURL(props.id);
            console.log(href)
            setStationURL(href);

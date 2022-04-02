@@ -166,32 +166,38 @@ export function AuthProvider({ children }) {
     }, [user]);
 
     useEffect(() => {
+        /**Use effect used to make a listener in authContext that listens to userData changes */
         let StudentListListener;
         let StationListener;
         let AccessLogListener;
 
         if(userData != null && user != null){
-            //check role & get student list (for production refractor name to list as list is not isolated to students but also other user roles)
+
+            /**Listeners that listen to the documents in firebase and update state of globally acessible variables when change is detected */
+
+            //Listen to the changes of Firebase documents from schools students and teachers
             StudentListListener =  onSnapshot(query(collection(db, "users"), where("school","==",userData.school)), ((querySnapshot) => {
                 console.log("updated user list");
                 setStudentListFromSnapshot(querySnapshot);
             }));
 
+            //Listen to the changes of Firebase documents from station collection
             StationListener = onSnapshot(query(collection(db,"stations"), where("school","==",userData.school)), ((querySnapshot) => {
                 console.log("updated station list");
                 setStationListFromSnapshot(querySnapshot);
             }));
 
+            //Listen to the changes of firebase records in the acess log in realtime DB
             AccessLogListener = onValue(ref(realtime_db,"/access_log/"+userData.school),(snapshot) => {
                 console.log("updated acess log");
                 const data = snapshot.val();
-
                 //sets acess log to 2D array. This 2D array in the following form : 
-                //[[log_id, {acess_Object containing properties such as first name}], [log_id, {acess_Object}], .....]
+                //[[log_id, {AcessLog Object (see schema in Criterion B)}], [log_id, {AcessLog Object}], .....]
                 setAccessLog(Object.entries(data));
             });
 
         }else{
+            //cleaning up states when userIsLoggedOut to prevent data leak
             resetFirestoreState();
             if(StudentListListener != null){
                 StudentListListener();
@@ -204,6 +210,13 @@ export function AuthProvider({ children }) {
             }
         }
     }, [userData])
+
+        
+    function resetFirestoreState() {
+        setStudentList([]);
+        setAcessStations([]);
+        setAccessLog([]);
+    }
 
     //create user record in firestore database
     function createFirestoreUser (UUID , email, password, FirstName, LastName, School, Role, url){
@@ -275,12 +288,7 @@ export function AuthProvider({ children }) {
         setAcessStations(temp_StationArray);
     }
     
-    
-    function resetFirestoreState() {
-        setStudentList([]);
-        setAcessStations([]);
-        setAccessLog([]);
-    }
+
 
     async function getUserExtraInformation() {
         if (user) {
@@ -360,10 +368,13 @@ export function AuthProvider({ children }) {
      */
     async function updateUserDataAccount(firstName,lastName, blobImage, uid){
         try {
+            //uploading image to storage bucket in directory "userImages/"
             await uploadUserImage(blobImage, uid)
             try {
+                //GET url of uploaded image for setting in userData file
                 let url = await getUserImageURL(uid);
                 try {
+                    //Updating the first_name,last_name and img_url fields of Firestore UserData file 
                     return updateDoc(doc(db,"users", uid), {
                         first_name: firstName,
                         last_name: lastName,
@@ -382,7 +393,7 @@ export function AuthProvider({ children }) {
     /**
      * @param  {blob} blobImage
      * @param  {string} uid - Unique identifies of user account in firebase
-     * @returns {Promis} - Promise of uploading image in userImages/ path
+     * @returns {Promise} - Promise of uploading image in userImages/ path
      */
     function uploadUserImage(blobImage, uid){
         return uploadBytes(sRef(storage,"userImages/"+uid),blobImage); //uploaing blob of user image to firebase storage
@@ -391,7 +402,7 @@ export function AuthProvider({ children }) {
     /**
      * This function is used by the userData to create reference to image in storage database
      * @param  {string} uid - function getUserImageURL 
-     * @returns {Promis} Promise of uploading image in userImages/ path
+     * @returns {Promise} Promise of uploading image in userImages/ path
     */
     function getUserImageURL (uid){
         return getDownloadURL(sRef(storage,"userImages/"+uid))

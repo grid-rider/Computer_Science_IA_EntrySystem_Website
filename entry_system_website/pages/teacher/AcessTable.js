@@ -49,11 +49,13 @@ export default function RowView() {
 
 
 
-
+//setting layout side bar tab using the global layout providefr
 RowView.getLayout = function getLayout(pages) {
     return(
         <Layout menuItems={PageMenuItems}>
+            {/**passing the menu items using the pageItems created with the helperClass*/}
             {pages}
         </Layout>
     )
 }
+

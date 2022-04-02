@@ -24,35 +24,31 @@ export default function StationView() {
             })
             setDisplayStationList(tempArray)
         }
+    }, [acessStations, editMode])
 
-    }, [acessStations])
-
-    useEffect(() => {
-        if(acessStations){
-            let tempArray = acessStations.map((element) => {
-                return(<StationRowView key={element.id} data={element.data()} id={element.id} editMode={editMode}/>)
-            })
-            setDisplayStationList(tempArray)
-        }   
-    }, [editMode])
 
     function handleEditModeClick(){
         setEditMode((value) => !value);
     }
 
+
     /**
+     * Invoked on add button click and uses useForm to acess data of entry with data object
      * @param  {object} data - Provides access to the form question of the stations name
     */
     async function handleStationAdd(data){
         try {
-            //Creating station file in user doc
+            //Creating station Firebase document using authCoontext function in Firestore
+            //The datastorage 
             let station = await createStation(data.stationEntry,userData.school);
             console.log("id : " + station.id);
+            //Uploading file to firebase storage for later acess through the station.id in
+            //the row view
             let fileUpload = await createStationQrCodeFile(station.id);
         } catch (error) {
             console.log(error)
         }
-    }
+    } 
     
     return(
         <Flex flexDir="column" justifyContent="space-evenly" alignItems="center" width="100%" >
