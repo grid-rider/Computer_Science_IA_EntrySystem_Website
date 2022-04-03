@@ -1,0 +1,16 @@
+@startuml
+
+class GraphAnalytics << (P,yellow) Page Component>> {
+    == State ==
+     #accessGraphValues: [Object]
+     #exitGraphValues: [Object]
+
+    == Componants Used ==
+     *Layout
+
+    == Methods ==
+    +getGraphValueObject(): object
+
+}
+    
+@enduml

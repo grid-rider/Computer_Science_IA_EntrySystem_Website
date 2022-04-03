@@ -18,6 +18,7 @@ export default function StudentRowView(props){
 
     function saveButtonHandler(data){
         updateStudentEntryStatus(data.status,props.id).then(() => {
+            //when promise is resolved close edit modal 
             onClose()   
         }).catch((error) => {
             console.log(error)
@@ -26,7 +27,7 @@ export default function StudentRowView(props){
     
     let name = props.data.first_name + " " + props.data.last_name;
 
-
+    //Returning JSX 
     return(
         <>
             <Tr>
@@ -46,15 +47,15 @@ export default function StudentRowView(props){
                 </Td>
 
                 <Td>
+                    {/**Changing background color depeneding on entry status */}
                     <Box backgroundColor={props.data.entry_status ? "green" : "red"} borderRadius="2rem" padding="0.5em">
                         <Text>{props.data.entry_status ? "Present" : "Absent"}</Text>
                     </Box>
                 </Td>   
 
-
-
                 <Td>
                     <VStack>
+                        {/**Using helper class to make date presentable as string */}
                         <Text>{HelperClass.getParsedDate(entry_date)}</Text>
                         <Text>{HelperClass.getParsedTime(entry_date)}</Text>
                     </VStack>
@@ -62,17 +63,20 @@ export default function StudentRowView(props){
 
                 <Td>
                     <VStack>
+                        {/**Using helper class to make date presentable as string */}
                         <Text>{HelperClass.getParsedDate(exit_date)}</Text>
                         <Text>{HelperClass.getParsedTime(exit_date)}</Text>
                     </VStack>
                 </Td>
                 
                 <Td>
+                    {/**Open model to enable edit of entry status */}
                     <Button variant="link" onClick={onOpen}>edit</Button>
                 </Td>
             </Tr>
 
             <Modal onClose={onClose} isOpen={isOpen}>
+                {/**Modals are popup tabs provided by charkraUI for extra user edit space */}
                 <ModalOverlay/>
                 <ModalContent>
                     <ModalHeader>Edit Student</ModalHeader>
@@ -81,6 +85,7 @@ export default function StudentRowView(props){
                         <Flex alignContent="space-between">
                             <Avatar src={props.data.img_url}/>
                             <Flex >
+                                {/**use form used again for form submission */}
                                 <form onSubmit={handleSubmit(saveButtonHandler)}>
                                     <FormControl m={1}>
                                         <FormLabel>Presence</FormLabel>

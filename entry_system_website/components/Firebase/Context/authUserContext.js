@@ -141,10 +141,8 @@ export function AuthProvider({ children }) {
     //////////////////////////////////////////////////Firestore Section/////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    let [studentList, setStudentList] = useState([]);
     let [ userData, setUserData] = useState(null);
-    let [ acessStations, setAcessStations] = useState([]);
-    let [ accessLog, setAccessLog] = useState([]);
+
 
 
     useEffect(() => {
@@ -165,14 +163,16 @@ export function AuthProvider({ children }) {
         }
     }, [user]);
 
+    let [ acessStations, setAcessStations] = useState([]);
+    let [ accessLog, setAccessLog] = useState([]);
+    let [ studentList, setStudentList] = useState([]);
+
     useEffect(() => {
         /**Use effect used to make a listener in authContext that listens to userData changes */
         let StudentListListener;
         let StationListener;
         let AccessLogListener;
-
         if(userData != null && user != null){
-
             /**Listeners that listen to the documents in firebase and update state of globally acessible variables when change is detected */
 
             //Listen to the changes of Firebase documents from schools students and teachers
@@ -195,7 +195,6 @@ export function AuthProvider({ children }) {
                 //[[log_id, {AcessLog Object (see schema in Criterion B)}], [log_id, {AcessLog Object}], .....]
                 setAccessLog(Object.entries(data));
             });
-
         }else{
             //cleaning up states when userIsLoggedOut to prevent data leak
             resetFirestoreState();
@@ -209,9 +208,11 @@ export function AuthProvider({ children }) {
                 AccessLogListener();
             }
         }
-    }, [userData])
-
-        
+    }, [userData]) 
+    /**
+     * Note: UserData refers to the Firebase document stored in the "user" collection 
+     * (for further explanation see Criterion B)
+    */
     function resetFirestoreState() {
         setStudentList([]);
         setAcessStations([]);
@@ -243,8 +244,12 @@ export function AuthProvider({ children }) {
         return getDownloadURL(sRef(storage,"stations/"+uid))
     }
 
-    //delete station doc in firestore database
+    /**
+     * Function used to create station files. 
+     * @param  {string} id - Id of station (the same name is also used for the storage location)
+     */
     function createStationQrCodeFile(id){
+        //pdfMake document definition
         let definition = {
             content: [
                 {text:"Securas Station:", margin: [200,100], fontSize:"30", color:"#89CFF1", bold:"true"},
@@ -252,6 +257,7 @@ export function AuthProvider({ children }) {
             ]
         }   
         let pdfGenerator = pdfMake.createPdf(definition);
+        //Uploading pdf to firebase and returning promise
         pdfGenerator.getBlob((blob) => {
             return uploadBytes(sRef(storage,"stations/"+id),blob);
         })

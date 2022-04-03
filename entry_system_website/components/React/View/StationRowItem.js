@@ -35,7 +35,7 @@ export default function StationRowView(props){
 
     return(
         <>
-            <Tr>
+            <Tr> {/**Table row item */}
                 <Td>
                     <Text>{props.data.name}</Text>
                 </Td>

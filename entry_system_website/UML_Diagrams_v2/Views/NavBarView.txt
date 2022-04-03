@@ -1,0 +1,18 @@
+@startuml
+
+class NavBar << (P,blue) View Component>> {
+    == Props ==
+     None
+
+    == State ==
+     #colorMode: Boolean
+
+    == Componants Used ==
+     *ProfileIconView
+
+    == Methods ==
+    None 
+
+}
+    
+@enduml

@@ -13,6 +13,11 @@ export default function RowView() {
     let [dispalyStudentList, setDisplayStudentLIst] = useState([]);
     let { studentList } = useAuth();
 
+    //Uses same approach as stationListener in the station page
+    //However use effect only listens to changes in the firestore data
+    //instead of having an edit mode
+    //This can be attributed to the fact that the StudentRowView
+    //Item uses a model instead of a rerender to edit edit entry status
     useEffect(() => {
         let tempArray = studentList.map((element) => {
             return(<StudentRowView key={element.id} data={element.data()} id={element.id}/>)

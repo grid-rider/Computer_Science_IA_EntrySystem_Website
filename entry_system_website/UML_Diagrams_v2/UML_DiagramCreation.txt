@@ -1,7 +1,8 @@
 @startuml
-title AuthContext Provider 
+title School Entry System App Overview
 
 class AuthContext << (P,yellow) Provider>> {
+    ~store AuthState
     ==State==
      #loading
      #user
@@ -17,8 +18,10 @@ class AuthContext << (P,yellow) Provider>> {
      ~AccessLogListener
 
 
-    ==Methods==
+    ==methods==
     +handleEvents()
+    +loading()
+    +user()
     +signIn()
     +Firebase_signOut()
     +createAccount()
@@ -27,17 +30,58 @@ class AuthContext << (P,yellow) Provider>> {
     +resetAuthState()
     +getFirestoreUser()
     +getFirestoreUserGroup()
+    +studentList()
     +getUserExtraInformation()
+    +userData()
     +updateUserInformation()
     +updateStudentEntryStatus()
     +setBuildingTransfer()
+    +acessStations()
     +createStation()
     +deleteStation()
     +createStationQrCodeFile()
     +getStationFileURL()
+    +accessLog()
     +updateUserDataAccount()
     +uploadUserImage()
     +getUserImageURL()
 }
+
+class ChakraUI << (P, yellow) Provider >> {
+
+}
+
+class AppContainer << (C,red) container>> {
+    ~store AuthState
+}
+
+class UserObject << (O,green) object>> {
+    ==Attributes==
+    #email
+    #entry_status
+    #first_name
+    #last_name
+    #school
+    #role
+    #img_url
+    #last_entry
+    #last_exit
+}
+
+
+
+
+class ScanPage << (C,blue) component>> {
+    ~store
+    ==props==
+    # radius:number
+    # hubRadius: number
+}
+
+
+AuthContext <--> AppContainer
+ChakraUI <--> AppContainer
+UserObject --# AuthContext
+AppContainer <--> ScanPage
 
 @enduml

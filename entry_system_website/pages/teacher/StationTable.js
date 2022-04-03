@@ -20,11 +20,18 @@ export default function StationView() {
     useEffect(() => {
         if(acessStations){
             let tempArray = acessStations.map((element) => {
-                return(<StationRowView key={element.id} data={element.data()} id={element.id} editMode={editMode}/>)
+                //Using stationRow view component for each row in table
+                return(<StationRowView 
+                    key={element.id} 
+                    data={element.data()} 
+                    id={element.id} 
+                    editMode={editMode}/>)
             })
+            //settin the displaystation list state for component Rerender
             setDisplayStationList(tempArray)
         }
-    }, [acessStations, editMode])
+    }, [acessStations, editMode]) 
+    //useEffect listens to changes in the available acesstations or edit mode
 
 
     function handleEditModeClick(){

@@ -1,0 +1,12 @@
+@startuml
+
+class HelperClass << (C,red) Class>> {
+    == Methods ==
+    +getIconFromType(): jsx
+    +MenuItem(): object
+    +menuItems(): [MenuItem]
+    +getParsedDate(): string
+    +getParsedTime(): string
+}
+    
+@enduml

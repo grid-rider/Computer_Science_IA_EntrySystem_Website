@@ -17,10 +17,12 @@ function getGraphValueObject(date){
 
 export default function GraphAnalytics() {
 
+
     let [ accessGraphValues, setAccessGraphValues ] = useState([]);
     let [ exitGraphValues, setExitGraphValues ] = useState([]);
     let { accessLog } = useAuth();
 
+    
 
     //data point object used for Graphing
     const data = {
@@ -37,6 +39,8 @@ export default function GraphAnalytics() {
         }]
     };
 
+
+    //General confic for data graph 
     const config = {
         spanGaps: 1000 * 60 * 60 * 24 * 1, // 1 day
         type: 'scatter',
@@ -45,6 +49,7 @@ export default function GraphAnalytics() {
             responsive: true,
             scales: {
                 x: {
+                    //Sets scale to 24 Hour scale
                     min: 0,
                     max: 24, 
                     ticks: {
@@ -52,6 +57,7 @@ export default function GraphAnalytics() {
                     }
                 },
                 y: {
+                    //Sets scale to 60 minute scale
                     min: 0,
                     max: 60, 
                     ticks: {
@@ -63,26 +69,36 @@ export default function GraphAnalytics() {
         }
     };
     
+    
+
+
+    //Updating data for graph 
     useEffect(() => {
-
-
         if(accessLog){
             console.log(accessLog);
             let temp_entryArray = [];
             let temp_exitArray = [];
             //accesing 2D array acess log 
             accessLog.forEach(element => {
+                /**
+                 * acessing index 1 in 2D acess log array with following schema:
+                 * [[log_id, {AcessLog Object (see schema in Criterion B)}], [log_id, {AcessLog Object}], .....]
+                 * For acesslog schema see criterion B
+                 * */ 
                 let entryObject = element[1];
+
                 let Access_date = new Date(entryObject.timestamp.seconds*1000 + entryObject.timestamp.nanoseconds/100000);
                 let timeNow = new Date();
 
                 if(entryObject.acess_type == "entry"){
+                    //FIltering through acess log and checking if date is current date. 
                     if(Access_date.getDate() == timeNow.getDate() && Access_date.getMonth() == timeNow.getMonth() && Access_date.getFullYear() == timeNow.getFullYear()){
                         temp_entryArray.push(getGraphValueObject(Access_date))
                     } else {
                         return; 
                     }
                 } else if(entryObject.acess_type == "exit"){
+                    //FIltering through acess log and checking if date is current date. 
                     if(Access_date.getDate() == timeNow.getDate() && Access_date.getMonth() == timeNow.getMonth() && Access_date.getFullYear() == timeNow.getFullYear()){
                         temp_exitArray.push(getGraphValueObject(Access_date))
                     } else {
@@ -90,23 +106,22 @@ export default function GraphAnalytics() {
                     }
                 }
             });
+            //Acess and Exit state variables are set to rerender graph
             setAccessGraphValues(temp_entryArray);
             setExitGraphValues(temp_exitArray);
             console.log(accessGraphValues);
         }
+    }, [accessLog]) //Invoked when changes in acessLog are detected
 
 
-    }, [accessLog])
-
-
+    //updating graph
     useEffect(()=>{
         let chart = new Chart("graph",config);
-        chart.update();
-
-        return(() => {
+        chart.update(); //Update chart 
+        return(() => { //This is invoked when component is unmounted and avoids uncessary resource usage 
             chart.destroy();
         })
-    },[accessGraphValues])
+    },[accessGraphValues, exitGraphValues]) //Called when changes in graph values are detected
 
 
     return(

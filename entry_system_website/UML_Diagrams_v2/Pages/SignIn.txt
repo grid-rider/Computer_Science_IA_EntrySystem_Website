@@ -1,0 +1,16 @@
+@startuml
+
+class SignIn << (P,yellow) Page Component>> {
+    == State ==
+     #invalidLogin: Boolean
+     #showPassword: Boolean
+
+    == Componants Used ==
+     *Navbar
+
+    == Methods ==
+    +signIn_ButtonHandler(): Promise(Void)
+
+}
+
+@enduml
