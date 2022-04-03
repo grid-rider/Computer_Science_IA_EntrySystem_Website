@@ -95,7 +95,7 @@ export default function StudentView() {
 
             }
         });
-        scanner.pause(false); //if scanner fails to match code return to scanning
+        scanner.resume();
     }
 
     function onScanFailure(error) {
