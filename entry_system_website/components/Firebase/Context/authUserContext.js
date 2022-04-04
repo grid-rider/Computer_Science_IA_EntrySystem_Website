@@ -226,8 +226,10 @@ export function AuthProvider({ children }) {
 
     //create station doc in firestore database
     function createStation (name,school){
-        return addDoc(collection(db,"stations"), stationDocumentModel(name, school))
+        return addDoc(collection(db,"stations"), stationDocumentModel(name, school));
     }
+
+
 
     //delete station doc in firestore database
     function deleteStation (uid){
@@ -243,7 +245,18 @@ export function AuthProvider({ children }) {
     function getStationFileURL (uid){
         return getDownloadURL(sRef(storage,"stations/"+uid))
     }
-
+    
+    //Adds station qrcode file after file creation
+    async function addStationURLFile (id){
+        try {
+            let url = await getStationFileURL(id);
+            return updateDoc(doc(db,"stations",id), {
+                file_url: url
+            });
+        } catch (error) {
+            return error;
+        }
+    }
     /**
      * Function used to create station files. 
      * @param  {string} id - Id of station (the same name is also used for the storage location)
@@ -462,7 +475,8 @@ export function AuthProvider({ children }) {
         accessLog,
         updateUserDataAccount,
         uploadUserImage,
-        getUserImageURL
+        getUserImageURL,
+        addStationURLFile
     }
     return(
         <AuthContext.Provider value={value}>
