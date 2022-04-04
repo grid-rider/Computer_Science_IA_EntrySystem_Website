@@ -11,7 +11,7 @@ let PageMenuItems = HelperClass.menuItems(false,false,true);
 
 export default function StationView() {
     let [dispalyStationList, setDisplayStationList] = useState([]);
-    let { acessStations, userData, createStation, createStationQrCodeFile } = useAuth();
+    let { acessStations, userData, createStation, createStationQrCodeFile,addStationURLFile } = useAuth();
     let [editMode, setEditMode] = useState(false);
 
     //form handler
@@ -19,7 +19,9 @@ export default function StationView() {
 
     useEffect(() => {
         if(acessStations){
+
             let tempArray = acessStations.map((element) => {
+                addStationURLFile(element.id)
                 //Using stationRow view component for each row in table
                 return(<StationRowView 
                     key={element.id} 
