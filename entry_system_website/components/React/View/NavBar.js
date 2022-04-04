@@ -8,6 +8,8 @@ import { MdAccountCircle } from "react-icons/md";
 
 export default function NavBar(){
     const { colorMode, toggleColorMode } = useColorMode();
+
+    //Fetching functions from context
     let { user, Firebase_signOut} = useAuth();
 
     return(
