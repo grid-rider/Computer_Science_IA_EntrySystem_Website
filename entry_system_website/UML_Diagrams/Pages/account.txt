@@ -1,0 +1,22 @@
+@startuml
+
+class Account << (P,yellow) Page Component>> {
+    == State ==
+     #invalidSignUp: Boolean
+     #iconURL: String
+     #firstName: String
+     #lastName: String
+
+    == Listeners ==
+     ~userData
+
+    == Componants Used ==
+     *Navbar
+
+    == Methods ==
+    +saveEditButtonHandler(): Void
+    +handleUserIconChange(): Void
+
+}
+    
+@enduml

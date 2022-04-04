@@ -1,12 +1,6 @@
 import { useAuth } from '../components/Firebase/Context/authUserContext';
-import UserProfile from '../components/React/Profile';
+import UserProfile from '../components/React/View/ProfileIcon.js';
 import { useToast, Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, InputGroup, InputRightElement, Modal, Select, Text, useColorModeValue } from '@chakra-ui/react';
-import {
-    SunIcon,
-    ViewIcon,
-    ViewOffIcon,
-} from '@chakra-ui/icons';
-import { useColorMode } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import NavBar from '../components/React/View/NavBar';
@@ -39,7 +33,7 @@ export default function Account(){
     //form handler
     const { register, handleSubmit, formState: { errors, isSubmitting } } =  useForm({
         resolver: yupResolver(schema),
-      });
+    });
       
 
     async function saveEditButtonHandler(data){
@@ -80,24 +74,24 @@ export default function Account(){
                     <Avatar width="8em" height="8em" src={iconURL}/>
                     <Box width="100%">
                         <form onSubmit={handleSubmit(saveEditButtonHandler)}>
-                            <FormControl  m={1} isInvalid={errors.picture} onChange={handleUserIconChange}>
+                            <FormControl  m={1} isInvalid={errors.picture} onChange={handleUserIconChange} isRequired>
                                 <FormLabel>User Icon</FormLabel>
-                                <Input p="0.1em" variant="unstyled"  {...register("picture")} type="file" name="picture"/>
+                                <Input p="0.1em" variant="unstyled"  {...register("picture")} type="file" name="picture"  />
                                 <FormErrorMessage>
                                 {errors.picture && errors.picture.message}
                                 </FormErrorMessage>
                             </FormControl>
-                            <FormControl  m={1} isInvalid={errors.firstName}>
+                            <FormControl  m={1} isInvalid={errors.firstName} isRequired>
                                 <FormLabel>First Name</FormLabel>
-                                <Input color="white" backgroundColor="gray.800" boxShadow="lg" placeholder={firstName} {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
+                                <Input color="white" backgroundColor="gray.800" boxShadow="lg" defaultValue={firstName} {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
                                 <FormErrorMessage>
                                         {errors.firstName && errors.firstName.message}
                                 </FormErrorMessage>
                             </FormControl>
 
-                            <FormControl  m={1} isInvalid={errors.lastName}>
+                            <FormControl  m={1} isInvalid={errors.lastName} isRequired>
                                 <FormLabel>Last Name</FormLabel>
-                                <Input color="white" backgroundColor="gray.800" boxShadow="lg" placeholder={lastName} {...register("lastName", { required: {value: true ,message: "Entry Required"}})}/>
+                                <Input color="white" backgroundColor="gray.800" boxShadow="lg" defaultValue={lastName} {...register("lastName", { required: {value: true ,message: "Entry Required"}})}/>
                                 <FormErrorMessage>
                                         {errors.lastName && errors.lastName.message}
                                 </FormErrorMessage>

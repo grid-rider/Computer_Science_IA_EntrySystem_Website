@@ -1,0 +1,18 @@
+@startuml
+
+class AcessTable << (P,yellow) Page Component>> {
+    == State ==
+     #dispalyStudentList: [StudentRowView]
+
+    == Listeners ==
+     ~studentList
+
+    == Componants Used ==
+     *Layout
+
+    == Methods ==
+    None
+
+}
+    
+@enduml

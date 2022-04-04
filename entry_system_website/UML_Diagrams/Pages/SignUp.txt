@@ -1,0 +1,21 @@
+@startuml
+
+class SignUp << (P,yellow) Page Component>> {
+    == State ==
+     #invalidSignUp: Boolean
+     #showPassword: Boolean
+     #iconURL: String
+
+    == Listeners ==
+     None
+
+    == Componants Used ==
+     *Navbar
+
+    == Methods ==
+     +handleUserIconChange(): Void
+     +signUp_ButtonHandler(): Void
+
+}
+
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+class Layout << (P,yellow) Provider>> {
+    == Props ==
+        children: jsx
+        menuItems: [MenutItem]
+    
+
+    ==State==
+
+    ==Listeners==
+
+    ==Methods==
+
+}
+
+@enduml

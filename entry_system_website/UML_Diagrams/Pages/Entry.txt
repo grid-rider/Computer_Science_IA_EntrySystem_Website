@@ -1,0 +1,29 @@
+@startuml
+
+class Entry << (P,yellow) Page Component>> {
+    == State ==
+     #scanOn: Boolean
+     #entryType: String
+     #entryObject: Object
+     #name: String
+     #loading: Boolean
+
+
+    == Listeners ==
+     ~userData
+
+    == Componants Used ==
+     *Navbar
+
+    == Methods ==
+    +getParsedDate(): String
+    +getParsedTime(): String
+    +getEntryObject(): Object
+    +startQrCode(): Void
+    +onScanSucess(): Void
+    +onScanFailure(): Void
+    +toggleScan(): Void
+
+}
+
+@enduml

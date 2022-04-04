@@ -1,0 +1,18 @@
+@startuml
+
+class Index << (P,yellow) Page Component>> {
+    == State ==
+     #dashboardSelector: String
+
+    == Listeners ==
+     ~UserData
+
+    == Componants Used ==
+     *Navbar
+
+    == Methods ==
+    None
+
+}
+
+@enduml

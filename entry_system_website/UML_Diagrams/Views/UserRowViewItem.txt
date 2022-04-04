@@ -1,0 +1,24 @@
+@startuml
+
+class AcessRowView << (P,blue) View Component>> {
+    == Props ==
+     status: String
+     id: String
+     data: Object
+
+
+    == State ==
+     #stationURL: String
+
+    == Listeners ==
+    None
+
+    == Componants Used ==
+    None 
+
+    == Methods ==
+    +saveButtonHandler(): Void
+
+}
+    
+@enduml

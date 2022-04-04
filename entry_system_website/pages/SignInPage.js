@@ -17,6 +17,7 @@ import {
     useColorMode,
     useColorModeValue,
     Button,
+    useToast,
 } from '@chakra-ui/react'
 
 import {
@@ -25,12 +26,14 @@ import {
     ViewOffIcon,
     AlertIcon
 } from '@chakra-ui/icons';
+import NavBar from '../components/React/View/NavBar';
 
 
 export default function SignInPage (){
 
     let { signIn , user} = useAuth();
     const router = useRouter();
+    let toast = useToast();
 
     //form handler
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
@@ -46,9 +49,16 @@ export default function SignInPage (){
         try {
             let sign_in = await signIn(data.email, data.password);
             setInvalidLogin(false);
+            toast({ //toast icon is generated with a duration of 9000ms to provide feedback for user
+                title: 'Account Setup',
+                description: "You Have Been Signed In",
+                status: 'success',
+                duration: 9000,
+                isClosable: true,
+            })
             router.push("/");
         } catch (error) {
-            setInvalidLogin(true);
+            setInvalidLogin(true); //Providing user feedback by setting invalid state to true
             console.log(error.message);
         }
     }
@@ -61,18 +71,19 @@ export default function SignInPage (){
 
 
     return (
+        <>
+        <NavBar/>
         <Flex justifyContent="center" alignItems="center" height="100vh" flexDirection="column">
-
             <Flex flexDirection="column" borderRadius="12" background={formBackground} p="12" justifyContent="space-evenly">
                 <Heading mb="1em">Sign In Form</Heading>
                 
 
-                <form onSubmit={handleSubmit(signIn_ButtonHandler)}>
+                <form onSubmit={handleSubmit(signIn_ButtonHandler)}> {/**Setting signup form to pass data to signIn_ButtonHandler */}
                     <FormControl  m={1} isInvalid={errors.email}>
                         <FormLabel>Email</FormLabel>
                         <Input type="email" placeholder='Enter Email' {...register("email", { required: {value: true ,message: "Entry Required"}})}/>
                         <FormErrorMessage>
-                            {errors.email && errors.email.message}
+                            {errors.email && errors.email.message} {/**Error message displayed when validation fails */}
                         </FormErrorMessage>
                     </FormControl>
 
@@ -81,7 +92,10 @@ export default function SignInPage (){
                         <InputGroup>
                             <Input id="password" type={showPassword? "text" : "password"} placeholder='Enter Password' {...register("password", { required: {value: true ,message: "Entry Required"}})}/>
                             <InputRightElement>
-                                <Button variant="ghost" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <ViewOffIcon/> : <ViewIcon/>}</Button>
+                                {/**Implementing hide password functionality to provide better security */}
+                                <Button variant="ghost" onClick={() => setShowPassword(!showPassword)}>
+                                    {showPassword ? <ViewOffIcon/> : <ViewIcon/>}
+                                </Button>
                             </InputRightElement>
                         </InputGroup>
                         <FormErrorMessage>
@@ -91,15 +105,14 @@ export default function SignInPage (){
                     </FormControl>
 
                     <HStack mt="2em">
+                        {/**Submit section */}
                         <Button width="100%" colorScheme="teal" type='submit' isLoading={isSubmitting}>Sign In</Button>
                         <Button onClick={toggleColorMode}><SunIcon/></Button>
                     </HStack>
                 </form>
-
                 <div style={{display: !invalidLogin ? "none" : "block", color: "red", fontSize: "1em", margin: "0 auto"}}>Invalid Email or Password</div>
-
-
             </Flex>
         </Flex>
+        </>
     )
 }

@@ -1,0 +1,21 @@
+@startuml
+
+class StationTable << (P,yellow) Page Component>> {
+    == State ==
+     #dispalyStationList: [StationRowView]
+     #editMode: Boolean
+
+    == Listeners ==
+     ~acessStations
+     ~editMode
+
+    == Componants Used ==
+     *Layout
+
+    == Methods ==
+     +handleEditModeClick
+     +handleStationAdd
+
+}
+    
+@enduml

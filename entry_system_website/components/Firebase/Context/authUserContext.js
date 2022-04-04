@@ -5,31 +5,18 @@ import { getDatabase, set, ref, push, onValue } from 'firebase/database';
 import { createContext, useContext, useEffect, useState } from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 import { getStorage, uploadBytes, ref as sRef, deleteObject, getDownloadURL } from "firebase/storage";
+
+//Setting up pdf generator for later use
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const AuthContext = createContext();
 
+//Custom hook that is made to enable acess to AuthProvider functions
 export function useAuth() {
     return useContext(AuthContext);
 }
 
-
-function getFirebaseApp() {
-    let firebaseConfig = {
-        apiKey: "AIzaSyDKwY8frueK8cFoTFEvNYdcF1-IFRYDw4o",
-        authDomain: "entrysystem-2fbb1.firebaseapp.com",
-        projectId: "entrysystem-2fbb1",
-        databaseURL: "https://entrysystem-2fbb1-default-rtdb.europe-west1.firebasedatabase.app/",
-        storageBucket: "entrysystem-2fbb1.appspot.com",
-        messagingSenderId: "986017227132",
-        appId: "1:986017227132:web:d8aa9215d01334e9df04f9",
-        measurementId: "G-Z7ZZ2GQM0T"
-    };
-
-    return initializeApp(firebaseConfig);
-}
 
 export function AuthProvider({ children }) {
 
@@ -48,14 +35,60 @@ export function AuthProvider({ children }) {
         })
     }
     
+    function userEntryRecordModel(type, station){
+
+        return({
+            user_id: user.uid,
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+            timestamp: Timestamp.now(),
+            acess_type: type,
+            school: userData.school,
+            station: station, 
+        })
+    }
+
+    function stationDocumentModel(name,school){
+        return({
+            name: name, 
+            school: school,
+            file_url: "",
+        })
+    }
+
+    //Firebase setup. Please do not share config properties as they contain keys
+    function getFirebaseApp() {
+        let firebaseConfig = {
+            apiKey: "AIzaSyDKwY8frueK8cFoTFEvNYdcF1-IFRYDw4o",
+            authDomain: "entrysystem-2fbb1.firebaseapp.com",
+            projectId: "entrysystem-2fbb1",
+            databaseURL: "https://entrysystem-2fbb1-default-rtdb.europe-west1.firebasedatabase.app/",
+            storageBucket: "entrysystem-2fbb1.appspot.com",
+            messagingSenderId: "986017227132",
+            appId: "1:986017227132:web:d8aa9215d01334e9df04f9",
+            measurementId: "G-Z7ZZ2GQM0T"
+        };
+
+        return initializeApp(firebaseConfig);
+    }
+
     
+    //Initizatialization of different Firebase DB's
     const app = getFirebaseApp();
     const auth = getAuth(app);
     const db = getFirestore(app);
     const realtime_db = getDatabase(app);
     const storage = getStorage(app);
 
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////Auth Section/////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Loading state displays if user is logged in or not
     let [loading, setLoading] = useState(true);
+    //User state contains returned firebase user object from firebase auth 
+    //Initially set to null because user is initially signed out
     let [user, setUser] = useState(null);
 
     useEffect((() => {
@@ -104,14 +137,12 @@ export function AuthProvider({ children }) {
         setLoading(true);
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////Firestore Functions/////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////Firestore Section/////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    let [studentList, setStudentList] = useState([]);
     let [ userData, setUserData] = useState(null);
-    let [ acessStations, setAcessStations] = useState([]);
-    let [ accessLog, setAccessLog] = useState([]);
+
 
 
     useEffect(() => {
@@ -132,33 +163,40 @@ export function AuthProvider({ children }) {
         }
     }, [user]);
 
+    let [ acessStations, setAcessStations] = useState([]);
+    let [ accessLog, setAccessLog] = useState([]);
+    let [ studentList, setStudentList] = useState([]);
+
     useEffect(() => {
+        /**Use effect used to make a listener in authContext that listens to userData changes */
         let StudentListListener;
         let StationListener;
         let AccessLogListener;
-
         if(userData != null && user != null){
-            //check role & get student list (for production refractor name to list as list is not isolated to students but also other user roles)
+            /**Listeners that listen to the documents in firebase and update state of globally acessible variables when change is detected */
+
+            //Listen to the changes of Firebase documents from schools students and teachers
             StudentListListener =  onSnapshot(query(collection(db, "users"), where("school","==",userData.school)), ((querySnapshot) => {
                 console.log("updated user list");
                 setStudentListFromSnapshot(querySnapshot);
             }));
 
+            //Listen to the changes of Firebase documents from station collection
             StationListener = onSnapshot(query(collection(db,"stations"), where("school","==",userData.school)), ((querySnapshot) => {
                 console.log("updated station list");
                 setStationListFromSnapshot(querySnapshot);
             }));
 
+            //Listen to the changes of firebase records in the acess log in realtime DB
             AccessLogListener = onValue(ref(realtime_db,"/access_log/"+userData.school),(snapshot) => {
                 console.log("updated acess log");
                 const data = snapshot.val();
-
                 //sets acess log to 2D array. This 2D array in the following form : 
-                //[[log_id, {acess_Object containing properties such as first name}], [log_id, {acess_Object}], .....]
+                //[[log_id, {AcessLog Object (see schema in Criterion B)}], [log_id, {AcessLog Object}], .....]
                 setAccessLog(Object.entries(data));
             });
-
         }else{
+            //cleaning up states when userIsLoggedOut to prevent data leak
             resetFirestoreState();
             if(StudentListListener != null){
                 StudentListListener();
@@ -170,7 +208,16 @@ export function AuthProvider({ children }) {
                 AccessLogListener();
             }
         }
-    }, [userData])
+    }, [userData]) 
+    /**
+     * Note: UserData refers to the Firebase document stored in the "user" collection 
+     * (for further explanation see Criterion B)
+    */
+    function resetFirestoreState() {
+        setStudentList([]);
+        setAcessStations([]);
+        setAccessLog([]);
+    }
 
     //create user record in firestore database
     function createFirestoreUser (UUID , email, password, FirstName, LastName, School, Role, url){
@@ -179,11 +226,7 @@ export function AuthProvider({ children }) {
 
     //create station doc in firestore database
     function createStation (name,school){
-        return addDoc(collection(db,"stations"), {
-            name: name, 
-            school: school,
-            file_url: "",
-        })
+        return addDoc(collection(db,"stations"), stationDocumentModel(name, school))
     }
 
     //delete station doc in firestore database
@@ -201,8 +244,12 @@ export function AuthProvider({ children }) {
         return getDownloadURL(sRef(storage,"stations/"+uid))
     }
 
-    //delete station doc in firestore database
+    /**
+     * Function used to create station files. 
+     * @param  {string} id - Id of station (the same name is also used for the storage location)
+     */
     function createStationQrCodeFile(id){
+        //pdfMake document definition
         let definition = {
             content: [
                 {text:"Securas Station:", margin: [200,100], fontSize:"30", color:"#89CFF1", bold:"true"},
@@ -210,6 +257,7 @@ export function AuthProvider({ children }) {
             ]
         }   
         let pdfGenerator = pdfMake.createPdf(definition);
+        //Uploading pdf to firebase and returning promise
         pdfGenerator.getBlob((blob) => {
             return uploadBytes(sRef(storage,"stations/"+id),blob);
         })
@@ -246,12 +294,7 @@ export function AuthProvider({ children }) {
         setAcessStations(temp_StationArray);
     }
     
-    
-    function resetFirestoreState() {
-        setStudentList([]);
-        setAcessStations([]);
-        setAccessLog([]);
-    }
+
 
     async function getUserExtraInformation() {
         if (user) {
@@ -316,17 +359,33 @@ export function AuthProvider({ children }) {
         }
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////Storage DB section/////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //Function used to update user account 
+    /**
+     * Async function that deals with updating the userData for the account page
+     * @param  {string} firstName
+     * @param  {string} lastName
+     * @param  {blob} blobImage - Method of transfering files programmatically
+     * @param  {string} uid - Unique identifies of user account in firebase
+     */
     async function updateUserDataAccount(firstName,lastName, blobImage, uid){
         try {
+            //uploading image to storage bucket in directory "userImages/"
             await uploadUserImage(blobImage, uid)
             try {
+                //GET url of uploaded image for setting in userData file
                 let url = await getUserImageURL(uid);
                 try {
+                    //Updating the first_name,last_name and img_url fields of Firestore UserData file 
                     return updateDoc(doc(db,"users", uid), {
                         first_name: firstName,
                         last_name: lastName,
                         img_url: url,
-                    }); 
+                    });     
                 } catch (error) {
                     throw error
                 }
@@ -337,12 +396,20 @@ export function AuthProvider({ children }) {
             return error
         }
     }
-
+    /**
+     * @param  {blob} blobImage
+     * @param  {string} uid - Unique identifies of user account in firebase
+     * @returns {Promise} - Promise of uploading image in userImages/ path
+     */
     function uploadUserImage(blobImage, uid){
-        return uploadBytes(sRef(storage,"userImages/"+uid),blobImage);
+        return uploadBytes(sRef(storage,"userImages/"+uid),blobImage); //uploaing blob of user image to firebase storage
     }
 
-    //delete station doc in firestore database
+    /**
+     * This function is used by the userData to create reference to image in storage database
+     * @param  {string} uid - function getUserImageURL 
+     * @returns {Promise} Promise of uploading image in userImages/ path
+    */
     function getUserImageURL (uid){
         return getDownloadURL(sRef(storage,"userImages/"+uid))
     }
@@ -350,22 +417,14 @@ export function AuthProvider({ children }) {
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////Realtime DB Functions///////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////Realtime DB Section/////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async function setBuildingTransfer(type,station){
         if (user) {
             try {
-                await push(ref(realtime_db,"/access_log/"+userData.school), {
-                    user_id: user.uid,
-                    first_name: userData.first_name,
-                    last_name: userData.last_name,
-                    timestamp: Timestamp.now(),
-                    acess_type: type,
-                    school: userData.school,
-                    station: station, 
-                })
+                await push(ref(realtime_db,"/access_log/"+userData.school), userEntryRecordModel(type,station))
             } catch (error) {
                 console.log(error);
             }
@@ -374,8 +433,10 @@ export function AuthProvider({ children }) {
     }
 
 
-    ////////////////////////////////////////////////////////////
+    ////////////Functions and Variables for Export////////////
+    
 
+    //These will be acessible through the custom useAuth hook
     let value = {
         loading,
         user,

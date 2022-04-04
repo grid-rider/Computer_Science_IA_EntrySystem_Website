@@ -1,21 +1,17 @@
-import { Box, Text , Flex, Button, Hstack, Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, Heading, Icon, HStack, VStack, useColorMode, List, ListItem} from "@chakra-ui/react";
-import { AiOutlineDingding } from 'react-icons/ai';
-import { VscGraphLine } from 'react-icons/vsc';
-import { ViewIcon, SunIcon, HamburgerIcon, CloseIcon, QuestionOutlineIcon} from '@chakra-ui/icons';
-import { BsQuestionSquare} from 'react-icons/bs';
-import UserProfile from "../Profile";
-import getIconFromType from '../../Helpers/iconTypes';
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Text , Flex, Button, useDisclosure, Heading, VStack, useColorMode, List, ListItem} from "@chakra-ui/react";
+import { QuestionOutlineIcon} from '@chakra-ui/icons';
 import { useRouter } from "next/router";
 import NavBar from "../View/NavBar";
-
+import HelperClass from "../../Helpers/HelperClass";
+/**
+ * Description: This component is used by the layout provider to provide navigation to the teacher section pages.
+ * Note: The properties (children and menuItems) in this function are destructured to gain quicker access
+ * @param  {} {children 
+ * @param  {} menuItems}
+ */
 export default function Layout({children, menuItems}) {
 
-    const { colorMode, toggleColorMode} = useColorMode();
-
-    const { isOpen, onOpen, onClose } = useDisclosure()
-
+    //useRouter hook used to navigate between pages
     let router = useRouter();
 
     return(
@@ -30,7 +26,7 @@ export default function Layout({children, menuItems}) {
                                 {menuItems.map(element => { 
                                     return (
                                     <ListItem key={element.title}>
-                                        <Button width="100%" variant="ghost" onClick={() => router.push(element.href)} borderBottom="1px" borderRadius="1rem" borderColor="gray.600" marginTop="1em" leftIcon={getIconFromType(element.iconType)} backgroundColor={element.isActive && "teal.400"}>
+                                        <Button width="100%" variant="ghost" onClick={() => router.push(element.href)} borderBottom="1px" borderRadius="1rem" borderColor="gray.600" marginTop="1em" leftIcon={HelperClass.getIconFromType(element.iconType)} backgroundColor={element.isActive && "teal.400"}>
                                             <Text>{element.title}</Text> 
                                         </Button>
                                     </ListItem>
