@@ -41,7 +41,7 @@ export default function Account(){
             await updateUserDataAccount(data.firstName, data.lastName, data.picture[0], user.uid).then(() => {
                 toast({
                     title: 'Account Changes Saved.',
-                    description: "We've created your account for you.",
+                    description: "Your profile image, firstname and last name have been updated",
                     status: 'success',
                     duration: 9000,
                     isClosable: true,

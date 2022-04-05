@@ -17,6 +17,7 @@ import NavBar from '../components/React/View/NavBar';
 export default function AccountCreation() {
 
     let [invalidSignUp, setInvalidSignUp] = useState(false);
+    let [invalidSignUpMessage, setInvalidSignUpMessage] = useState("Error");
     let [showPassword, setShowPassword] = useState(false);
     let [iconURL, setIconURL] = useState("");
 
@@ -76,6 +77,7 @@ export default function AccountCreation() {
         } catch (error) {
             console.log(error);
             setInvalidSignUp(true); //set invalid to true to provide feedback
+            setInvalidSignUpMessage(error.message)
         }
 
     }
@@ -104,7 +106,7 @@ export default function AccountCreation() {
                 {/**Avatar binded to iconURL state to update when user uploads image file */}
                 <Avatar width="4em" height="4em" src={iconURL}/>
                 <form onSubmit={handleSubmit(signUp_ButtonHandler)}> {/**Setting signup form to pass data to signUp_ButtonHandler() */}
-                    <FormControl  m={1} isInvalid={errors.picture} onChange={handleUserIconChange}>
+                    <FormControl  m={1} isInvalid={errors.picture} onChange={handleUserIconChange} isRequired>
                         <FormLabel>User Icon</FormLabel>
                         <Input p="0.1em" variant="unstyled" {...register("picture")} type="file" name="picture"/>
                         <FormErrorMessage>
@@ -112,7 +114,7 @@ export default function AccountCreation() {
                         </FormErrorMessage>
                     </FormControl>
 
-                    <FormControl  m={1} isInvalid={errors.email}>
+                    <FormControl  m={1} isInvalid={errors.email} isRequired>
                         <FormLabel>Email</FormLabel>
                         <Input 
                             type="email" 
@@ -123,7 +125,7 @@ export default function AccountCreation() {
                         </FormErrorMessage>
                     </FormControl>
 
-                    <FormControl  m={1} isInvalid={errors.password}>
+                    <FormControl  m={1} isInvalid={errors.password} isRequired>
                         <FormLabel>Password</FormLabel>
                         <InputGroup>
                             <Input 
@@ -147,7 +149,7 @@ export default function AccountCreation() {
 
                     </FormControl>
 
-                    <FormControl  m={1} isInvalid={errors.firstName}>
+                    <FormControl  m={1} isInvalid={errors.firstName} isRequired>
                         <FormLabel>First Name</FormLabel>
                         <Input 
                             placeholder='Enter First Name' 
@@ -157,7 +159,7 @@ export default function AccountCreation() {
                         </FormErrorMessage>
                     </FormControl>
 
-                    <FormControl  m={1} isInvalid={errors.lastName}>
+                    <FormControl  m={1} isInvalid={errors.lastName} isRequired>
                         <FormLabel>Last Name</FormLabel>
                         <Input 
                             placeholder='Enter Last Name' 
@@ -168,15 +170,15 @@ export default function AccountCreation() {
                     </FormControl>
 
                     {/**Restricting school and roles with selectors to fit confines of app */}
-                    <FormControl m={1}>
+                    <FormControl m={1} isRequired>
                         <FormLabel>School</FormLabel>
                         <Select {...register("school")}>
                             <option value="LeipzigInternationalSchool">Leipzig International School</option>
                         </Select>
                     </FormControl>
 
-                    <FormControl m={1}>
-                        <FormLabel>Occupation</FormLabel>
+                    <FormControl m={1} isRequired>
+                        <FormLabel>Occupation</FormLabel >
                         <Select {...register("role")}>
                             <option value="teacher">Teacher</option>
                             <option value="student">Student</option>
@@ -192,6 +194,9 @@ export default function AccountCreation() {
                 {/**Triggered when invalidSignUp state changes */}
                 <div style={{display: !invalidSignUp ? "none" : "block", color: "red", fontSize: "1em", margin: "0 auto"}}>
                     Invalid Email or Password
+                </div>
+                <div style={{display: !invalidSignUp ? "none" : "block", color: "orange", fontSize: "1em", margin: "0 auto"}}>
+                    {invalidSignUpMessage}
                 </div>
             </Flex>
         </Flex>
