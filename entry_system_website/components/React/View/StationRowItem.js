@@ -7,22 +7,24 @@ import { useEffect, useState } from 'react';
 
 export default function StationRowView(props){
 
-    let {deleteStation, getStationFileURL, userData} = useAuth();
-    let [stationURL,setStationURL] = useState("/");
+    let {deleteStation, getStationFileURL, userData, addStationURLFile} = useAuth();
+    let [stationURL,setStationURL] = useState(null);
+    let [loadButton, setLoadButton] = useState(true);
 
 
     useEffect(() => {
         handleStationFile()
+        
     }, [userData])
 
     async function handleStationFile(){
         try {
-           let href = await getStationFileURL(props.id);
-           console.log(href)
-           setStationURL(href);
-        } catch (error) {
-            console.log(error)
-        }
+            let href = await getStationFileURL(props.id);
+            console.log(href)
+            setStationURL(href);
+         } catch (error) {
+             console.log(error)
+         }
     }
 
     async function handleStationRemove(){
@@ -32,6 +34,12 @@ export default function StationRowView(props){
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        if(stationURL){
+            setLoadButton(false);
+        }
+    }, [stationURL]);
 
     return(
         <>
@@ -48,7 +56,7 @@ export default function StationRowView(props){
                     {props.editMode? 
                         <Button variant="solid" onClick={handleStationRemove}>Remove</Button>
                     :
-                        <Button variant="solid" as="a" href={stationURL} target="_blank">File</Button>                
+                        <Button variant="solid" as="a" href={props.data.file_url} target="_blank">File</Button>                
                     }
                 </Td>
             </Tr>
