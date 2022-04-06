@@ -98,7 +98,7 @@ export default function Account(){
                             </FormControl>
 
                             <HStack mt="2em">
-                                <Button width="100%" colorScheme="teal" type='submit' isLoading={isSubmitting}>Set Account</Button>
+                                <Button width="100%" colorScheme="teal" type='submit' isLoading={isSubmitting} isLoading={firstName ? false : true}>Set Account</Button>
                             </HStack>
                         </form>
                     </Box>
