@@ -1,6 +1,6 @@
 import { useAuth } from '../components/Firebase/Context/authUserContext';
 import UserProfile from '../components/React/View/ProfileIcon.js';
-import { useToast, Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, InputGroup, InputRightElement, Modal, Select, Text, useColorModeValue } from '@chakra-ui/react';
+import { useToast, Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, InputGroup, InputRightElement, Modal, Select, Text, useColorModeValue, EditableInput, Editable, EditablePreview } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import NavBar from '../components/React/View/NavBar';
@@ -15,8 +15,8 @@ export default function Account(){
     const toast = useToast();
     let [invalidSignUp, setInvalidSignUp] = useState(false);
     let [iconURL, setIconURL] = useState("");
-    let [firstName, setFirstName] = useState("Loading.....");
-    let [lastName, setLastName] = useState("Loading.....");
+    let [firstName, setFirstName] = useState(null);
+    let [lastName, setLastName] = useState(null);
 
     //object schema for image file upload validation
     const schema = yup.object().shape({
@@ -41,7 +41,7 @@ export default function Account(){
             await updateUserDataAccount(data.firstName, data.lastName, data.picture[0], user.uid).then(() => {
                 toast({
                     title: 'Account Changes Saved.',
-                    description: "We've created your account for you.",
+                    description: "Your profile image, firstname and last name have been updated",
                     status: 'success',
                     duration: 9000,
                     isClosable: true,
@@ -75,8 +75,8 @@ export default function Account(){
                     <Box width="100%">
                         <form onSubmit={handleSubmit(saveEditButtonHandler)}>
                             <FormControl  m={1} isInvalid={errors.picture} onChange={handleUserIconChange} isRequired>
-                                <FormLabel>User Icon</FormLabel>
-                                <Input p="0.1em" variant="unstyled"  {...register("picture")} type="file" name="picture"  />
+                                <FormLabel>User Icon</FormLabel>    
+                                <Input p="0.1em" variant="unstyled"  {...register("picture")} type="file" name="picture" />
                                 <FormErrorMessage>
                                 {errors.picture && errors.picture.message}
                                 </FormErrorMessage>

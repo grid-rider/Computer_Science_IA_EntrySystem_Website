@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Image, Td, Tr, VStack, Text, Button , useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Select, ModalFooter, Center} from '@chakra-ui/react';
+import { Avatar, Box, Flex, Image, Td, Tr, VStack, Text, Button , useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Select, ModalFooter, Center, useToast} from '@chakra-ui/react';
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../Firebase/Context/authUserContext";
 import { Timestamp } from 'firebase/firestore';
@@ -12,6 +12,7 @@ export default function StudentRowView(props){
     
     const { isOpen, onOpen, onClose } = useDisclosure()
     let {updateStudentEntryStatus} = useAuth();
+    let toast = useToast();
     
     //form handler
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
@@ -20,6 +21,13 @@ export default function StudentRowView(props){
         updateStudentEntryStatus(data.status,props.id).then(() => {
             //when promise is resolved close edit modal 
             onClose()   
+            toast({
+                title: 'Entry Status of user Has Been changed',
+                description: "You have sucessfully updated the entry status of a user",
+                status: 'success',
+                duration: 9000,
+                isClosable: true,
+            })
         }).catch((error) => {
             console.log(error)
         })
