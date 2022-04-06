@@ -50,7 +50,7 @@ export default function SignInPage (){
             let sign_in = await signIn(data.email, data.password);
             setInvalidLogin(false);
             toast({ //toast icon is generated with a duration of 9000ms to provide feedback for user
-                title: 'Account Setup',
+                title: 'Account Signed In',
                 description: "You Have Been Signed In",
                 status: 'success',
                 duration: 9000,
