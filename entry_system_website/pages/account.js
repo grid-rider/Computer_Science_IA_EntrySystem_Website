@@ -83,7 +83,7 @@ export default function Account(){
                             </FormControl>
                             <FormControl  m={1} isInvalid={errors.firstName} isRequired>
                                 <FormLabel>First Name</FormLabel>
-                                <Input defaultValue={firstName} color="white" backgroundColor="gray.800" boxShadow="lg" defaultValue={firstName} {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
+                                <Input color="white" backgroundColor="gray.800" boxShadow="lg" defaultValue={firstName} {...register("firstName", { required: {value: true ,message: "Entry Required"}})}/>
                                 <FormErrorMessage>
                                         {errors.firstName && errors.firstName.message}
                                 </FormErrorMessage>
@@ -98,7 +98,7 @@ export default function Account(){
                             </FormControl>
 
                             <HStack mt="2em">
-                                <Button width="100%" colorScheme="teal" type='submit' isLoading={(firstName != null ? false : true) || isSubmitting}>Set Account</Button>
+                                <Button width="100%" colorScheme="teal" type='submit' isLoading={isSubmitting}>Set Account</Button>
                             </HStack>
                         </form>
                     </Box>
