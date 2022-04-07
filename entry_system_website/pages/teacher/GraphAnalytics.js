@@ -1,5 +1,5 @@
 
-import { Box, Flex, Heading } from '@chakra-ui/react';
+import { Box, Flex, Heading , Text} from '@chakra-ui/react';
 import Layout from '../../components/React/Layout/Layout';
 import HelperClass from '../../components/Helpers/HelperClass';
 import Chart from 'chart.js/auto';
@@ -16,7 +16,9 @@ function getGraphValueObject(date){
 }
 
 export default function GraphAnalytics() {
-
+ 
+    //This graph page will dispay no values if theere have been no entries on the current date
+    //To see values please perform and entry or exit
 
     let [ accessGraphValues, setAccessGraphValues ] = useState([]);
     let [ exitGraphValues, setExitGraphValues ] = useState([]);
@@ -54,6 +56,18 @@ export default function GraphAnalytics() {
                     max: 24, 
                     ticks: {
                         stepSize: 1,
+                    },
+                    display:true,
+                    title: {
+                        display: true,
+                        text: 'Hour of Current Day',
+                        color: '#008080',
+                        font: {
+                          size: 15,
+                          weight: 'bold',
+                          lineHeight: 1.2,
+                        },
+                        padding: {top: 5, left: 0, right: 0, bottom: 0}
                     }
                 },
                 y: {
@@ -62,6 +76,17 @@ export default function GraphAnalytics() {
                     max: 60, 
                     ticks: {
                         stepSize: 1,
+                    },
+                    title: {
+                        display: true,
+                        text: 'Minutes of Respective Hour',
+                        color: '#008080',
+                        font: {
+                          size: 15,
+                          weight: 'bold',
+                          lineHeight: 1.2,
+                        },
+                        padding: {top: 10, left: 0, right: 0, bottom: 0}
                     }
                 }
             },
@@ -130,6 +155,7 @@ export default function GraphAnalytics() {
             <Box backgroundColor="white" marginTop="2em" width="43vw" height="fit-content" padding="1em" borderRadius="2rem">
                 <canvas id="graph"/>
             </Box>
+            <Text fontSize='sm' color='tomato' as="i">Please Note: this page reflects values of the current day. <br/>Therefore if no entries/exits have been made today the graph above will be blank</Text>
         </Flex>
     )
 }

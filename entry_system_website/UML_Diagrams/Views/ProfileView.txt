@@ -1,15 +1,12 @@
 @startuml
 
-class ProfileIconView << (P,blue) View Component>> {
+class ProfileIcon << (P,blue) View Component>> {
     == Props ==
     None
 
     == State ==
      #name: String
      #imgUrl: String
-
-    == Listeners ==
-    ~userData
 
     == Componants Used ==
     None

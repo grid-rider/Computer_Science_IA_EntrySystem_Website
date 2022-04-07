@@ -5,16 +5,11 @@ class GraphAnalytics << (P,yellow) Page Component>> {
      #accessGraphValues: [Object]
      #exitGraphValues: [Object]
 
-    == Listeners ==
-     ~accessLog
-     ~accessGraphValues
-
     == Componants Used ==
      *Layout
 
     == Methods ==
-    +getGraphValueObject(): Object
-    +handleUserIconChange(): Void
+    +getGraphValueObject(): object
 
 }
     

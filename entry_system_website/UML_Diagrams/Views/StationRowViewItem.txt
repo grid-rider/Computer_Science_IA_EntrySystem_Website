@@ -1,6 +1,6 @@
 @startuml
 
-class StationRowView << (P,blue) View Component>> {
+class StationRowItem << (P,blue) View Component>> {
     == Props ==
      name: String
      id: String
@@ -9,15 +9,12 @@ class StationRowView << (P,blue) View Component>> {
     == State ==
      #stationURL: String
 
-    == Listeners ==
-    ~userData
-
     == Componants Used ==
-     *ProfileIconView
+     None
 
     == Methods ==
-    +handleStationFile(): Void
-    +handleStationRemove(): Void
+    +handleStationFile(): Promise(void)
+    +handleStationRemove(): Promise(void)
 
 }
     

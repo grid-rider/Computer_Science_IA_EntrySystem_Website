@@ -3,18 +3,14 @@
 class StationTable << (P,yellow) Page Component>> {
     == State ==
      #dispalyStationList: [StationRowView]
-     #editMode: Boolean
-
-    == Listeners ==
-     ~acessStations
-     ~editMode
+     #editMode: boolean
 
     == Componants Used ==
      *Layout
 
     == Methods ==
-     +handleEditModeClick
-     +handleStationAdd
+     +handleEditModeClick(): void
+     +handleStationAdd(): Proimise(void)
 
 }
     

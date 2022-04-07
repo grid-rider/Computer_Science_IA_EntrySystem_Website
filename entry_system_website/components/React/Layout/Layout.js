@@ -39,7 +39,7 @@ export default function Layout({children, menuItems}) {
                             <QuestionOutlineIcon width="1.5em" height="1.5em" marginTop="0.5em"/>
                             <Flex alignItems="center"flexDirection="column" justifyContent="center">
                                 <Heading fontSize="1.5em">Need Help</Heading>
-                                <Button colorScheme="blue" margin="0.5em" variant="solid">See Documentation</Button>
+                                <Button colorScheme="blue" margin="0.5em" variant="solid" as="a" target="blank" href="https://github.com/grid-rider/Computer_Science_IA_EntrySystem_Website.git">See Documentation</Button>
                             </Flex>
                         </VStack>
                     </Flex>
