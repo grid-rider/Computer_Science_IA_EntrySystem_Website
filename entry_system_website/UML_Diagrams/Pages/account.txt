@@ -7,9 +7,6 @@ class Account << (P,yellow) Page Component>> {
      #firstName: String
      #lastName: String
 
-    == Listeners ==
-     ~userData
-
     == Componants Used ==
      *Navbar
 

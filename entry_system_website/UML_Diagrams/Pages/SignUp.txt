@@ -6,9 +6,6 @@ class SignUp << (P,yellow) Page Component>> {
      #showPassword: Boolean
      #iconURL: String
 
-    == Listeners ==
-     None
-
     == Componants Used ==
      *Navbar
 

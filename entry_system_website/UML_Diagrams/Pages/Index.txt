@@ -2,10 +2,7 @@
 
 class Index << (P,yellow) Page Component>> {
     == State ==
-     #dashboardSelector: String
-
-    == Listeners ==
-     ~UserData
+     #isTeacher: Boolean
 
     == Componants Used ==
      *Navbar

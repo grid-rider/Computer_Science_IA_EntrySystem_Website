@@ -5,14 +5,11 @@ class SignIn << (P,yellow) Page Component>> {
      #invalidLogin: Boolean
      #showPassword: Boolean
 
-    == Listeners ==
-     ~onMount
-
     == Componants Used ==
      *Navbar
 
     == Methods ==
-    +signIn_ButtonHandler(): Void
+    +signIn_ButtonHandler(): Promise(Void)
 
 }
 
